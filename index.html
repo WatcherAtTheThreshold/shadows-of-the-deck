@@ -22,26 +22,32 @@
   }
 
   .background {
-    background: rgba(3, 3, 3, 0.4);
+    background: rgba(20, 20, 20, 0.3);
     opacity: 1;
     position: fixed;
     width: 100%;
     height: 100%;
     z-index: -2;
+    transition: background 2s ease-in-out;
+  }
+
+  body.danger-mode .background {
+    background: rgba(3, 3, 3, 0.6);
   }
 
   .mist-overlay {
-    background: url('images/mist-overlay2.png') repeat;
-    opacity: 0.6;
+    background: url('images/mist-overlay.png') repeat;
+    opacity: 0.7;
     position: fixed;
     width: 100%;
     height: 100%;
     z-index: -1;
     animation: mistScroll 20s linear infinite;
-    transition: opacity 2s ease-in-out;
+    transition: background-image 2s ease-in-out, opacity 2s ease-in-out;
   }
 
   body.danger-mode .mist-overlay {
+    background-image: url('images/mist-overlay2.png');
     opacity: 0.8;
     animation-duration: 15s;
   }
