@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadows in the Deck - Coins, Turn Phases & Encounters</title>
+<title>Shadows in the Deck - Enhanced Mechanics</title>
 <style>
   body { font-family: sans-serif; background: #111; color: #eee; text-align: center; }
   #game { max-width: 900px; margin: auto; }
@@ -15,8 +15,12 @@
   .node { width: 40px; height: 40px; border-radius: 50%; background: #555; margin: 5px; position: relative; }
   .player { width: 20px; height: 20px; border-radius: 50%; background: cyan; position: absolute; top: 10px; left: 10px; }
   .fragment { width: 14px; height: 14px; border-radius: 50%; background: gold; position: absolute; bottom: 3px; right: 3px; }
-  .encounter { width: 14px; height: 14px; border-radius: 50%; background: red; position: absolute; top: 3px; right: 3px; }
+  .encounter { width: 14px; height: 14px; border-radius: 50%; position: absolute; top: 3px; right: 3px; }
+  .encounter.treasure { background: lime; }
+  .encounter.heal { background: lightblue; }
+  .encounter.buff { background: orange; }
   #log { background: #222; padding: 10px; min-height: 60px; margin-top: 20px; border-radius: 6px; }
+  #error-log { color: red; font-size: 0.9em; min-height: 20px; }
   #restart-btn, #end-turn-btn { margin-top: 15px; padding: 8px 16px; border: none; border-radius: 6px; background: gold; color: #111; font-weight: bold; cursor: pointer; }
   #restart-btn:hover, #end-turn-btn:hover { background: orange; }
   #hud { margin: 10px; font-weight: bold; }
@@ -26,31 +30,26 @@
 <div id="game">
   <h1>Shadows in the Deck</h1>
   <div id="hud">Coins: <span id="coins">0</span> | Fragments: <span id="frags">0</span></div>
-
+  <div id="error-log"></div>
   <h2>Market</h2>
   <div id="market"></div>
-
   <h2>Your Hand</h2>
   <div id="player-hand"></div>
-
   <button id="end-turn-btn" onclick="endTurn()">End Turn</button>
-
   <h2>Dream Map</h2>
   <div id="map"></div>
-
   <div id="log">Welcome to the game!</div>
   <button id="restart-btn" style="display:none;" onclick="restartGame()">Restart Game</button>
 </div>
-
 <script>
-let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, encounterPositions;
-
+let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, encounterPositions, isShadowBlocked;
 function setupGameData(){
   marketDeck = [
     { name:"Focus +2", cost: 3 },
     { name:"Move +2", cost: 4 },
     { name:"Fragment 3pts", cost: 5 },
     { name:"Shadow Blocker", cost: 4 },
+    { name:"Card Purge", cost: 6 },
     { name:"Focus +3", cost: 5 },
     { name:"Move +3", cost: 6 }
   ];
@@ -63,20 +62,17 @@ function setupGameData(){
   fragmentPositions = [2, 4];
   fragmentsCollected = 0;
   totalFragments = fragmentPositions.length;
-  encounterPositions = [1, 3, 5];
+  encounterPositions = [ {pos:1,type:'treasure'}, {pos:3,type:'heal'}, {pos:5,type:'buff'} ];
   cruxflareDeck = [
     "Shadow Surge: Add a dead card to discard.",
     "Corruption Pulse: Remove cheapest market card.",
     "Dream Collapse: Lose a node on the map.",
-    "Sudden Eclipse: Discard a random card from hand.",
-    "Shadow Surge: Add a dead card to discard.",
-    "Corruption Pulse: Remove cheapest market card.",
-    "Dream Collapse: Lose a node on the map."
+    "Sudden Eclipse: Discard a random card from hand."
   ];
   coins = 0;
+  isShadowBlocked = false;
   updateHUD();
 }
-
 function initGame(){
   setupGameData();
   document.getElementById('restart-btn').style.display = 'none';
@@ -86,26 +82,13 @@ function initGame(){
   renderHand();
   renderMap();
 }
-
-function drawMarketCard(){
-  if(marketDeck.length>0){
-    marketRow.push(marketDeck.shift());
-  }
-}
-
+function drawMarketCard(){ if(marketDeck.length>0) marketRow.push(marketDeck.shift()); }
 function drawHand(){
-  while(playerHand.length < 5 && playerDeck.length>0){
-    playerHand.push(playerDeck.shift());
-  }
-  if(playerDeck.length===0 && discardPile.length>0){
-    playerDeck = discardPile;
-    discardPile = [];
-  }
+  while(playerHand.length < 5 && playerDeck.length>0){ playerHand.push(playerDeck.shift()); }
+  if(playerDeck.length===0 && discardPile.length>0){ playerDeck = discardPile; discardPile = []; }
 }
-
 function renderMarket(){
-  let m = document.getElementById('market');
-  m.innerHTML = '';
+  let m = document.getElementById('market'); m.innerHTML = '';
   marketRow.forEach((cardObj, i)=>{
     let el = document.createElement('div');
     el.className = 'card';
@@ -120,29 +103,25 @@ function renderMarket(){
         renderMarket();
         updateHUD();
       } else {
-        logMsg(`Not enough coins to buy ${cardObj.name}`);
+        errorMsg(`Not enough coins to buy ${cardObj.name}`);
       }
     };
     m.appendChild(el);
   });
 }
-
 function renderHand(){
-  let h = document.getElementById('player-hand');
-  h.innerHTML = '';
+  let h = document.getElementById('player-hand'); h.innerHTML = '';
   playerHand.forEach((card, i)=>{
-    let el = document.createElement('div');
-    el.className = 'card';
-    el.textContent = card;
+    let el = document.createElement('div'); el.className = 'card'; el.textContent = card;
     el.onclick = ()=>{
-      if(card.includes('Move')){
-        movePlayer(parseInt(card.replace(/\D/g,'')));
-      }
-      if(card.includes('Focus')){
-        let val = parseInt(card.replace(/\D/g,''));
-        coins += val;
-        updateHUD();
-        logMsg(`Gained ${val} coins.`);
+      if(card.includes('Move')){ movePlayer(parseInt(card.replace(/\D/g,''))); }
+      if(card.includes('Focus')){ let val = parseInt(card.replace(/\D/g,'')); coins += val; updateHUD(); logMsg(`Gained ${val} coins.`); }
+      if(card.includes('Shadow Blocker')){ isShadowBlocked = true; logMsg('Shadow Blocker activated! Next Cruxflare event will be blocked.'); }
+      if(card.includes('Card Purge')){
+        if(playerHand.length>1){
+          let removed = playerHand.splice( (i+1)%playerHand.length, 1 );
+          logMsg(`Purged card: ${removed}`);
+        }
       }
       discardPile.push(card);
       playerHand.splice(i,1);
@@ -151,98 +130,54 @@ function renderHand(){
     h.appendChild(el);
   });
 }
-
 function renderMap(){
-  let map = document.getElementById('map');
-  map.innerHTML = '';
+  let map = document.getElementById('map'); map.innerHTML = '';
   for(let i=0; i<mapNodes; i++){
-    let node = document.createElement('div');
-    node.className = 'node';
-    if(fragmentPositions.includes(i)){
-      let f = document.createElement('div');
-      f.className = 'fragment';
-      node.appendChild(f);
-    }
-    if(encounterPositions.includes(i)){
-      let e = document.createElement('div');
-      e.className = 'encounter';
-      node.appendChild(e);
-    }
-    if(i===playerPos){
-      let p = document.createElement('div');
-      p.className = 'player';
-      node.appendChild(p);
-    }
+    let node = document.createElement('div'); node.className = 'node';
+    if(fragmentPositions.includes(i)){ let f = document.createElement('div'); f.className = 'fragment'; node.appendChild(f); }
+    let enc = encounterPositions.find(e => e.pos===i);
+    if(enc){ let e = document.createElement('div'); e.className = `encounter ${enc.type}`; node.appendChild(e); }
+    if(i===playerPos){ let p = document.createElement('div'); p.className = 'player'; node.appendChild(p); }
     map.appendChild(node);
   }
 }
-
 function movePlayer(steps){
   playerPos = Math.min(playerPos + steps, mapNodes-1);
   if(fragmentPositions.includes(playerPos)){
-    fragmentsCollected++;
-    fragmentPositions = fragmentPositions.filter(pos => pos !== playerPos);
-    updateHUD();
+    fragmentsCollected++; fragmentPositions = fragmentPositions.filter(pos => pos !== playerPos); updateHUD();
     logMsg(`Collected a fragment! Total: ${fragmentsCollected}`);
-    if(fragmentsCollected >= totalFragments){
-      logMsg(`You collected all fragments! You win!`);
-      endGame();
-      return;
-    }
+    if(fragmentsCollected >= totalFragments){ logMsg(`You collected all fragments! You win!`); endGame(); return; }
   }
-  if(encounterPositions.includes(playerPos)){
-    triggerEncounter();
-  }
+  let enc = encounterPositions.find(e => e.pos===playerPos);
+  if(enc) triggerEncounter(enc.type);
   renderMap();
 }
-
-function triggerEncounter(){
-  let roll = Math.random();
-  if(roll < 0.5){
-    let gain = Math.ceil(Math.random()*3);
-    coins += gain;
-    logMsg(`Encounter: Found treasure! +${gain} coins.`);
-  } else {
-    let loss = Math.ceil(Math.random()*2);
-    coins = Math.max(0, coins - loss);
-    logMsg(`Encounter: Shadow drains you. -${loss} coins.`);
-  }
+function triggerEncounter(type){
+  if(type==='treasure'){ let gain = Math.ceil(Math.random()*3); coins += gain; logMsg(`Treasure: +${gain} coins.`); }
+  if(type==='heal'){ let idx = discardPile.indexOf('Shadow (dead)'); if(idx !== -1){ discardPile.splice(idx,1); logMsg('Healing light: Removed a Shadow card.'); } }
+  if(type==='buff'){ playerDeck = playerDeck.map(c => c.includes('Move') ? c+' (+1 buff)' : c); logMsg('Momentum surge: Next Move gets +1.'); }
   updateHUD();
 }
-
-function updateHUD(){
-  document.getElementById('coins').textContent = coins;
-  document.getElementById('frags').textContent = fragmentsCollected;
+function updateHUD(){ document.getElementById('coins').textContent = coins; document.getElementById('frags').textContent = fragmentsCollected; }
+function logMsg(msg){ document.getElementById('log').textContent = msg; }
+function errorMsg(msg){
+  let el = document.getElementById('error-log'); el.textContent = msg; setTimeout(()=>{ el.textContent=''; },2000);
 }
-
-function logMsg(msg){
-  document.getElementById('log').textContent = msg;
-}
-
 function endTurn(){
-  if(cruxflareDeck.length > 0){
+  if(isShadowBlocked){ logMsg('Shadow Blocker prevented the Cruxflare event!'); isShadowBlocked = false; }
+  else if(cruxflareDeck.length > 0){
     let event = cruxflareDeck.shift();
+    if(event.includes('Lose a node') && fragmentPositions.includes(mapNodes-1)){
+      fragmentPositions = fragmentPositions.map(f => f===mapNodes-1 ? mapNodes-2 : f);
+    }
     logMsg(event);
     resolveCruxflare(event);
-  } else {
-    logMsg(`The dream collapses! You collected ${fragmentsCollected} fragments.`);
-    endGame();
-  }
-  drawHand();
-  renderHand();
+  } else { logMsg(`The dream collapses! You collected ${fragmentsCollected} fragments.`); endGame(); }
+  drawHand(); renderHand();
 }
-
 function resolveCruxflare(event){
-  if(event.includes('dead card')){
-    discardPile.push("Shadow (dead)");
-  }
-  if(event.includes('Remove cheapest')){
-    if(marketRow.length > 0){
-      marketRow.shift();
-      drawMarketCard();
-      renderMarket();
-    }
-  }
+  if(event.includes('dead card')) discardPile.push('Shadow (dead)');
+  if(event.includes('Remove cheapest') && marketRow.length > 0){ marketRow.shift(); drawMarketCard(); renderMarket(); }
   if(event.includes('Lose a node') && mapNodes > 2){
     mapNodes -= 1;
     if(playerPos >= mapNodes) playerPos = mapNodes - 1;
@@ -250,13 +185,8 @@ function resolveCruxflare(event){
     encounterPositions = encounterPositions.filter(pos => pos < mapNodes);
     renderMap();
   }
-  if(event.includes('Discard a random') && playerHand.length > 0){
-    let rand = Math.floor(Math.random() * playerHand.length);
-    playerHand.splice(rand, 1);
-    renderHand();
-  }
+  if(event.includes('Discard a random') && playerHand.length > 0){ let rand = Math.floor(Math.random() * playerHand.length); playerHand.splice(rand, 1); renderHand(); }
 }
-
 function endGame(){
   document.getElementById('market').innerHTML = '';
   document.getElementById('player-hand').innerHTML = '';
@@ -264,13 +194,7 @@ function endGame(){
   document.getElementById('restart-btn').style.display = 'inline-block';
   document.getElementById('end-turn-btn').style.display = 'none';
 }
-
-function restartGame(){
-  initGame();
-  logMsg('Welcome to the game!');
-  document.getElementById('end-turn-btn').style.display = 'inline-block';
-}
-
+function restartGame(){ initGame(); logMsg('Welcome to the game!'); document.getElementById('end-turn-btn').style.display = 'inline-block'; }
 initGame();
 </script>
 </body>
