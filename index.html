@@ -17,43 +17,64 @@
     font-family: 'Source Sans Pro', sans-serif;
     color: #fff;
     position: relative;
-    background: #111;
+    background: #333;
     overflow-x: hidden;
   }
 
-  .background {
-    background: rgba(40, 40, 45, 0.2);
-    opacity: 1;
+  /* Test: Simple overlay approach */
+  body::before {
+    content: '';
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    z-index: -2;
-    transition: background 2s ease-in-out;
+    background: url('images/mist-overlay.png') repeat;
+    opacity: 0.6;
+    z-index: -1;
+    animation: mistScroll 20s linear infinite;
+    pointer-events: none;
+    transition: background-image 2s ease-in-out, opacity 2s ease-in-out;
   }
 
-  body.danger-mode .background {
-    background: rgba(3, 3, 3, 0.7);
+  body.danger-mode::before {
+    background-image: url('images/mist-overlay2.png');
+    opacity: 0.8;
+    animation-duration: 15s;
+  }
+
+  /* Fallback: If images don't load, show animated gradient mist */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(255,255,255,0.08) 0%, transparent 50%);
+    z-index: -2;
+    animation: mistScroll 25s linear infinite reverse;
+    pointer-events: none;
+    opacity: 0.3;
+  }
+
+  body.danger-mode::after {
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(100,0,0,0.2) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(100,0,0,0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(100,0,0,0.15) 0%, transparent 50%);
+    opacity: 0.4;
+  }
+
+  .background {
+    display: none;
   }
 
   .mist-overlay {
-    background: url('images/mist-overlay.png') repeat;
-    opacity: 1;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    animation: mistScroll 20s linear infinite;
-    transition: background-image 2s ease-in-out, opacity 2s ease-in-out;
-    filter: contrast(150%) brightness(0.8);
-    mix-blend-mode: multiply;
-  }
-
-  body.danger-mode .mist-overlay {
-    background-image: url('images/mist-overlay2.png');
-    opacity: 0.9;
-    animation-duration: 15s;
-    filter: contrast(120%) brightness(0.6);
-    mix-blend-mode: normal;
+    display: none;
   }
 
   @keyframes mistScroll {
