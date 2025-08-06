@@ -1,25 +1,4 @@
-Of course. I have rewritten the HTML and JavaScript with the suggested improvements integrated directly into the code.
 
-Here are the key changes I made:
-
-  * **Clearer Card Functionality:**
-      * The confusing `"Fragment 3pts"` card has been renamed to **"Dream Compass"** and now has a useful effect: it lets you draw an extra card when played.
-      * The **"Shadow Blocker"** and **"Card Purge"** cards are now fully functional.
-  * **Enhanced UI & Feedback:**
-      * The HUD now includes a **"Turns Left"** counter, making the game's clock visible to the player.
-      * The starting message now gives a clear, concise overview of the game's strategy.
-      * An "error" message area has been added for temporary feedback, like when you don't have enough coins, so it doesn't get lost in the main log.
-  * **Improved Game Mechanics:**
-      * The **"Buff"** encounter now provides a more immediate and understandable bonus (`+2` to your next move this turn).
-      * The **"Dream Collapse"** event will no longer make the game unwinnable; if a fragment is on the last node, it is safely moved before the node is removed.
-
-This revised code should provide a much more intuitive and understandable gameplay experience.
-
------
-
-### **Updated `index.html`**
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
