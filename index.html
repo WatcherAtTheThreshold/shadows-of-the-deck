@@ -30,7 +30,7 @@
     width: 100%;
     height: 100%;
     background: url('images/mist-overlay.png') repeat;
-    opacity: 0.6;
+    opacity: .06;
     z-index: -1;
     animation: mistScroll 20s linear infinite;
     pointer-events: none;
@@ -439,7 +439,7 @@
 </style>
 </head>
 <body>
-<div class="mist-overlay" id="mist-overlay"></div>
+<div class="mist-layer" id="mist-layer"></div>
 <div class="particles" id="particles"></div>
 
 <div id="game">
@@ -1072,12 +1072,7 @@ function restartGame(){
   // Clear game over screen
   document.getElementById('game-over-container').innerHTML = '';
   
-  // Wait for DOM to be fully loaded before starting the game
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initGame);
-} else {
   initGame();
-}
   logMsg('Welcome to the game!');
   document.getElementById('end-turn-btn').style.display = 'inline-block';
 }
