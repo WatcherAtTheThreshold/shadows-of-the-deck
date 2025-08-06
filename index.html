@@ -31,19 +31,18 @@
   }
 
   .mist-overlay {
-    background: url('images/mist-overlay.png') repeat;
-    opacity: 0.3;
+    background: url('images/mist-overlay2.png') repeat;
+    opacity: 0.4;
     position: fixed;
     width: 100%;
     height: 100%;
     z-index: -1;
     animation: mistScroll 20s linear infinite;
-    transition: background-image 2s ease-in-out;
+    transition: opacity 2s ease-in-out;
   }
 
   body.danger-mode .mist-overlay {
-    background-image: url('images/mist-overlay2.png');
-    opacity: 0.5;
+    opacity: 0.6;
     animation-duration: 15s;
   }
 
@@ -118,6 +117,47 @@
     0%   { border-color: rgba(138, 43, 226, 0.3); background: rgba(0, 0, 0, 0.4); }
     50%  { border-color: rgba(255, 0, 0, 0.8); background: rgba(255, 0, 0, 0.1); }
     100% { border-color: rgba(138, 43, 226, 0.3); background: rgba(0, 0, 0, 0.4); }
+  }
+
+  /* Game over screen */
+  .game-over-screen {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    border-radius: 12px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(222, 184, 135, 0.5);
+    text-align: center;
+    margin: 20px 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .game-over-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: rgba(222, 184, 135, 0.9);
+  }
+
+  .game-over-score {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .game-over-flavor {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+
+  .section-header {
+    transition: opacity 0.5s ease;
+  }
+
+  .section-header.hidden {
+    opacity: 0;
+    pointer-events: none;
   }
 
   #game { 
@@ -282,6 +322,9 @@
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
     font-family: 'Source Sans Pro', sans-serif;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
   
   #restart-btn:hover, #end-turn-btn:hover { 
@@ -389,16 +432,18 @@
     </div>
   </div>
 
-  <h2>Market</h2>
+  <h2 class="section-header" id="market-header">Market</h2>
   <div id="market"></div>
 
-  <h2>Your Hand</h2>
+  <h2 class="section-header" id="hand-header">Your Hand</h2>
   <div id="player-hand"></div>
 
   <button id="end-turn-btn" onclick="endTurn()">End Turn</button>
 
-  <h2>Dream Map</h2>
+  <h2 class="section-header" id="map-header">Dream Map</h2>
   <div id="map"></div>
+
+  <div id="game-over-container"></div>
 
   <div id="log">Welcome to the game!</div>
   <button id="restart-btn" style="display:none;" onclick="restartGame()">Restart Game</button>
@@ -676,6 +721,7 @@ function playCard(card, index){
           case 'fragment_boost':
             // Set a flag for next fragment collection
             window.fragmentBoostActive = effect.value;
+            console.log('Fragment boost set:', effect.value); // Debug log
             message += ` - Next fragment worth ${effect.value} points!`;
             break;
             
@@ -780,6 +826,7 @@ function movePlayer(steps, skipEncounters = false){
     let fragmentValue = 1;
     
     // Check if fragment boost is active
+    console.log('Fragment boost active?', window.fragmentBoostActive); // Debug log
     if (window.fragmentBoostActive) {
       fragmentValue = window.fragmentBoostActive;
       window.fragmentBoostActive = null;
@@ -846,14 +893,13 @@ function updateMistOverlay(){
     document.body.classList.add('danger-mode');
   }
   
-  // Enhanced endgame tension
+  // Enhanced endgame tension - but less stroby
   if(cruxflareDeck.length <= 2){
-    document.body.style.filter = 'contrast(1.2) brightness(0.8)';
     const hud = document.getElementById('hud');
-    hud.style.animation = 'pulse-danger 1s ease-in-out infinite';
+    hud.style.borderColor = 'rgba(255, 100, 100, 0.6)';
   } else if(cruxflareDeck.length <= 4){
     const hud = document.getElementById('hud');
-    hud.style.animation = 'pulse-warning 2s ease-in-out infinite';
+    hud.style.borderColor = 'rgba(222, 184, 135, 0.6)';
   }
 }
 
@@ -940,14 +986,58 @@ function resolveCruxflare(event){
 }
 
 function endGame(){
+  // Hide section headers
+  document.getElementById('market-header').classList.add('hidden');
+  document.getElementById('hand-header').classList.add('hidden'); 
+  document.getElementById('map-header').classList.add('hidden');
+  
+  // Clear game areas
   document.getElementById('market').innerHTML = '';
   document.getElementById('player-hand').innerHTML = '';
   document.getElementById('map').innerHTML = '';
-  document.getElementById('restart-btn').style.display = 'inline-block';
   document.getElementById('end-turn-btn').style.display = 'none';
+  
+  // Determine win/loss and create game over screen
+  const isWin = fragmentsCollected >= totalFragments;
+  const gameOverContainer = document.getElementById('game-over-container');
+  
+  let flavorText;
+  if (isWin) {
+    const flavorTexts = [
+      "The dream fragments coalesce into crystalline truth. You have mastered the shifting realm.",
+      "Through shadow and mist, you have gathered the scattered pieces of the dreaming mind.",
+      "The Cruxflare fades as your collection of fragments forms a complete vision of the dreamscape."
+    ];
+    flavorText = flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
+  } else {
+    const flavorTexts = [
+      "The dream collapses, fragments scattered to the void. The shadows claim what remains.",
+      "Cruxflare consumes the last vestiges of the dream. The fragments slip through ethereal fingers.",
+      "The mist thickens, obscuring the path. Some fragments were never meant to be found."
+    ];
+    flavorText = flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
+  }
+  
+  gameOverContainer.innerHTML = `
+    <div class="game-over-screen">
+      <div class="game-over-title">${isWin ? '✧ Victory ✧' : '◯ Dream Lost ◯'}</div>
+      <div class="game-over-score">Fragments Collected: ${fragmentsCollected} / ${totalFragments}</div>
+      <div class="game-over-flavor">${flavorText}</div>
+    </div>
+  `;
+  
+  document.getElementById('restart-btn').style.display = 'inline-block';
 }
 
 function restartGame(){
+  // Show section headers again
+  document.getElementById('market-header').classList.remove('hidden');
+  document.getElementById('hand-header').classList.remove('hidden');
+  document.getElementById('map-header').classList.remove('hidden');
+  
+  // Clear game over screen
+  document.getElementById('game-over-container').innerHTML = '';
+  
   initGame();
   logMsg('Welcome to the game!');
   document.getElementById('end-turn-btn').style.display = 'inline-block';
