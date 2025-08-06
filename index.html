@@ -3,31 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadows in the Deck - Mockup with Cruxflare & Fragments</title>
+<title>Shadows in the Deck - Coins, Turn Phases & Encounters</title>
 <style>
   body { font-family: sans-serif; background: #111; color: #eee; text-align: center; }
   #game { max-width: 900px; margin: auto; }
   #market, #player-hand { display: flex; justify-content: center; margin: 10px 0; }
-  .card { background: #333; border: 2px solid #666; border-radius: 8px; width: 100px; height: 140px; margin: 5px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .card { background: #333; border: 2px solid #666; border-radius: 8px; width: 100px; height: 140px; margin: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
   .card:hover { border-color: gold; }
+  .cost { font-size: 0.8em; color: gold; }
   #map { display: flex; justify-content: center; margin: 20px 0; }
   .node { width: 40px; height: 40px; border-radius: 50%; background: #555; margin: 5px; position: relative; }
   .player { width: 20px; height: 20px; border-radius: 50%; background: cyan; position: absolute; top: 10px; left: 10px; }
   .fragment { width: 14px; height: 14px; border-radius: 50%; background: gold; position: absolute; bottom: 3px; right: 3px; }
+  .encounter { width: 14px; height: 14px; border-radius: 50%; background: red; position: absolute; top: 3px; right: 3px; }
   #log { background: #222; padding: 10px; min-height: 60px; margin-top: 20px; border-radius: 6px; }
-  #restart-btn { margin-top: 15px; padding: 8px 16px; border: none; border-radius: 6px; background: gold; color: #111; font-weight: bold; cursor: pointer; }
-  #restart-btn:hover { background: orange; }
+  #restart-btn, #end-turn-btn { margin-top: 15px; padding: 8px 16px; border: none; border-radius: 6px; background: gold; color: #111; font-weight: bold; cursor: pointer; }
+  #restart-btn:hover, #end-turn-btn:hover { background: orange; }
+  #hud { margin: 10px; font-weight: bold; }
 </style>
 </head>
 <body>
 <div id="game">
   <h1>Shadows in the Deck</h1>
+  <div id="hud">Coins: <span id="coins">0</span> | Fragments: <span id="frags">0</span></div>
 
   <h2>Market</h2>
   <div id="market"></div>
 
   <h2>Your Hand</h2>
   <div id="player-hand"></div>
+
+  <button id="end-turn-btn" onclick="endTurn()">End Turn</button>
 
   <h2>Dream Map</h2>
   <div id="map"></div>
@@ -37,10 +43,17 @@
 </div>
 
 <script>
-let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck;
+let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, encounterPositions;
 
 function setupGameData(){
-  marketDeck = ["Focus +2", "Move +2", "Fragment 3pts", "Shadow Blocker", "Focus +3", "Move +3"];
+  marketDeck = [
+    { name:"Focus +2", cost: 3 },
+    { name:"Move +2", cost: 4 },
+    { name:"Fragment 3pts", cost: 5 },
+    { name:"Shadow Blocker", cost: 4 },
+    { name:"Focus +3", cost: 5 },
+    { name:"Move +3", cost: 6 }
+  ];
   playerDeck = ["Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Move +1","Move +1","Move +1"];
   discardPile = [];
   playerHand = [];
@@ -50,6 +63,7 @@ function setupGameData(){
   fragmentPositions = [2, 4];
   fragmentsCollected = 0;
   totalFragments = fragmentPositions.length;
+  encounterPositions = [1, 3, 5];
   cruxflareDeck = [
     "Shadow Surge: Add a dead card to discard.",
     "Corruption Pulse: Remove cheapest market card.",
@@ -59,6 +73,8 @@ function setupGameData(){
     "Corruption Pulse: Remove cheapest market card.",
     "Dream Collapse: Lose a node on the map."
   ];
+  coins = 0;
+  updateHUD();
 }
 
 function initGame(){
@@ -90,17 +106,22 @@ function drawHand(){
 function renderMarket(){
   let m = document.getElementById('market');
   m.innerHTML = '';
-  marketRow.forEach((card, i)=>{
+  marketRow.forEach((cardObj, i)=>{
     let el = document.createElement('div');
     el.className = 'card';
-    el.textContent = card;
+    el.innerHTML = `<div>${cardObj.name}</div><div class='cost'>Cost: ${cardObj.cost}</div>`;
     el.onclick = ()=>{
-      logMsg(`Bought ${card}`);
-      discardPile.push(card);
-      marketRow.splice(i,1);
-      drawMarketCard();
-      renderMarket();
-      endTurn();
+      if(coins >= cardObj.cost){
+        coins -= cardObj.cost;
+        logMsg(`Bought ${cardObj.name}`);
+        discardPile.push(cardObj.name);
+        marketRow.splice(i,1);
+        drawMarketCard();
+        renderMarket();
+        updateHUD();
+      } else {
+        logMsg(`Not enough coins to buy ${cardObj.name}`);
+      }
     };
     m.appendChild(el);
   });
@@ -114,14 +135,18 @@ function renderHand(){
     el.className = 'card';
     el.textContent = card;
     el.onclick = ()=>{
-      logMsg(`Played ${card}`);
       if(card.includes('Move')){
         movePlayer(parseInt(card.replace(/\D/g,'')));
+      }
+      if(card.includes('Focus')){
+        let val = parseInt(card.replace(/\D/g,''));
+        coins += val;
+        updateHUD();
+        logMsg(`Gained ${val} coins.`);
       }
       discardPile.push(card);
       playerHand.splice(i,1);
       renderHand();
-      if(playerHand.length === 0){ endTurn(); }
     };
     h.appendChild(el);
   });
@@ -138,6 +163,11 @@ function renderMap(){
       f.className = 'fragment';
       node.appendChild(f);
     }
+    if(encounterPositions.includes(i)){
+      let e = document.createElement('div');
+      e.className = 'encounter';
+      node.appendChild(e);
+    }
     if(i===playerPos){
       let p = document.createElement('div');
       p.className = 'player';
@@ -152,6 +182,7 @@ function movePlayer(steps){
   if(fragmentPositions.includes(playerPos)){
     fragmentsCollected++;
     fragmentPositions = fragmentPositions.filter(pos => pos !== playerPos);
+    updateHUD();
     logMsg(`Collected a fragment! Total: ${fragmentsCollected}`);
     if(fragmentsCollected >= totalFragments){
       logMsg(`You collected all fragments! You win!`);
@@ -159,7 +190,29 @@ function movePlayer(steps){
       return;
     }
   }
+  if(encounterPositions.includes(playerPos)){
+    triggerEncounter();
+  }
   renderMap();
+}
+
+function triggerEncounter(){
+  let roll = Math.random();
+  if(roll < 0.5){
+    let gain = Math.ceil(Math.random()*3);
+    coins += gain;
+    logMsg(`Encounter: Found treasure! +${gain} coins.`);
+  } else {
+    let loss = Math.ceil(Math.random()*2);
+    coins = Math.max(0, coins - loss);
+    logMsg(`Encounter: Shadow drains you. -${loss} coins.`);
+  }
+  updateHUD();
+}
+
+function updateHUD(){
+  document.getElementById('coins').textContent = coins;
+  document.getElementById('frags').textContent = fragmentsCollected;
 }
 
 function logMsg(msg){
@@ -194,6 +247,7 @@ function resolveCruxflare(event){
     mapNodes -= 1;
     if(playerPos >= mapNodes) playerPos = mapNodes - 1;
     fragmentPositions = fragmentPositions.filter(pos => pos < mapNodes);
+    encounterPositions = encounterPositions.filter(pos => pos < mapNodes);
     renderMap();
   }
   if(event.includes('Discard a random') && playerHand.length > 0){
@@ -208,11 +262,13 @@ function endGame(){
   document.getElementById('player-hand').innerHTML = '';
   document.getElementById('map').innerHTML = '';
   document.getElementById('restart-btn').style.display = 'inline-block';
+  document.getElementById('end-turn-btn').style.display = 'none';
 }
 
 function restartGame(){
   initGame();
   logMsg('Welcome to the game!');
+  document.getElementById('end-turn-btn').style.display = 'inline-block';
 }
 
 initGame();
