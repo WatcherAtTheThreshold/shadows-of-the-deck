@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadows in the Deck - Mockup</title>
+<title>Shadows in the Deck - Mockup with Cruxflare & Fragments</title>
 <style>
   body { font-family: sans-serif; background: #111; color: #eee; text-align: center; }
   #game { max-width: 900px; margin: auto; }
@@ -13,7 +13,10 @@
   #map { display: flex; justify-content: center; margin: 20px 0; }
   .node { width: 40px; height: 40px; border-radius: 50%; background: #555; margin: 5px; position: relative; }
   .player { width: 20px; height: 20px; border-radius: 50%; background: cyan; position: absolute; top: 10px; left: 10px; }
+  .fragment { width: 14px; height: 14px; border-radius: 50%; background: gold; position: absolute; bottom: 3px; right: 3px; }
   #log { background: #222; padding: 10px; min-height: 60px; margin-top: 20px; border-radius: 6px; }
+  #restart-btn { margin-top: 15px; padding: 8px 16px; border: none; border-radius: 6px; background: gold; color: #111; font-weight: bold; cursor: pointer; }
+  #restart-btn:hover { background: orange; }
 </style>
 </head>
 <body>
@@ -30,31 +33,44 @@
   <div id="map"></div>
 
   <div id="log">Welcome to the game!</div>
+  <button id="restart-btn" style="display:none;" onclick="restartGame()">Restart Game</button>
 </div>
 
 <script>
-// --- SIMPLE MOCK DATA ---
-let marketDeck = ["Focus +2", "Move +2", "Fragment 3pts", "Shadow Blocker", "Focus +3", "Move +3"];
-let playerDeck = ["Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Move +1","Move +1","Move +1"];
-let discardPile = [];
-let playerHand = [];
-let marketRow = [];
-let mapNodes = 6;
-let playerPos = 0;
+let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck;
 
-// --- INIT ---
+function setupGameData(){
+  marketDeck = ["Focus +2", "Move +2", "Fragment 3pts", "Shadow Blocker", "Focus +3", "Move +3"];
+  playerDeck = ["Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Move +1","Move +1","Move +1"];
+  discardPile = [];
+  playerHand = [];
+  marketRow = [];
+  mapNodes = 6;
+  playerPos = 0;
+  fragmentPositions = [2, 4];
+  fragmentsCollected = 0;
+  totalFragments = fragmentPositions.length;
+  cruxflareDeck = [
+    "Shadow Surge: Add a dead card to discard.",
+    "Corruption Pulse: Remove cheapest market card.",
+    "Dream Collapse: Lose a node on the map.",
+    "Sudden Eclipse: Discard a random card from hand.",
+    "Shadow Surge: Add a dead card to discard.",
+    "Corruption Pulse: Remove cheapest market card.",
+    "Dream Collapse: Lose a node on the map."
+  ];
+}
+
 function initGame(){
-  // Fill market
-  for (let i=0; i<5; i++) {
-    drawMarketCard();
-  }
+  setupGameData();
+  document.getElementById('restart-btn').style.display = 'none';
+  for (let i=0; i<5; i++) { drawMarketCard(); }
   renderMarket();
   drawHand();
   renderHand();
   renderMap();
 }
 
-// --- DRAW FUNCTIONS ---
 function drawMarketCard(){
   if(marketDeck.length>0){
     marketRow.push(marketDeck.shift());
@@ -71,7 +87,6 @@ function drawHand(){
   }
 }
 
-// --- RENDER FUNCTIONS ---
 function renderMarket(){
   let m = document.getElementById('market');
   m.innerHTML = '';
@@ -85,6 +100,7 @@ function renderMarket(){
       marketRow.splice(i,1);
       drawMarketCard();
       renderMarket();
+      endTurn();
     };
     m.appendChild(el);
   });
@@ -105,6 +121,7 @@ function renderHand(){
       discardPile.push(card);
       playerHand.splice(i,1);
       renderHand();
+      if(playerHand.length === 0){ endTurn(); }
     };
     h.appendChild(el);
   });
@@ -116,6 +133,11 @@ function renderMap(){
   for(let i=0; i<mapNodes; i++){
     let node = document.createElement('div');
     node.className = 'node';
+    if(fragmentPositions.includes(i)){
+      let f = document.createElement('div');
+      f.className = 'fragment';
+      node.appendChild(f);
+    }
     if(i===playerPos){
       let p = document.createElement('div');
       p.className = 'player';
@@ -125,9 +147,18 @@ function renderMap(){
   }
 }
 
-// --- GAME ACTIONS ---
 function movePlayer(steps){
   playerPos = Math.min(playerPos + steps, mapNodes-1);
+  if(fragmentPositions.includes(playerPos)){
+    fragmentsCollected++;
+    fragmentPositions = fragmentPositions.filter(pos => pos !== playerPos);
+    logMsg(`Collected a fragment! Total: ${fragmentsCollected}`);
+    if(fragmentsCollected >= totalFragments){
+      logMsg(`You collected all fragments! You win!`);
+      endGame();
+      return;
+    }
+  }
   renderMap();
 }
 
@@ -135,7 +166,55 @@ function logMsg(msg){
   document.getElementById('log').textContent = msg;
 }
 
-// --- START GAME ---
+function endTurn(){
+  if(cruxflareDeck.length > 0){
+    let event = cruxflareDeck.shift();
+    logMsg(event);
+    resolveCruxflare(event);
+  } else {
+    logMsg(`The dream collapses! You collected ${fragmentsCollected} fragments.`);
+    endGame();
+  }
+  drawHand();
+  renderHand();
+}
+
+function resolveCruxflare(event){
+  if(event.includes('dead card')){
+    discardPile.push("Shadow (dead)");
+  }
+  if(event.includes('Remove cheapest')){
+    if(marketRow.length > 0){
+      marketRow.shift();
+      drawMarketCard();
+      renderMarket();
+    }
+  }
+  if(event.includes('Lose a node') && mapNodes > 2){
+    mapNodes -= 1;
+    if(playerPos >= mapNodes) playerPos = mapNodes - 1;
+    fragmentPositions = fragmentPositions.filter(pos => pos < mapNodes);
+    renderMap();
+  }
+  if(event.includes('Discard a random') && playerHand.length > 0){
+    let rand = Math.floor(Math.random() * playerHand.length);
+    playerHand.splice(rand, 1);
+    renderHand();
+  }
+}
+
+function endGame(){
+  document.getElementById('market').innerHTML = '';
+  document.getElementById('player-hand').innerHTML = '';
+  document.getElementById('map').innerHTML = '';
+  document.getElementById('restart-btn').style.display = 'inline-block';
+}
+
+function restartGame(){
+  initGame();
+  logMsg('Welcome to the game!');
+}
+
 initGame();
 </script>
 </body>
