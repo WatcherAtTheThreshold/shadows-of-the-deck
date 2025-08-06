@@ -108,6 +108,18 @@
     }
   }
 
+  @keyframes pulse-warning {
+    0%   { border-color: rgba(138, 43, 226, 0.3); }
+    50%  { border-color: rgba(222, 184, 135, 0.6); }
+    100% { border-color: rgba(138, 43, 226, 0.3); }
+  }
+
+  @keyframes pulse-danger {
+    0%   { border-color: rgba(138, 43, 226, 0.3); background: rgba(0, 0, 0, 0.4); }
+    50%  { border-color: rgba(255, 0, 0, 0.8); background: rgba(255, 0, 0, 0.1); }
+    100% { border-color: rgba(138, 43, 226, 0.3); background: rgba(0, 0, 0, 0.4); }
+  }
+
   #game { 
     max-width: 1000px; 
     margin: auto; 
@@ -393,42 +405,98 @@
 </div>
 
 <script>
-let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, encounterPositions;
+let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, encounterPositions, shadowBlocked, lastPlayedCard;
+
+// Data-driven card system
+const CARD_EFFECTS = {
+  'Focus +1': { type: 'coins', value: 1 },
+  'Focus +2': { type: 'coins', value: 2 },
+  'Focus +3': { type: 'coins', value: 3 },
+  'Focus +4': { type: 'coins', value: 4 },
+  'Focus +5': { type: 'coins', value: 5 },
+  'Move +1': { type: 'move', value: 1 },
+  'Move +2': { type: 'move', value: 2 },
+  'Move +3': { type: 'move', value: 3 },
+  'Swift Step': { type: 'move_safe', value: 1 },
+  'Void Step': { type: 'move_safe', value: 2 },
+  'Shadow Walk': { type: 'move_safe', value: 3 },
+  'Lucky Find': { type: 'special', effect: 'lucky_find' },
+  'Shadow Blocker': { type: 'special', effect: 'shadow_block' },
+  'Dream Sight': { type: 'special', effect: 'dream_sight' },
+  'Fragment 3pts': { type: 'special', effect: 'fragment_boost', value: 3 },
+  'Coin Burst': { type: 'coins', value: 3 },
+  'Astral Drift': { type: 'move', value: 4 },
+  'Dream Echo': { type: 'special', effect: 'replay_last' },
+  'Mist Walker': { type: 'special', effect: 'move_and_coin', move: 2, coins: 1 },
+  'Phantom Step': { type: 'move', value: 2 },
+  'Essence Tap': { type: 'special', effect: 'coin_and_draw', coins: 2 },
+  'Spirit Guide': { type: 'special', effect: 'move_and_protect', move: 3 }
+};
+
+function generateTooltip(cardName) {
+  const effect = CARD_EFFECTS[cardName];
+  if (!effect) return "Basic card";
+  
+  switch (effect.type) {
+    case 'coins': return `Gain ${effect.value} coins when played`;
+    case 'move': return `Move ${effect.value} spaces on the map`;
+    case 'move_safe': return `Move ${effect.value} spaces, skip encounters`;
+    case 'special':
+      switch (effect.effect) {
+        case 'lucky_find': return "Gain 1-3 random coins";
+        case 'shadow_block': return "Block the next Cruxflare effect";
+        case 'dream_sight': return "Look at top Cruxflare card";
+        case 'fragment_boost': return `Next fragment collected counts as ${effect.value}`;
+        case 'replay_last': return "Replay your last played card";
+        case 'move_and_coin': return `Move ${effect.move} spaces, gain ${effect.coins} coin`;
+        case 'coin_and_draw': return `Gain ${effect.coins} coins, draw 1 card`;
+        case 'move_and_protect': return `Move ${effect.move} spaces, avoid next Cruxflare`;
+        default: return "Special effect";
+      }
+    default: return "Basic card";
+  }
+}
 
 function setupGameData(){
   // Much larger market deck to prevent running out
   marketDeck = [
-    { name:"Focus +2", cost: 3, tooltip: "Gain 2 coins when played" },
-    { name:"Move +2", cost: 4, tooltip: "Move 2 spaces on the map" },
-    { name:"Fragment 3pts", cost: 5, tooltip: "Counts as 3 fragments when collected" },
-    { name:"Shadow Blocker", cost: 4, tooltip: "Protects against some Cruxflare effects" },
-    { name:"Focus +3", cost: 5, tooltip: "Gain 3 coins when played" },
-    { name:"Move +3", cost: 6, tooltip: "Move 3 spaces on the map" },
-    { name:"Swift Step", cost: 3, tooltip: "Move 1 space, skip encounters" },
-    { name:"Dream Sight", cost: 4, tooltip: "Look at top Cruxflare card" },
-    { name:"Focus +4", cost: 7, tooltip: "Gain 4 coins when played" },
-    { name:"Ethereal Leap", cost: 5, tooltip: "Move to any adjacent fragment" },
+    { name:"Focus +2", cost: 3 },
+    { name:"Move +2", cost: 4 },
+    { name:"Fragment 3pts", cost: 5 },
+    { name:"Shadow Blocker", cost: 4 },
+    { name:"Focus +3", cost: 5 },
+    { name:"Move +3", cost: 6 },
+    { name:"Swift Step", cost: 3 },
+    { name:"Dream Sight", cost: 4 },
+    { name:"Focus +4", cost: 7 },
+    { name:"Ethereal Leap", cost: 5 },
     
     // Additional cards to fill out the deck
-    { name:"Focus +2", cost: 3, tooltip: "Gain 2 coins when played" },
-    { name:"Move +2", cost: 4, tooltip: "Move 2 spaces on the map" },
-    { name:"Void Step", cost: 4, tooltip: "Move 2 spaces, immune to encounters this turn" },
-    { name:"Focus +3", cost: 5, tooltip: "Gain 3 coins when played" },
-    { name:"Shadow Walk", cost: 6, tooltip: "Move 3 spaces, skip all encounters" },
-    { name:"Coin Burst", cost: 3, tooltip: "Gain 3 coins immediately" },
-    { name:"Focus +5", cost: 8, tooltip: "Gain 5 coins when played" },
-    { name:"Astral Drift", cost: 7, tooltip: "Move 4 spaces on the map" },
-    { name:"Lucky Find", cost: 2, tooltip: "Gain 1-3 random coins" },
-    { name:"Focus +2", cost: 3, tooltip: "Gain 2 coins when played" },
-    { name:"Move +1", cost: 2, tooltip: "Move 1 space on the map" },
-    { name:"Dream Echo", cost: 6, tooltip: "Replay your last played card" },
-    { name:"Mist Walker", cost: 5, tooltip: "Move 2 spaces, gain 1 coin" },
-    { name:"Focus +3", cost: 5, tooltip: "Gain 3 coins when played" },
-    { name:"Phantom Step", cost: 4, tooltip: "Move 2 spaces through any terrain" },
-    { name:"Essence Tap", cost: 4, tooltip: "Gain 2 coins, draw 1 card" },
-    { name:"Move +2", cost: 4, tooltip: "Move 2 spaces on the map" },
-    { name:"Spirit Guide", cost: 6, tooltip: "Move 3 spaces, avoid next Cruxflare" }
+    { name:"Focus +2", cost: 3 },
+    { name:"Move +2", cost: 4 },
+    { name:"Void Step", cost: 4 },
+    { name:"Focus +3", cost: 5 },
+    { name:"Shadow Walk", cost: 6 },
+    { name:"Coin Burst", cost: 3 },
+    { name:"Focus +5", cost: 8 },
+    { name:"Astral Drift", cost: 7 },
+    { name:"Lucky Find", cost: 2 },
+    { name:"Focus +2", cost: 3 },
+    { name:"Move +1", cost: 2 },
+    { name:"Dream Echo", cost: 6 },
+    { name:"Mist Walker", cost: 5 },
+    { name:"Focus +3", cost: 5 },
+    { name:"Phantom Step", cost: 4 },
+    { name:"Essence Tap", cost: 4 },
+    { name:"Move +2", cost: 4 },
+    { name:"Spirit Guide", cost: 6 }
   ];
+  
+  // Add tooltips to market cards
+  marketDeck = marketDeck.map(card => ({
+    ...card,
+    tooltip: generateTooltip(card.name)
+  }));
   
   // Shuffle the market deck
   for(let i = marketDeck.length - 1; i > 0; i--){
@@ -446,6 +514,8 @@ function setupGameData(){
   fragmentsCollected = 0;
   totalFragments = fragmentPositions.length;
   encounterPositions = [2, 4, 6, 8, 10];
+  shadowBlocked = false;
+  lastPlayedCard = null;
   
   cruxflareDeck = [
     "Shadow Surge: Add a dead card to discard.",
@@ -519,6 +589,7 @@ function drawHand(){
       const j = Math.floor(Math.random() * (i + 1));
       [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
     }
+    logMsg("Your deck is reshuffled.");
   }
 }
 
@@ -553,12 +624,7 @@ function renderHand(){
   playerHand.forEach((card, i)=>{
     let el = document.createElement('div');
     el.className = 'card tooltip';
-    
-    let tooltip = "Basic card";
-    if(card.includes('Focus')) tooltip = `Gain ${card.replace(/\D/g,'')} coins when played`;
-    if(card.includes('Move')) tooltip = `Move ${card.replace(/\D/g,'')} spaces on the map`;
-    el.setAttribute('data-tooltip', tooltip);
-    
+    el.setAttribute('data-tooltip', generateTooltip(card));
     el.textContent = card;
     el.onclick = ()=>{
       playCard(card, i);
@@ -568,31 +634,113 @@ function renderHand(){
 }
 
 function playCard(card, index){
-  if(card.includes('Move')){
-    movePlayer(parseInt(card.replace(/\D/g,'')));
-  }
-  if(card.includes('Focus')){
-    let val = parseInt(card.replace(/\D/g,''));
-    coins += val;
-    updateHUD();
-    logMsg(`Gained ${val} coins.`);
-  }
-  if(card === 'Swift Step'){
-    movePlayer(1, true);
-  }
-  if(card === 'Dream Sight' && cruxflareDeck.length > 0){
-    logMsg(`Next Cruxflare: ${cruxflareDeck[0]}`);
-  }
-  if(card === 'Lucky Find'){
-    let gain = Math.ceil(Math.random() * 3);
-    coins += gain;
-    logMsg(`Lucky Find: Gained ${gain} coins!`);
-    updateHUD();
+  const effect = CARD_EFFECTS[card];
+  let message = `Played ${card}`;
+  
+  if (effect) {
+    switch (effect.type) {
+      case 'coins':
+        coins += effect.value;
+        message += ` - Gained ${effect.value} coins`;
+        break;
+        
+      case 'move':
+        movePlayer(effect.value);
+        message += ` - Moved ${effect.value} spaces`;
+        break;
+        
+      case 'move_safe':
+        movePlayer(effect.value, true);
+        message += ` - Moved ${effect.value} spaces safely`;
+        break;
+        
+      case 'special':
+        switch (effect.effect) {
+          case 'lucky_find':
+            let gain = Math.ceil(Math.random() * 3);
+            coins += gain;
+            message += ` - Found ${gain} coins!`;
+            break;
+            
+          case 'shadow_block':
+            shadowBlocked = true;
+            message += ` - Next Cruxflare blocked!`;
+            break;
+            
+          case 'dream_sight':
+            if (cruxflareDeck.length > 0) {
+              message += ` - Next Cruxflare: ${cruxflareDeck[0]}`;
+            }
+            break;
+            
+          case 'fragment_boost':
+            // Set a flag for next fragment collection
+            window.fragmentBoostActive = effect.value;
+            message += ` - Next fragment worth ${effect.value} points!`;
+            break;
+            
+          case 'replay_last':
+            if (lastPlayedCard && CARD_EFFECTS[lastPlayedCard]) {
+              message += ` - Replaying ${lastPlayedCard}`;
+              // Don't actually consume the card, just trigger its effect
+              setTimeout(() => {
+                const lastEffect = CARD_EFFECTS[lastPlayedCard];
+                if (lastEffect.type === 'coins') {
+                  coins += lastEffect.value;
+                  logMsg(`Dream Echo: Gained ${lastEffect.value} more coins`);
+                  updateHUD();
+                } else if (lastEffect.type === 'move') {
+                  movePlayer(lastEffect.value);
+                  logMsg(`Dream Echo: Moved ${lastEffect.value} more spaces`);
+                }
+              }, 500);
+            } else {
+              message += ` - No previous card to replay`;
+            }
+            break;
+            
+          case 'move_and_coin':
+            movePlayer(effect.move);
+            coins += effect.coins;
+            message += ` - Moved ${effect.move}, gained ${effect.coins} coin`;
+            break;
+            
+          case 'coin_and_draw':
+            coins += effect.coins;
+            if (playerDeck.length > 0) {
+              playerHand.push(playerDeck.shift());
+              message += ` - Gained ${effect.coins} coins, drew 1 card`;
+            } else {
+              message += ` - Gained ${effect.coins} coins, deck empty`;
+            }
+            break;
+            
+          case 'move_and_protect':
+            movePlayer(effect.move);
+            shadowBlocked = true;
+            message += ` - Moved ${effect.move} spaces, protected from next Cruxflare`;
+            break;
+        }
+        break;
+    }
   }
   
+  lastPlayedCard = card;
+  logMsg(message);
+  
+  // Add visual feedback - make the card glow briefly
+  const cardEl = event.target;
+  cardEl.style.transform = 'scale(1.1)';
+  cardEl.style.boxShadow = '0 0 20px rgba(222, 184, 135, 0.8)';
+  setTimeout(() => {
+    cardEl.style.transform = '';
+    cardEl.style.boxShadow = '';
+  }, 300);
+  
   discardPile.push(card);
-  playerHand.splice(index,1);
+  playerHand.splice(index, 1);
   renderHand();
+  updateHUD();
 }
 
 function renderMap(){
@@ -629,10 +777,23 @@ function movePlayer(steps, skipEncounters = false){
   playerPos = Math.min(playerPos + steps, mapNodes-1);
   
   if(fragmentPositions.includes(playerPos)){
-    fragmentsCollected++;
+    let fragmentValue = 1;
+    
+    // Check if fragment boost is active
+    if (window.fragmentBoostActive) {
+      fragmentValue = window.fragmentBoostActive;
+      window.fragmentBoostActive = null;
+      logMsg(`Fragment boost activated! Gained ${fragmentValue} fragments!`);
+    }
+    
+    fragmentsCollected += fragmentValue;
     fragmentPositions = fragmentPositions.filter(pos => pos !== playerPos);
     updateHUD();
-    logMsg(`Collected a fragment! Total: ${fragmentsCollected}`);
+    
+    if (fragmentValue === 1) {
+      logMsg(`Collected a fragment! Total: ${fragmentsCollected}`);
+    }
+    
     if(fragmentsCollected >= totalFragments){
       logMsg(`You collected all fragments! You win!`);
       endGame();
@@ -642,6 +803,18 @@ function movePlayer(steps, skipEncounters = false){
   
   if(encounterPositions.includes(playerPos) && !skipEncounters){
     triggerEncounter();
+    
+    // Visual feedback for encounter
+    const nodes = document.querySelectorAll('.node');
+    const currentNode = nodes[playerPos];
+    if (currentNode) {
+      currentNode.style.background = 'rgba(138, 43, 226, 0.8)';
+      currentNode.style.transform = 'scale(1.2)';
+      setTimeout(() => {
+        currentNode.style.background = 'rgba(192, 192, 192, 0.3)';
+        currentNode.style.transform = 'scale(1)';
+      }, 800);
+    }
   }
   
   renderMap();
@@ -672,6 +845,16 @@ function updateMistOverlay(){
   if(cruxflareDeck.length <= 7){
     document.body.classList.add('danger-mode');
   }
+  
+  // Enhanced endgame tension
+  if(cruxflareDeck.length <= 2){
+    document.body.style.filter = 'contrast(1.2) brightness(0.8)';
+    const hud = document.getElementById('hud');
+    hud.style.animation = 'pulse-danger 1s ease-in-out infinite';
+  } else if(cruxflareDeck.length <= 4){
+    const hud = document.getElementById('hud');
+    hud.style.animation = 'pulse-warning 2s ease-in-out infinite';
+  }
 }
 
 function logMsg(msg){
@@ -693,13 +876,21 @@ function endTurn(){
 }
 
 function resolveCruxflare(event){
+  // Check if Shadow Blocker is active
+  if (shadowBlocked) {
+    shadowBlocked = false;
+    logMsg(`Shadow Blocker activated! Cruxflare effect blocked.`);
+    return;
+  }
+  
   if(event.includes('dead card')){
     discardPile.push("Shadow (dead)");
   }
   if(event.includes('Remove cheapest')){
     if(marketRow.length > 0){
       marketRow.sort((a,b) => a.cost - b.cost);
-      marketRow.shift();
+      const removed = marketRow.shift();
+      logMsg(`${removed.name} vanishes from the market.`);
       drawMarketCard();
       renderMarket();
     }
@@ -707,7 +898,26 @@ function resolveCruxflare(event){
   if(event.includes('Lose a node') && mapNodes > 3){
     mapNodes -= 1;
     if(playerPos >= mapNodes) playerPos = mapNodes - 1;
+    
+    // CRITICAL FIX: Preserve fragments when nodes are destroyed
+    const lostFragments = fragmentPositions.filter(pos => pos >= mapNodes);
     fragmentPositions = fragmentPositions.filter(pos => pos < mapNodes);
+    
+    // Move lost fragments to random safe positions
+    lostFragments.forEach(() => {
+      const safePositions = [];
+      for (let i = 1; i < mapNodes; i++) {
+        if (!fragmentPositions.includes(i) && !encounterPositions.includes(i) && i !== playerPos) {
+          safePositions.push(i);
+        }
+      }
+      if (safePositions.length > 0) {
+        const newPos = safePositions[Math.floor(Math.random() * safePositions.length)];
+        fragmentPositions.push(newPos);
+        logMsg(`A fragment shifts to node ${newPos} as reality warps.`);
+      }
+    });
+    
     encounterPositions = encounterPositions.filter(pos => pos < mapNodes);
     renderMap();
   }
