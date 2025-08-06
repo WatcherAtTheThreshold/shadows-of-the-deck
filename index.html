@@ -3,50 +3,151 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadows in the Deck - Enhanced</title>
+<title>Shadows in the Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;700&family=Source+Sans+Pro:wght@300;400&display=swap" rel="stylesheet">
 <style>
-  body { 
-    font-family: sans-serif; 
-    background: #111; 
-    color: #eee; 
-    text-align: center; 
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body, html {
+    height: 100%;
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #fff;
     position: relative;
+    background: #111;
     overflow-x: hidden;
   }
-  
-  /* Animated mist overlay */
-  body::before {
-    content: '';
+
+  .background {
+    background: rgba(3, 3, 3, 0.4);
+    opacity: 1;
     position: fixed;
-    top: 0;
-    left: -100%;
-    width: 300%;
+    width: 100%;
     height: 100%;
-    background-image: url('images/mist-overlay.png');
-    background-repeat: repeat-x;
-    background-size: 100% 100%;
+    z-index: -2;
+  }
+
+  .mist-overlay {
+    background: url('images/mist-overlay.png') repeat;
     opacity: 0.3;
+    position: fixed;
+    width: 100%;
+    height: 100%;
     z-index: -1;
-    animation: driftMist 20s linear infinite;
+    animation: mistScroll 20s linear infinite;
     transition: background-image 2s ease-in-out;
   }
-  
-  body.danger-mode::before {
+
+  body.danger-mode .mist-overlay {
     background-image: url('images/mist-overlay2.png');
     opacity: 0.5;
     animation-duration: 15s;
   }
-  
-  @keyframes driftMist {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(100px); }
+
+  @keyframes mistScroll {
+    from { background-position: 0 0; }
+    to { background-position: -500px 500px; }
   }
-  
-  #game { max-width: 1000px; margin: auto; position: relative; z-index: 1; }
-  #market, #player-hand { display: flex; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
+
+  /* Floating particles */
+  .particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: float 25s infinite linear;
+    opacity: 0;
+  }
+
+  .particle.golden {
+    background: radial-gradient(circle, rgba(222, 184, 135, 0.6) 0%, rgba(222, 184, 135, 0.1) 70%, transparent 100%);
+    box-shadow: 0 0 4px rgba(222, 184, 135, 0.4);
+  }
+
+  .particle.purple {
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.5) 0%, rgba(138, 43, 226, 0.1) 70%, transparent 100%);
+    box-shadow: 0 0 4px rgba(138, 43, 226, 0.3);
+  }
+
+  .particle.silver {
+    background: radial-gradient(circle, rgba(192, 192, 192, 0.4) 0%, rgba(192, 192, 192, 0.1) 70%, transparent 100%);
+    box-shadow: 0 0 3px rgba(192, 192, 192, 0.2);
+  }
+
+  @keyframes float {
+    0% { 
+      transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.5); 
+      opacity: 0; 
+    }
+    5% { 
+      opacity: 0.8;
+      transform: translateY(95vh) translateX(10px) rotate(18deg) scale(0.8);
+    }
+    50% {
+      transform: translateY(50vh) translateX(var(--drift, 50px)) rotate(180deg) scale(1);
+      opacity: 0.6;
+    }
+    95% { 
+      opacity: 0.4; 
+    }
+    100% { 
+      transform: translateY(-10vh) translateX(calc(var(--drift, 50px) * 2)) rotate(360deg) scale(0.3); 
+      opacity: 0; 
+    }
+  }
+
+  #game { 
+    max-width: 1000px; 
+    margin: auto; 
+    position: relative; 
+    z-index: 2;
+    backdrop-filter: blur(1px);
+    padding: 20px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: #f2f2f2;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    margin: 20px 0 10px 0;
+  }
+
+  #market, #player-hand { 
+    display: flex; 
+    justify-content: center; 
+    margin: 10px 0; 
+    flex-wrap: wrap; 
+  }
+
   .card { 
-    background: rgba(51, 51, 51, 0.9); 
-    border: 2px solid #666; 
+    background: rgba(0, 0, 0, 0.4) url('images/card-back.webp') center/cover;
+    background-blend-mode: overlay;
+    border: 2px solid rgba(138, 43, 226, 0.4); 
     border-radius: 8px; 
     width: 100px; 
     height: 140px; 
@@ -56,11 +157,27 @@
     align-items: center; 
     justify-content: center; 
     cursor: pointer;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
     position: relative;
+    transition: all 0.3s ease;
+    color: #f2f2f2;
+    text-align: center;
+    font-size: 0.85em;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
   }
-  .card:hover { border-color: gold; transform: translateY(-2px); }
-  .cost { font-size: 0.8em; color: gold; }
+
+  .card:hover { 
+    border-color: rgba(222, 184, 135, 0.8); 
+    transform: translateY(-3px) scale(1.02);
+    background-color: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 5px 15px rgba(222, 184, 135, 0.3);
+  }
+
+  .cost { 
+    font-size: 0.8em; 
+    color: rgba(222, 184, 135, 0.9);
+    font-weight: bold;
+  }
   
   #map { 
     display: flex; 
@@ -76,83 +193,113 @@
     width: 40px; 
     height: 40px; 
     border-radius: 50%; 
-    background: #555; 
+    background: rgba(192, 192, 192, 0.3);
+    border: 2px solid rgba(192, 192, 192, 0.6);
     margin: 5px; 
     position: relative;
     cursor: help;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+  }
+
+  .node:hover {
+    border-color: rgba(222, 184, 135, 0.8);
+    background: rgba(192, 192, 192, 0.4);
   }
   
   .player { 
-    width: 20px; 
-    height: 20px; 
+    width: 16px; 
+    height: 16px; 
     border-radius: 50%; 
     background: cyan; 
     position: absolute; 
-    top: 10px; 
-    left: 10px;
-    box-shadow: 0 0 10px cyan;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px cyan;
+    z-index: 3;
   }
   
   .fragment { 
-    width: 14px; 
-    height: 14px; 
+    width: 12px; 
+    height: 12px; 
     border-radius: 50%; 
-    background: gold; 
+    background: rgba(222, 184, 135, 0.9);
     position: absolute; 
-    bottom: 3px; 
-    right: 3px;
-    box-shadow: 0 0 8px gold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(222, 184, 135, 0.8);
+    z-index: 1;
   }
   
   .encounter { 
-    width: 14px; 
-    height: 14px; 
+    width: 12px; 
+    height: 12px; 
     border-radius: 50%; 
-    background: red; 
+    background: rgba(138, 43, 226, 0.9);
     position: absolute; 
-    top: 3px; 
-    right: 3px;
-    box-shadow: 0 0 6px red;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px rgba(138, 43, 226, 0.7);
+    z-index: 1;
   }
   
   #log { 
-    background: rgba(34, 34, 34, 0.9); 
-    padding: 10px; 
+    background: rgba(0, 0, 0, 0.4); 
+    padding: 15px; 
     min-height: 60px; 
     margin-top: 20px; 
-    border-radius: 6px;
-    backdrop-filter: blur(5px);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    text-align: center;
+    font-size: 1rem;
   }
   
   #restart-btn, #end-turn-btn { 
-    margin-top: 15px; 
-    padding: 8px 16px; 
-    border: none; 
-    border-radius: 6px; 
-    background: gold; 
-    color: #111; 
+    margin: 15px 5px; 
+    padding: 12px 24px; 
+    border: 1px solid rgba(222, 184, 135, 0.5); 
+    border-radius: 8px; 
+    background: rgba(0, 0, 0, 0.4); 
+    color: rgba(222, 184, 135, 0.9); 
     font-weight: bold; 
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    font-family: 'Source Sans Pro', sans-serif;
   }
-  #restart-btn:hover, #end-turn-btn:hover { background: orange; transform: scale(1.05); }
+  
+  #restart-btn:hover, #end-turn-btn:hover { 
+    background: rgba(222, 184, 135, 0.1);
+    border-color: rgba(222, 184, 135, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(222, 184, 135, 0.2);
+  }
   
   #hud { 
     margin: 10px; 
     font-weight: bold;
-    background: rgba(17, 17, 17, 0.8);
-    padding: 10px;
-    border-radius: 6px;
-    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    text-align: center;
+    font-size: 1.1rem;
   }
   
   #legend {
-    background: rgba(34, 34, 34, 0.9);
+    background: rgba(0, 0, 0, 0.4);
     padding: 10px;
-    border-radius: 6px;
+    border-radius: 8px;
     margin: 10px 0;
     font-size: 0.9em;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    text-align: center;
   }
   
   .legend-item {
@@ -191,14 +338,25 @@
     pointer-events: none;
     transition: opacity 0.3s;
     z-index: 1000;
+    border: 1px solid rgba(138, 43, 226, 0.5);
   }
   
   .tooltip:hover::after {
     opacity: 1;
   }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    #game { padding: 10px; }
+    .card { width: 85px; height: 120px; font-size: 0.8em; }
+  }
 </style>
 </head>
 <body>
+<div class="background"></div>
+<div class="mist-overlay"></div>
+<div class="particles" id="particles"></div>
+
 <div id="game">
   <h1>Shadows in the Deck</h1>
   <div id="hud">
@@ -212,10 +370,10 @@
       <span class="legend-icon" style="background: cyan; box-shadow: 0 0 5px cyan;"></span>You
     </div>
     <div class="legend-item">
-      <span class="legend-icon" style="background: gold; box-shadow: 0 0 5px gold;"></span>Fragment
+      <span class="legend-icon" style="background: rgba(222, 184, 135, 0.9); box-shadow: 0 0 5px rgba(222, 184, 135, 0.8);"></span>Fragment
     </div>
     <div class="legend-item">
-      <span class="legend-icon" style="background: red; box-shadow: 0 0 5px red;"></span>Encounter
+      <span class="legend-icon" style="background: rgba(138, 43, 226, 0.9); box-shadow: 0 0 5px rgba(138, 43, 226, 0.7);"></span>Encounter
     </div>
   </div>
 
@@ -238,6 +396,7 @@
 let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, encounterPositions;
 
 function setupGameData(){
+  // Much larger market deck to prevent running out
   marketDeck = [
     { name:"Focus +2", cost: 3, tooltip: "Gain 2 coins when played" },
     { name:"Move +2", cost: 4, tooltip: "Move 2 spaces on the map" },
@@ -248,21 +407,46 @@ function setupGameData(){
     { name:"Swift Step", cost: 3, tooltip: "Move 1 space, skip encounters" },
     { name:"Dream Sight", cost: 4, tooltip: "Look at top Cruxflare card" },
     { name:"Focus +4", cost: 7, tooltip: "Gain 4 coins when played" },
-    { name:"Ethereal Leap", cost: 5, tooltip: "Move to any adjacent fragment" }
+    { name:"Ethereal Leap", cost: 5, tooltip: "Move to any adjacent fragment" },
+    
+    // Additional cards to fill out the deck
+    { name:"Focus +2", cost: 3, tooltip: "Gain 2 coins when played" },
+    { name:"Move +2", cost: 4, tooltip: "Move 2 spaces on the map" },
+    { name:"Void Step", cost: 4, tooltip: "Move 2 spaces, immune to encounters this turn" },
+    { name:"Focus +3", cost: 5, tooltip: "Gain 3 coins when played" },
+    { name:"Shadow Walk", cost: 6, tooltip: "Move 3 spaces, skip all encounters" },
+    { name:"Coin Burst", cost: 3, tooltip: "Gain 3 coins immediately" },
+    { name:"Focus +5", cost: 8, tooltip: "Gain 5 coins when played" },
+    { name:"Astral Drift", cost: 7, tooltip: "Move 4 spaces on the map" },
+    { name:"Lucky Find", cost: 2, tooltip: "Gain 1-3 random coins" },
+    { name:"Focus +2", cost: 3, tooltip: "Gain 2 coins when played" },
+    { name:"Move +1", cost: 2, tooltip: "Move 1 space on the map" },
+    { name:"Dream Echo", cost: 6, tooltip: "Replay your last played card" },
+    { name:"Mist Walker", cost: 5, tooltip: "Move 2 spaces, gain 1 coin" },
+    { name:"Focus +3", cost: 5, tooltip: "Gain 3 coins when played" },
+    { name:"Phantom Step", cost: 4, tooltip: "Move 2 spaces through any terrain" },
+    { name:"Essence Tap", cost: 4, tooltip: "Gain 2 coins, draw 1 card" },
+    { name:"Move +2", cost: 4, tooltip: "Move 2 spaces on the map" },
+    { name:"Spirit Guide", cost: 6, tooltip: "Move 3 spaces, avoid next Cruxflare" }
   ];
+  
+  // Shuffle the market deck
+  for(let i = marketDeck.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [marketDeck[i], marketDeck[j]] = [marketDeck[j], marketDeck[i]];
+  }
   
   playerDeck = ["Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Move +1","Move +1","Move +1"];
   discardPile = [];
   playerHand = [];
   marketRow = [];
-  mapNodes = 12; // Doubled from 6
+  mapNodes = 12;
   playerPos = 0;
-  fragmentPositions = [3, 5, 7, 9, 11]; // More fragments for longer map
+  fragmentPositions = [3, 5, 7, 9, 11];
   fragmentsCollected = 0;
   totalFragments = fragmentPositions.length;
-  encounterPositions = [2, 4, 6, 8, 10]; // More encounters
+  encounterPositions = [2, 4, 6, 8, 10];
   
-  // Doubled Cruxflare deck to maintain tension
   cruxflareDeck = [
     "Shadow Surge: Add a dead card to discard.",
     "Corruption Pulse: Remove cheapest market card.",
@@ -280,12 +464,13 @@ function setupGameData(){
     "Final Darkness: Game ends in 2 turns."
   ];
   
-  coins = 3; // Start with more coins for longer game
+  coins = 3;
   updateHUD();
 }
 
 function initGame(){
   setupGameData();
+  createParticles();
   document.body.classList.remove('danger-mode');
   document.getElementById('restart-btn').style.display = 'none';
   for (let i=0; i<5; i++) { drawMarketCard(); }
@@ -294,6 +479,27 @@ function initGame(){
   renderHand();
   renderMap();
   updateMistOverlay();
+}
+
+function createParticles(){
+  const container = document.getElementById('particles');
+  container.innerHTML = ''; // Clear existing particles
+  const colors = ['golden', 'purple', 'silver'];
+  
+  for (let i = 0; i < 60; i++) {
+    const particle = document.createElement('div');
+    particle.className = `particle ${colors[Math.floor(Math.random() * colors.length)]}`;
+    
+    const size = Math.random() * 6 + 1;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 30 + 's';
+    particle.style.animationDuration = (Math.random() * 20 + 20) + 's';
+    particle.style.setProperty('--drift', (Math.random() - 0.5) * 150 + 'px');
+    
+    container.appendChild(particle);
+  }
 }
 
 function drawMarketCard(){
@@ -309,7 +515,6 @@ function drawHand(){
   if(playerDeck.length===0 && discardPile.length>0){
     playerDeck = [...discardPile];
     discardPile = [];
-    // Shuffle playerDeck
     for(let i = playerDeck.length - 1; i > 0; i--){
       const j = Math.floor(Math.random() * (i + 1));
       [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
@@ -349,7 +554,6 @@ function renderHand(){
     let el = document.createElement('div');
     el.className = 'card tooltip';
     
-    // Add tooltips for hand cards
     let tooltip = "Basic card";
     if(card.includes('Focus')) tooltip = `Gain ${card.replace(/\D/g,'')} coins when played`;
     if(card.includes('Move')) tooltip = `Move ${card.replace(/\D/g,'')} spaces on the map`;
@@ -373,12 +577,17 @@ function playCard(card, index){
     updateHUD();
     logMsg(`Gained ${val} coins.`);
   }
-  // Special card effects
   if(card === 'Swift Step'){
-    movePlayer(1, true); // Skip encounters
+    movePlayer(1, true);
   }
   if(card === 'Dream Sight' && cruxflareDeck.length > 0){
     logMsg(`Next Cruxflare: ${cruxflareDeck[0]}`);
+  }
+  if(card === 'Lucky Find'){
+    let gain = Math.ceil(Math.random() * 3);
+    coins += gain;
+    logMsg(`Lucky Find: Gained ${gain} coins!`);
+    updateHUD();
   }
   
   discardPile.push(card);
@@ -460,7 +669,6 @@ function updateHUD(){
 }
 
 function updateMistOverlay(){
-  // Switch to danger mode when halfway through Cruxflare deck
   if(cruxflareDeck.length <= 7){
     document.body.classList.add('danger-mode');
   }
