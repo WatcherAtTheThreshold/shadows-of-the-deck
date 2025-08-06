@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadows in the Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;700&family=Source+Sans+Pro:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body, html {
+    height: 100%;
+    font-family: 'Source Sans Pro', sans-serif;
+    color: #fff;
+    position: relative;
+    background: #111;
+    overflow-x: hidden;
+  }
+
+  .background {
+    background: rgba(40, 40, 45, 0.2);
+    opacity: 1;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    transition: background 2s ease-in-out;
+  }
+
+  body.danger-mode .background {
+    background: rgba(3, 3, 3, 0.7);
+  }
+
+  .mist-overlay {
+    background: url('images/mist-overlay.png') repeat;
+    opacity: 0.9;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    animation: mistScroll 20s linear infinite;
+    transition: background-image 2s ease-in-out, opacity 2s ease-in-out;
+  }
+
+  body.danger-mode .mist-overlay {
+    background-image: url('images/mist-overlay2.png');
+    opacity: 0.85;
+    animation-duration: 15s;
+  }
+
+  @keyframes mistScroll {
+    from { background-position: 0 0; }
+    to { background-position: -500px 500px; }
+  }
+
+  /* Floating particles */
+  .particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: float 25s infinite linear;
+    opacity: 0;
+  }
+
+  .particle.golden {
+    background: radial-gradient(circle, rgba(222, 184, 135, 0.6) 0%, rgba(222, 184, 135, 0.1) 70%, transparent 100%);
+    box-shadow: 0 0 4px rgba(222, 184, 135, 0.4);
+  }
+
+  .particle.purple {
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.5) 0%, rgba(138, 43, 226, 0.1) 70%, transparent 100%);
+    box-shadow: 0 0 4px rgba(138, 43, 226, 0.3);
+  }
+
+  .particle.silver {
+    background: radial-gradient(circle, rgba(192, 192, 192, 0.4) 0%, rgba(192, 192, 192, 0.1) 70%, transparent 100%);
+    box-shadow: 0 0 3px rgba(192, 192, 192, 0.2);
+  }
+
+  @keyframes float {
+    0% { 
+      transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.5); 
+      opacity: 0; 
+    }
+    5% { 
+      opacity: 0.8;
+      transform: translateY(95vh) translateX(10px) rotate(18deg) scale(0.8);
+    }
+    50% {
+      transform: translateY(50vh) translateX(var(--drift, 50px)) rotate(180deg) scale(1);
+      opacity: 0.6;
+    }
+    95% { 
+      opacity: 0.4; 
+    }
+    100% { 
+      transform: translateY(-10vh) translateX(calc(var(--drift, 50px) * 2)) rotate(360deg) scale(0.3); 
+      opacity: 0; 
+    }
+  }
+
+  @keyframes pulse-warning {
+    0%   { border-color: rgba(138, 43, 226, 0.3); }
+    50%  { border-color: rgba(222, 184, 135, 0.6); }
+    100% { border-color: rgba(138, 43, 226, 0.3); }
+  }
+
+  @keyframes pulse-danger {
+    0%   { border-color: rgba(138, 43, 226, 0.3); background: rgba(0, 0, 0, 0.4); }
+    50%  { border-color: rgba(255, 0, 0, 0.8); background: rgba(255, 0, 0, 0.1); }
+    100% { border-color: rgba(138, 43, 226, 0.3); background: rgba(0, 0, 0, 0.4); }
+  }
+
+  /* Game over screen */
+  .game-over-screen {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    border-radius: 12px;
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(222, 184, 135, 0.5);
+    text-align: center;
+    margin: 20px 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .game-over-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: rgba(222, 184, 135, 0.9);
+  }
+
+  .game-over-score {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .game-over-flavor {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+    line-height: 1.4;
+  }
+
+  .section-header {
+    transition: opacity 0.5s ease;
+  }
+
+  .section-header.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #game { 
+    max-width: 1000px; 
+    margin: auto; 
+    position: relative; 
+    z-index: 2;
+    backdrop-filter: blur(1px);
+    padding: 20px;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: #f2f2f2;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    letter-spacing: 0.5px;
+    text-align: center;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    margin: 20px 0 10px 0;
+  }
+
+  #market, #player-hand { 
+    display: flex; 
+    justify-content: center; 
+    margin: 10px 0; 
+    flex-wrap: wrap; 
+  }
+
+  .card { 
+    background: rgba(0, 0, 0, 0.4) url('images/card-back.webp') center/cover;
+    background-blend-mode: overlay;
+    border: 2px solid rgba(138, 43, 226, 0.4); 
+    border-radius: 8px; 
+    width: 100px; 
+    height: 140px; 
+    margin: 5px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    position: relative;
+    transition: all 0.3s ease;
+    color: #f2f2f2;
+    text-align: center;
+    font-size: 0.85em;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  }
+
+  .card:hover { 
+    border-color: rgba(222, 184, 135, 0.8); 
+    transform: translateY(-3px) scale(1.02);
+    background-color: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 5px 15px rgba(222, 184, 135, 0.3);
+  }
+
+  .cost { 
+    font-size: 0.8em; 
+    color: rgba(222, 184, 135, 0.9);
+    font-weight: bold;
+  }
+  
+  #map { 
+    display: flex; 
+    justify-content: center; 
+    margin: 20px 0; 
+    flex-wrap: wrap;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .node { 
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    background: rgba(192, 192, 192, 0.3);
+    border: 2px solid rgba(192, 192, 192, 0.6);
+    margin: 5px; 
+    position: relative;
+    cursor: help;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+  }
+
+  .node:hover {
+    border-color: rgba(222, 184, 135, 0.8);
+    background: rgba(192, 192, 192, 0.4);
+  }
+  
+  .player { 
+    width: 16px; 
+    height: 16px; 
+    border-radius: 50%; 
+    background: cyan; 
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px cyan;
+    z-index: 3;
+  }
+  
+  .fragment { 
+    width: 12px; 
+    height: 12px; 
+    border-radius: 50%; 
+    background: rgba(222, 184, 135, 0.9);
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px rgba(222, 184, 135, 0.8);
+    z-index: 1;
+  }
+  
+  .encounter { 
+    width: 12px; 
+    height: 12px; 
+    border-radius: 50%; 
+    background: rgba(138, 43, 226, 0.9);
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px rgba(138, 43, 226, 0.7);
+    z-index: 1;
+  }
+  
+  #log { 
+    background: rgba(0, 0, 0, 0.4); 
+    padding: 15px; 
+    min-height: 60px; 
+    margin-top: 20px; 
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    text-align: center;
+    font-size: 1rem;
+  }
+  
+  #restart-btn, #end-turn-btn { 
+    margin: 15px 5px; 
+    padding: 12px 24px; 
+    border: 1px solid rgba(222, 184, 135, 0.5); 
+    border-radius: 8px; 
+    background: rgba(0, 0, 0, 0.4); 
+    color: rgba(222, 184, 135, 0.9); 
+    font-weight: bold; 
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    font-family: 'Source Sans Pro', sans-serif;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  #restart-btn:hover, #end-turn-btn:hover { 
+    background: rgba(222, 184, 135, 0.1);
+    border-color: rgba(222, 184, 135, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(222, 184, 135, 0.2);
+  }
+  
+  #hud { 
+    margin: 10px; 
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    text-align: center;
+    font-size: 1.1rem;
+  }
+  
+  #legend {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 10px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-size: 0.9em;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    text-align: center;
+  }
+  
+  .legend-item {
+    display: inline-block;
+    margin: 0 15px;
+  }
+  
+  .legend-icon {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  
+  /* Tooltip styles */
+  .tooltip {
+    position: relative;
+    cursor: help;
+  }
+  
+  .tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 0.8em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 1000;
+    border: 1px solid rgba(138, 43, 226, 0.5);
+  }
+  
+  .tooltip:hover::after {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    #game { padding: 10px; }
+    .card { width: 85px; height: 120px; font-size: 0.8em; }
+  }
+</style>
+</head>
+<body>
+<div class="background"></div>
+<div class="mist-overlay"></div>
+<div class="particles" id="particles"></div>
+
+<div id="game">
+  <h1>Shadows in the Deck</h1>
+  <div id="hud">
+    Coins: <span id="coins">0</span> | 
+    Fragments: <span id="frags">0</span> | 
+    Cruxflare Cards Left: <span id="crux-remaining">0</span>
+  </div>
+  
+  <div id="legend">
+    <div class="legend-item">
+      <span class="legend-icon" style="background: cyan; box-shadow: 0 0 5px cyan;"></span>You
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon" style="background: rgba(222, 184, 135, 0.9); box-shadow: 0 0 5px rgba(222, 184, 135, 0.8);"></span>Fragment
+    </div>
+    <div class="legend-item">
+      <span class="legend-icon" style="background: rgba(138, 43, 226, 0.9); box-shadow: 0 0 5px rgba(138, 43, 226, 0.7);"></span>Encounter
+    </div>
+  </div>
+
+  <h2 class="section-header" id="market-header">Market</h2>
+  <div id="market"></div>
+
+  <h2 class="section-header" id="hand-header">Your Hand</h2>
+  <div id="player-hand"></div>
+
+  <button id="end-turn-btn" onclick="endTurn()">End Turn</button>
+
+  <h2 class="section-header" id="map-header">Dream Map</h2>
+  <div id="map"></div>
+
+  <div id="game-over-container"></div>
+
+  <div id="log">Welcome to the game!</div>
+  <button id="restart-btn" style="display:none;" onclick="restartGame()">Restart Game</button>
+</div>
+
+<script>
+let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, encounterPositions, shadowBlocked, lastPlayedCard, fragmentBoostActive;
+
+// Data-driven card system
+const CARD_EFFECTS = {
+  'Focus +1': { type: 'coins', value: 1 },
+  'Focus +2': { type: 'coins', value: 2 },
+  'Focus +3': { type: 'coins', value: 3 },
+  'Focus +4': { type: 'coins', value: 4 },
+  'Focus +5': { type: 'coins', value: 5 },
+  'Move +1': { type: 'move', value: 1 },
+  'Move +2': { type: 'move', value: 2 },
+  'Move +3': { type: 'move', value: 3 },
+  'Swift Step': { type: 'move_safe', value: 1 },
+  'Void Step': { type: 'move_safe', value: 2 },
+  'Shadow Walk': { type: 'move_safe', value: 3 },
+  'Lucky Find': { type: 'special', effect: 'lucky_find' },
+  'Shadow Blocker': { type: 'special', effect: 'shadow_block' },
+  'Dream Sight': { type: 'special', effect: 'dream_sight' },
+  'Fragment 3pts': { type: 'special', effect: 'fragment_boost', value: 3 },
+  'Coin Burst': { type: 'coins', value: 3 },
+  'Astral Drift': { type: 'move', value: 4 },
+  'Dream Echo': { type: 'special', effect: 'replay_last' },
+  'Mist Walker': { type: 'special', effect: 'move_and_coin', move: 2, coins: 1 },
+  'Phantom Step': { type: 'move', value: 2 },
+  'Essence Tap': { type: 'special', effect: 'coin_and_draw', coins: 2 },
+  'Spirit Guide': { type: 'special', effect: 'move_and_protect', move: 3 }
+};
+
+function generateTooltip(cardName) {
+  const effect = CARD_EFFECTS[cardName];
+  if (!effect) return "Basic card";
+  
+  switch (effect.type) {
+    case 'coins': return `Gain ${effect.value} coins when played`;
+    case 'move': return `Move ${effect.value} spaces on the map`;
+    case 'move_safe': return `Move ${effect.value} spaces, skip encounters`;
+    case 'special':
+      switch (effect.effect) {
+        case 'lucky_find': return "Gain 1-3 random coins";
+        case 'shadow_block': return "Block the next Cruxflare effect";
+        case 'dream_sight': return "Look at top Cruxflare card";
+        case 'fragment_boost': return `Next fragment collected counts as ${effect.value}`;
+        case 'replay_last': return "Replay your last played card";
+        case 'move_and_coin': return `Move ${effect.move} spaces, gain ${effect.coins} coin`;
+        case 'coin_and_draw': return `Gain ${effect.coins} coins, draw 1 card`;
+        case 'move_and_protect': return `Move ${effect.move} spaces, avoid next Cruxflare`;
+        default: return "Special effect";
+      }
+    default: return "Basic card";
+  }
+}
+
+function setupGameData(){
+  // Much larger market deck to prevent running out
+  marketDeck = [
+    { name:"Focus +2", cost: 3 },
+    { name:"Move +2", cost: 4 },
+    { name:"Fragment 3pts", cost: 5 },
+    { name:"Shadow Blocker", cost: 4 },
+    { name:"Focus +3", cost: 5 },
+    { name:"Move +3", cost: 6 },
+    { name:"Swift Step", cost: 3 },
+    { name:"Dream Sight", cost: 4 },
+    { name:"Focus +4", cost: 7 },
+    { name:"Ethereal Leap", cost: 5 },
+    
+    // Additional cards to fill out the deck
+    { name:"Focus +2", cost: 3 },
+    { name:"Move +2", cost: 4 },
+    { name:"Void Step", cost: 4 },
+    { name:"Focus +3", cost: 5 },
+    { name:"Shadow Walk", cost: 6 },
+    { name:"Coin Burst", cost: 3 },
+    { name:"Focus +5", cost: 8 },
+    { name:"Astral Drift", cost: 7 },
+    { name:"Lucky Find", cost: 2 },
+    { name:"Focus +2", cost: 3 },
+    { name:"Move +1", cost: 2 },
+    { name:"Dream Echo", cost: 6 },
+    { name:"Mist Walker", cost: 5 },
+    { name:"Focus +3", cost: 5 },
+    { name:"Phantom Step", cost: 4 },
+    { name:"Essence Tap", cost: 4 },
+    { name:"Move +2", cost: 4 },
+    { name:"Spirit Guide", cost: 6 }
+  ];
+  
+  // Add tooltips to market cards
+  marketDeck = marketDeck.map(card => ({
+    ...card,
+    tooltip: generateTooltip(card.name)
+  }));
+  
+  // Shuffle the market deck
+  for(let i = marketDeck.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [marketDeck[i], marketDeck[j]] = [marketDeck[j], marketDeck[i]];
+  }
+  
+  playerDeck = ["Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Focus +1","Move +1","Move +1","Move +1"];
+  discardPile = [];
+  playerHand = [];
+  marketRow = [];
+  mapNodes = 12;
+  playerPos = 0;
+  fragmentPositions = [3, 5, 7, 9, 11];
+  fragmentsCollected = 0;
+  totalFragments = fragmentPositions.length;
+  encounterPositions = [2, 4, 6, 8, 10];
+  shadowBlocked = false;
+  lastPlayedCard = null;
+  fragmentBoostActive = null;
+  
+  cruxflareDeck = [
+    "Shadow Surge: Add a dead card to discard.",
+    "Corruption Pulse: Remove cheapest market card.",
+    "Dream Collapse: Lose a node on the map.",
+    "Sudden Eclipse: Discard a random card from hand.",
+    "Void Whisper: Lose 2 coins.",
+    "Time Fracture: Skip next card draw.",
+    "Shadow Surge: Add a dead card to discard.",
+    "Corruption Pulse: Remove cheapest market card.", 
+    "Dream Collapse: Lose a node on the map.",
+    "Sudden Eclipse: Discard a random card from hand.",
+    "Memory Drain: Shuffle a card from hand into deck.",
+    "Reality Shift: Rearrange fragment positions.",
+    "Shadow Surge: Add a dead card to discard.",
+    "Final Darkness: Game ends in 2 turns."
+  ];
+  
+  coins = 3;
+  updateHUD();
+}
+
+function initGame(){
+  setupGameData();
+  createParticles();
+  document.body.classList.remove('danger-mode');
+  document.getElementById('restart-btn').style.display = 'none';
+  for (let i=0; i<5; i++) { drawMarketCard(); }
+  renderMarket();
+  drawHand();
+  renderHand();
+  renderMap();
+  updateMistOverlay();
+}
+
+function createParticles(){
+  const container = document.getElementById('particles');
+  container.innerHTML = ''; // Clear existing particles
+  const colors = ['golden', 'purple', 'silver'];
+  
+  for (let i = 0; i < 60; i++) {
+    const particle = document.createElement('div');
+    particle.className = `particle ${colors[Math.floor(Math.random() * colors.length)]}`;
+    
+    const size = Math.random() * 6 + 1;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 30 + 's';
+    particle.style.animationDuration = (Math.random() * 20 + 20) + 's';
+    particle.style.setProperty('--drift', (Math.random() - 0.5) * 150 + 'px');
+    
+    container.appendChild(particle);
+  }
+}
+
+function drawMarketCard(){
+  if(marketDeck.length>0){
+    marketRow.push(marketDeck.shift());
+  }
+}
+
+function drawHand(){
+  while(playerHand.length < 5 && playerDeck.length>0){
+    playerHand.push(playerDeck.shift());
+  }
+  if(playerDeck.length===0 && discardPile.length>0){
+    playerDeck = [...discardPile];
+    discardPile = [];
+    for(let i = playerDeck.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
+    }
+    logMsg("Your deck is reshuffled.");
+  }
+}
+
+function renderMarket(){
+  let m = document.getElementById('market');
+  m.innerHTML = '';
+  marketRow.forEach((cardObj, i)=>{
+    let el = document.createElement('div');
+    el.className = 'card tooltip';
+    el.setAttribute('data-tooltip', cardObj.tooltip);
+    el.innerHTML = `<div>${cardObj.name}</div><div class='cost'>Cost: ${cardObj.cost}</div>`;
+    el.onclick = ()=>{
+      if(coins >= cardObj.cost){
+        coins -= cardObj.cost;
+        logMsg(`Bought ${cardObj.name}`);
+        discardPile.push(cardObj.name);
+        marketRow.splice(i,1);
+        drawMarketCard();
+        renderMarket();
+        updateHUD();
+      } else {
+        logMsg(`Not enough coins to buy ${cardObj.name}`);
+      }
+    };
+    m.appendChild(el);
+  });
+}
+
+function renderHand(){
+  let h = document.getElementById('player-hand');
+  h.innerHTML = '';
+  playerHand.forEach((card, i)=>{
+    let el = document.createElement('div');
+    el.className = 'card tooltip';
+    el.setAttribute('data-tooltip', generateTooltip(card));
+    el.textContent = card;
+    el.onclick = ()=>{
+      playCard(card, i);
+    };
+    h.appendChild(el);
+  });
+}
+
+function playCard(card, index){
+  const effect = CARD_EFFECTS[card];
+  let message = `Played ${card}`;
+  
+  if (effect) {
+    switch (effect.type) {
+      case 'coins':
+        coins += effect.value;
+        message += ` - Gained ${effect.value} coins`;
+        break;
+        
+      case 'move':
+        movePlayer(effect.value);
+        message += ` - Moved ${effect.value} spaces`;
+        break;
+        
+      case 'move_safe':
+        movePlayer(effect.value, true);
+        message += ` - Moved ${effect.value} spaces safely`;
+        break;
+        
+      case 'special':
+        switch (effect.effect) {
+          case 'lucky_find':
+            let gain = Math.ceil(Math.random() * 3);
+            coins += gain;
+            message += ` - Found ${gain} coins!`;
+            break;
+            
+          case 'shadow_block':
+            shadowBlocked = true;
+            message += ` - Next Cruxflare blocked!`;
+            break;
+            
+          case 'dream_sight':
+            if (cruxflareDeck.length > 0) {
+              message += ` - Next Cruxflare: ${cruxflareDeck[0]}`;
+            }
+            break;
+            
+          case 'fragment_boost':
+            // Set a flag for next fragment collection
+            fragmentBoostActive = effect.value;
+            console.log('Fragment boost set:', effect.value); // Debug log
+            message += ` - Next fragment worth ${effect.value} points!`;
+            break;
+            
+          case 'replay_last':
+            if (lastPlayedCard && CARD_EFFECTS[lastPlayedCard]) {
+              message += ` - Replaying ${lastPlayedCard}`;
+              // Don't actually consume the card, just trigger its effect
+              setTimeout(() => {
+                const lastEffect = CARD_EFFECTS[lastPlayedCard];
+                if (lastEffect.type === 'coins') {
+                  coins += lastEffect.value;
+                  logMsg(`Dream Echo: Gained ${lastEffect.value} more coins`);
+                  updateHUD();
+                } else if (lastEffect.type === 'move') {
+                  movePlayer(lastEffect.value);
+                  logMsg(`Dream Echo: Moved ${lastEffect.value} more spaces`);
+                }
+              }, 500);
+            } else {
+              message += ` - No previous card to replay`;
+            }
+            break;
+            
+          case 'move_and_coin':
+            movePlayer(effect.move);
+            coins += effect.coins;
+            message += ` - Moved ${effect.move}, gained ${effect.coins} coin`;
+            break;
+            
+          case 'coin_and_draw':
+            coins += effect.coins;
+            if (playerDeck.length > 0) {
+              playerHand.push(playerDeck.shift());
+              message += ` - Gained ${effect.coins} coins, drew 1 card`;
+            } else {
+              message += ` - Gained ${effect.coins} coins, deck empty`;
+            }
+            break;
+            
+          case 'move_and_protect':
+            movePlayer(effect.move);
+            shadowBlocked = true;
+            message += ` - Moved ${effect.move} spaces, protected from next Cruxflare`;
+            break;
+        }
+        break;
+    }
+  }
+  
+  lastPlayedCard = card;
+  logMsg(message);
+  
+  // Add visual feedback - make the card glow briefly
+  const cardEl = event.target;
+  cardEl.style.transform = 'scale(1.1)';
+  cardEl.style.boxShadow = '0 0 20px rgba(222, 184, 135, 0.8)';
+  setTimeout(() => {
+    cardEl.style.transform = '';
+    cardEl.style.boxShadow = '';
+  }, 300);
+  
+  discardPile.push(card);
+  playerHand.splice(index, 1);
+  renderHand();
+  updateHUD();
+}
+
+function renderMap(){
+  let map = document.getElementById('map');
+  map.innerHTML = '';
+  for(let i=0; i<mapNodes; i++){
+    let node = document.createElement('div');
+    node.className = 'node';
+    node.title = `Node ${i}`;
+    
+    if(fragmentPositions.includes(i)){
+      let f = document.createElement('div');
+      f.className = 'fragment';
+      node.appendChild(f);
+      node.title += ' - Contains Fragment';
+    }
+    if(encounterPositions.includes(i)){
+      let e = document.createElement('div');
+      e.className = 'encounter';
+      node.appendChild(e);
+      node.title += ' - Encounter Zone';
+    }
+    if(i===playerPos){
+      let p = document.createElement('div');
+      p.className = 'player';
+      node.appendChild(p);
+      node.title += ' - Your Location';
+    }
+    map.appendChild(node);
+  }
+}
+
+function movePlayer(steps, skipEncounters = false){
+  playerPos = Math.min(playerPos + steps, mapNodes-1);
+  
+  if(fragmentPositions.includes(playerPos)){
+    let fragmentValue = 1;
+    
+    // Check if fragment boost is active
+    console.log('Fragment boost active?', fragmentBoostActive); // Debug log
+    if (fragmentBoostActive) {
+      fragmentValue = fragmentBoostActive;
+      fragmentBoostActive = null;
+      logMsg(`Fragment boost activated! Gained ${fragmentValue} fragments!`);
+    }
+    
+    fragmentsCollected += fragmentValue;
+    fragmentPositions = fragmentPositions.filter(pos => pos !== playerPos);
+    updateHUD();
+    
+    if (fragmentValue === 1) {
+      logMsg(`Collected a fragment! Total: ${fragmentsCollected}`);
+    }
+    
+    if(fragmentsCollected >= totalFragments){
+      logMsg(`You collected all fragments! You win!`);
+      endGame();
+      return;
+    }
+  }
+  
+  if(encounterPositions.includes(playerPos) && !skipEncounters){
+    triggerEncounter();
+    
+    // Visual feedback for encounter
+    const nodes = document.querySelectorAll('.node');
+    const currentNode = nodes[playerPos];
+    if (currentNode) {
+      currentNode.style.background = 'rgba(138, 43, 226, 0.8)';
+      currentNode.style.transform = 'scale(1.2)';
+      setTimeout(() => {
+        currentNode.style.background = 'rgba(192, 192, 192, 0.3)';
+        currentNode.style.transform = 'scale(1)';
+      }, 800);
+    }
+  }
+  
+  renderMap();
+}
+
+function triggerEncounter(){
+  let roll = Math.random();
+  if(roll < 0.6){
+    let gain = Math.ceil(Math.random()*3) + 1;
+    coins += gain;
+    logMsg(`Encounter: Found treasure! +${gain} coins.`);
+  } else {
+    let loss = Math.ceil(Math.random()*2);
+    coins = Math.max(0, coins - loss);
+    logMsg(`Encounter: Shadow drains you. -${loss} coins.`);
+  }
+  updateHUD();
+}
+
+function updateHUD(){
+  document.getElementById('coins').textContent = coins;
+  document.getElementById('frags').textContent = fragmentsCollected;
+  document.getElementById('crux-remaining').textContent = cruxflareDeck.length;
+  updateMistOverlay();
+}
+
+function updateMistOverlay(){
+  if(cruxflareDeck.length <= 7){
+    document.body.classList.add('danger-mode');
+  }
+  
+  // Enhanced endgame tension - but less stroby
+  if(cruxflareDeck.length <= 2){
+    const hud = document.getElementById('hud');
+    hud.style.borderColor = 'rgba(255, 100, 100, 0.6)';
+  } else if(cruxflareDeck.length <= 4){
+    const hud = document.getElementById('hud');
+    hud.style.borderColor = 'rgba(222, 184, 135, 0.6)';
+  }
+}
+
+function logMsg(msg){
+  document.getElementById('log').textContent = msg;
+}
+
+function endTurn(){
+  if(cruxflareDeck.length > 0){
+    let event = cruxflareDeck.shift();
+    logMsg(`Cruxflare: ${event}`);
+    resolveCruxflare(event);
+  } else {
+    logMsg(`The dream collapses! You collected ${fragmentsCollected}/${totalFragments} fragments.`);
+    endGame();
+  }
+  drawHand();
+  renderHand();
+  updateHUD();
+}
+
+function resolveCruxflare(event){
+  // Check if Shadow Blocker is active
+  if (shadowBlocked) {
+    shadowBlocked = false;
+    logMsg(`Shadow Blocker activated! Cruxflare effect blocked.`);
+    return;
+  }
+  
+  if(event.includes('dead card')){
+    discardPile.push("Shadow (dead)");
+  }
+  if(event.includes('Remove cheapest')){
+    if(marketRow.length > 0){
+      marketRow.sort((a,b) => a.cost - b.cost);
+      const removed = marketRow.shift();
+      logMsg(`${removed.name} vanishes from the market.`);
+      drawMarketCard();
+      renderMarket();
+    }
+  }
+  if(event.includes('Lose a node') && mapNodes > 3){
+    mapNodes -= 1;
+    if(playerPos >= mapNodes) playerPos = mapNodes - 1;
+    
+    // CRITICAL FIX: Preserve fragments when nodes are destroyed
+    const lostFragments = fragmentPositions.filter(pos => pos >= mapNodes);
+    fragmentPositions = fragmentPositions.filter(pos => pos < mapNodes);
+    
+    // Move lost fragments to random safe positions
+    lostFragments.forEach(() => {
+      const safePositions = [];
+      for (let i = 1; i < mapNodes; i++) {
+        if (!fragmentPositions.includes(i) && !encounterPositions.includes(i) && i !== playerPos) {
+          safePositions.push(i);
+        }
+      }
+      if (safePositions.length > 0) {
+        const newPos = safePositions[Math.floor(Math.random() * safePositions.length)];
+        fragmentPositions.push(newPos);
+        logMsg(`A fragment shifts to node ${newPos} as reality warps.`);
+      }
+    });
+    
+    encounterPositions = encounterPositions.filter(pos => pos < mapNodes);
+    renderMap();
+  }
+  if(event.includes('Discard a random') && playerHand.length > 0){
+    let rand = Math.floor(Math.random() * playerHand.length);
+    let discarded = playerHand.splice(rand, 1)[0];
+    discardPile.push(discarded);
+    logMsg(`Lost ${discarded} from hand.`);
+    renderHand();
+  }
+  if(event.includes('Lose 2 coins')){
+    coins = Math.max(0, coins - 2);
+  }
+  if(event.includes('Final Darkness')){
+    setTimeout(() => {
+      logMsg(`Final darkness consumes the dream! Final score: ${fragmentsCollected}/${totalFragments} fragments.`);
+      endGame();
+    }, 3000);
+  }
+}
+
+function endGame(){
+  // Hide section headers
+  document.getElementById('market-header').classList.add('hidden');
+  document.getElementById('hand-header').classList.add('hidden'); 
+  document.getElementById('map-header').classList.add('hidden');
+  
+  // Clear game areas
+  document.getElementById('market').innerHTML = '';
+  document.getElementById('player-hand').innerHTML = '';
+  document.getElementById('map').innerHTML = '';
+  document.getElementById('end-turn-btn').style.display = 'none';
+  
+  // Determine win/loss and create game over screen
+  const isWin = fragmentsCollected >= totalFragments;
+  const gameOverContainer = document.getElementById('game-over-container');
+  
+  let flavorText;
+  if (isWin) {
+    const flavorTexts = [
+      "The dream fragments coalesce into crystalline truth. You have mastered the shifting realm.",
+      "Through shadow and mist, you have gathered the scattered pieces of the dreaming mind.",
+      "The Cruxflare fades as your collection of fragments forms a complete vision of the dreamscape."
+    ];
+    flavorText = flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
+  } else {
+    const flavorTexts = [
+      "The dream collapses, fragments scattered to the void. The shadows claim what remains.",
+      "Cruxflare consumes the last vestiges of the dream. The fragments slip through ethereal fingers.",
+      "The mist thickens, obscuring the path. Some fragments were never meant to be found."
+    ];
+    flavorText = flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
+  }
+  
+  gameOverContainer.innerHTML = `
+    <div class="game-over-screen">
+      <div class="game-over-title">${isWin ? '✧ Victory ✧' : '◯ Dream Lost ◯'}</div>
+      <div class="game-over-score">Fragments Collected: ${fragmentsCollected} / ${totalFragments}</div>
+      <div class="game-over-flavor">${flavorText}</div>
+    </div>
+  `;
+  
+  document.getElementById('restart-btn').style.display = 'inline-block';
+}
+
+function restartGame(){
+  // Show section headers again
+  document.getElementById('market-header').classList.remove('hidden');
+  document.getElementById('hand-header').classList.remove('hidden');
+  document.getElementById('map-header').classList.remove('hidden');
+  
+  // Clear game over screen
+  document.getElementById('game-over-container').innerHTML = '';
+  
+  initGame();
+  logMsg('Welcome to the game!');
+  document.getElementById('end-turn-btn').style.display = 'inline-block';
+}
+
+initGame();
+</script>
+</body>
+</html>
