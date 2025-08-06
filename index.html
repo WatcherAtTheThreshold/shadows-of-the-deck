@@ -441,6 +441,7 @@
 <body>
 <div class="background"></div>
 <div class="mist-overlay"></div>
+<div class="mist-layer" id="mist-layer"></div>
 <div class="particles" id="particles"></div>
 
 <div id="game">
@@ -619,6 +620,7 @@ function initGame(){
   setupGameData();
   createParticles();
   document.body.classList.remove('danger-mode');
+  document.getElementById('mist-layer').classList.remove('danger');
   document.getElementById('restart-btn').style.display = 'none';
   for (let i=0; i<5; i++) { drawMarketCard(); }
   renderMarket();
@@ -921,8 +923,10 @@ function updateHUD(){
 }
 
 function updateMistOverlay(){
+  const mistLayer = document.getElementById('mist-layer');
   if(cruxflareDeck.length <= 7){
     document.body.classList.add('danger-mode');
+    mistLayer.classList.add('danger');
   }
   
   // Enhanced endgame tension - but less stroby
