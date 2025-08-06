@@ -1072,7 +1072,12 @@ function restartGame(){
   // Clear game over screen
   document.getElementById('game-over-container').innerHTML = '';
   
+  // Wait for DOM to be fully loaded before starting the game
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initGame);
+} else {
   initGame();
+}
   logMsg('Welcome to the game!');
   document.getElementById('end-turn-btn').style.display = 'inline-block';
 }
