@@ -4,13 +4,50 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shadows of the Deck - QR Code</title>
+<style>
+  body {
+    font-family: sans-serif;
+    background: #111;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  h1 {
+    margin-bottom: 10px;
+  }
+  p {
+    margin: 5px 0 15px 0;
+    text-align: center;
+  }
+  .qr-container {
+    background: rgba(34, 34, 34, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+  }
+  img {
+    display: block;
+    margin: auto;
+    border: 4px solid gold;
+    border-radius: 8px;
+  }
+  strong {
+    color: gold;
+  }
+</style>
 </head>
-<body style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; font-family:sans-serif;">
-  <h1>Shadows of the Deck</h1>
-  <p>Scan this QR code to test the game on your phone:</p>
-  <a href="https://watcheratthethreshold.github.io/shadows-of-the-deck/" target="_blank">
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://watcheratthethreshold.github.io/shadows-of-the-deck/" alt="QR Code to Shadows of the Deck">
-  </a>
-  <p>Or visit: <br><strong>https://watcheratthethreshold.github.io/shadows-of-the-deck/</strong></p>
+<body>
+  <div class="qr-container">
+    <h1>Shadows of the Deck</h1>
+    <p>Scan this QR code to test the game on your phone:</p>
+    <a href="https://watcheratthethreshold.github.io/shadows-of-the-deck/" target="_blank">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://watcheratthethreshold.github.io/shadows-of-the-deck/" alt="QR Code to Shadows of the Deck">
+    </a>
+    <p>Or visit: <br><strong>https://watcheratthethreshold.github.io/shadows-of-the-deck/</strong></p>
+  </div>
 </body>
 </html>
