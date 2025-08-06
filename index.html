@@ -32,7 +32,7 @@
 
   .mist-overlay {
     background: url('images/mist-overlay2.png') repeat;
-    opacity: 0.4;
+    opacity: 0.6;
     position: fixed;
     width: 100%;
     height: 100%;
@@ -42,7 +42,7 @@
   }
 
   body.danger-mode .mist-overlay {
-    opacity: 0.6;
+    opacity: 0.8;
     animation-duration: 15s;
   }
 
@@ -450,7 +450,7 @@
 </div>
 
 <script>
-let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, encounterPositions, shadowBlocked, lastPlayedCard;
+let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, encounterPositions, shadowBlocked, lastPlayedCard, fragmentBoostActive;
 
 // Data-driven card system
 const CARD_EFFECTS = {
@@ -561,6 +561,7 @@ function setupGameData(){
   encounterPositions = [2, 4, 6, 8, 10];
   shadowBlocked = false;
   lastPlayedCard = null;
+  fragmentBoostActive = null;
   
   cruxflareDeck = [
     "Shadow Surge: Add a dead card to discard.",
@@ -720,7 +721,7 @@ function playCard(card, index){
             
           case 'fragment_boost':
             // Set a flag for next fragment collection
-            window.fragmentBoostActive = effect.value;
+            fragmentBoostActive = effect.value;
             console.log('Fragment boost set:', effect.value); // Debug log
             message += ` - Next fragment worth ${effect.value} points!`;
             break;
@@ -826,10 +827,10 @@ function movePlayer(steps, skipEncounters = false){
     let fragmentValue = 1;
     
     // Check if fragment boost is active
-    console.log('Fragment boost active?', window.fragmentBoostActive); // Debug log
-    if (window.fragmentBoostActive) {
-      fragmentValue = window.fragmentBoostActive;
-      window.fragmentBoostActive = null;
+    console.log('Fragment boost active?', fragmentBoostActive); // Debug log
+    if (fragmentBoostActive) {
+      fragmentValue = fragmentBoostActive;
+      fragmentBoostActive = null;
       logMsg(`Fragment boost activated! Gained ${fragmentValue} fragments!`);
     }
     
