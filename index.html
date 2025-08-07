@@ -1,53 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadows in the Deck</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;700&family=Source+Sans+Pro:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadows in the Deck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;700&family=Source+Sans+Pro:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="mist-layer" id="mist-layer"></div>
-<div class="particles" id="particles"></div>
+  <!-- Atmospheric Effects -->
+  <div class="mist-layer" id="mist-layer"></div>
+  <div class="particles" id="particles"></div>
 
-<div id="game">
-  <h1>Shadows in the Deck</h1>
-  <div id="hud">
-    Coins: <span id="coins">0</span> | 
-    Fragments: <span id="frags">0</span> | 
-    Cruxflare Cards Left: <span id="crux-remaining">0</span>
+  <!-- Game Container -->
+  <div id="game">
+    <h1>Shadows in the Deck</h1>
+    
+    <!-- HUD -->
+    <div id="hud">
+      Coins: <span id="coins">0</span> | 
+      Fragments: <span id="frags">0</span> | 
+      Cruxflare Cards Left: <span id="crux-remaining">0</span>
+    </div>
+    
+    <!-- Legend -->
+    <div id="legend">
+      <div class="legend-item">
+        <span class="legend-icon" style="background: cyan; box-shadow: 0 0 5px cyan;"></span>You
+      </div>
+      <div class="legend-item">
+        <span class="legend-icon" style="background: rgba(222, 184, 135, 0.9); box-shadow: 0 0 5px rgba(222, 184, 135, 0.8);"></span>Fragment
+      </div>
+      <div class="legend-item">
+        <span class="legend-icon" style="background: rgba(138, 43, 226, 0.9); box-shadow: 0 0 5px rgba(138, 43, 226, 0.7);"></span>Encounter
+      </div>
+    </div>
+
+    <!-- Market Section -->
+    <h2 class="section-header" id="market-header">Market</h2>
+    <div id="market"></div>
+
+    <!-- Hand Section -->
+    <h2 class="section-header" id="hand-header">Your Hand</h2>
+    <div id="player-hand"></div>
+
+    <!-- Turn Controls -->
+    <button id="end-turn-btn" onclick="endTurn()">End Turn</button>
+
+    <!-- Map Section -->
+    <h2 class="section-header" id="map-header">Dream Map</h2>
+    <div id="map"></div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-container"></div>
+
+    <!-- Log and Controls -->
+    <div id="log">Welcome to the game!</div>
+    <button id="restart-btn" style="display:none;" onclick="restartGame()">Restart Game</button>
   </div>
-  
-  <div id="legend">
-    <div class="legend-item">
-      <span class="legend-icon" style="background: cyan; box-shadow: 0 0 5px cyan;"></span>You
-    </div>
-    <div class="legend-item">
-      <span class="legend-icon" style="background: rgba(222, 184, 135, 0.9); box-shadow: 0 0 5px rgba(222, 184, 135, 0.8);"></span>Fragment
-    </div>
-    <div class="legend-item">
-      <span class="legend-icon" style="background: rgba(138, 43, 226, 0.9); box-shadow: 0 0 5px rgba(138, 43, 226, 0.7);"></span>Encounter
-    </div>
-  </div>
 
-  <h2 class="section-header" id="market-header">Market</h2>
-  <div id="market"></div>
-
-  <h2 class="section-header" id="hand-header">Your Hand</h2>
-  <div id="player-hand"></div>
-
-  <button id="end-turn-btn" onclick="endTurn()">End Turn</button>
-
-  <h2 class="section-header" id="map-header">Dream Map</h2>
-  <div id="map"></div>
-
-  <div id="game-over-container"></div>
-
-  <div id="log">Welcome to the game!</div>
-  <button id="restart-btn" style="display:none;" onclick="restartGame()">Restart Game</button>
-</div>
-
-<script type="module" src="game.js"></script>
+  <!-- Game Logic -->
+  <script type="module" src="game.js"></script>
 </body>
 </html>
