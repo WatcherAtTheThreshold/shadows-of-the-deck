@@ -13,65 +13,143 @@ body, html {
   overflow-x: hidden;
 }
 
-/* Test: Simple overlay approach */
-body::before {
-  content: '';
+/* Enhanced Mist Layers */
+.mist-layer {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('images/mist-overlay.png') repeat;
-  opacity: .06;
-  z-index: -1;
-  animation: mistScroll 20s linear infinite;
   pointer-events: none;
-  transition: background-image 2s ease-in-out, opacity 2s ease-in-out;
+  z-index: 1;
+  overflow: hidden;
 }
 
-body.danger-mode::before {
-  background-image: url('images/mist-overlay2.png');
-  opacity: 0.8;
-  animation-duration: 15s;
-}
-
-/* Fallback: If images don't load, show animated gradient mist */
-body::after {
+/* Multiple mist layers for depth */
+.mist-layer::before {
   content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
   background: 
-    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(255,255,255,0.08) 0%, transparent 50%);
-  z-index: -2;
-  animation: mistScroll 25s linear infinite reverse;
-  pointer-events: none;
-  opacity: 0.3;
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.02) 0%, transparent 25%),
+    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.04) 0%, transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(255,255,255,0.02) 0%, transparent 25%),
+    radial-gradient(circle at 30% 70%, rgba(255,255,255,0.03) 0%, transparent 25%);
+  animation: mistDrift1 45s ease-in-out infinite;
+  opacity: 0.6;
 }
 
-body.danger-mode::after {
+.mist-layer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
   background: 
-    radial-gradient(circle at 20% 50%, rgba(100,0,0,0.2) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(100,0,0,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 80%, rgba(100,0,0,0.15) 0%, transparent 50%);
+    radial-gradient(circle at 70% 30%, rgba(255,255,255,0.02) 0%, transparent 30%),
+    radial-gradient(circle at 20% 60%, rgba(255,255,255,0.03) 0%, transparent 30%),
+    radial-gradient(circle at 60% 90%, rgba(255,255,255,0.02) 0%, transparent 30%),
+    radial-gradient(circle at 90% 50%, rgba(255,255,255,0.025) 0%, transparent 30%);
+  animation: mistDrift2 60s ease-in-out infinite reverse;
   opacity: 0.4;
 }
 
-.background {
-  display: none;
+/* Additional atmospheric tendrils */
+.mist-tendrils {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.01) 35%, transparent 40%),
+    linear-gradient(-45deg, transparent 60%, rgba(255,255,255,0.015) 65%, transparent 70%),
+    linear-gradient(90deg, transparent 20%, rgba(255,255,255,0.008) 25%, transparent 30%);
+  animation: tendrilFlow 35s linear infinite;
+  opacity: 0.7;
 }
 
-.mist-overlay {
-  display: none;
+/* Danger mode - red mist */
+body.danger-mode .mist-layer::before {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255,100,100,0.06) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(200,50,50,0.04) 0%, transparent 25%),
+    radial-gradient(circle at 40% 40%, rgba(255,80,80,0.08) 0%, transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(180,40,40,0.04) 0%, transparent 25%),
+    radial-gradient(circle at 30% 70%, rgba(255,60,60,0.06) 0%, transparent 25%);
+  animation-duration: 25s;
+  opacity: 0.8;
 }
 
-@keyframes mistScroll {
-  from { background-position: 0 0; }
-  to { background-position: -500px 500px; }
+body.danger-mode .mist-layer::after {
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(200,30,30,0.04) 0%, transparent 30%),
+    radial-gradient(circle at 20% 60%, rgba(255,40,40,0.06) 0%, transparent 30%),
+    radial-gradient(circle at 60% 90%, rgba(180,20,20,0.04) 0%, transparent 30%),
+    radial-gradient(circle at 90% 50%, rgba(255,50,50,0.05) 0%, transparent 30%);
+  animation-duration: 35s;
+  opacity: 0.6;
+}
+
+body.danger-mode .mist-tendrils {
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(255,50,50,0.02) 35%, transparent 40%),
+    linear-gradient(-45deg, transparent 60%, rgba(200,30,30,0.025) 65%, transparent 70%),
+    linear-gradient(90deg, transparent 20%, rgba(255,40,40,0.015) 25%, transparent 30%);
+  animation-duration: 20s;
+}
+
+/* Keyframe animations */
+@keyframes mistDrift1 {
+  0%, 100% { 
+    transform: translate(0, 0) rotate(0deg) scale(1); 
+  }
+  25% { 
+    transform: translate(-30px, -20px) rotate(1deg) scale(1.05); 
+  }
+  50% { 
+    transform: translate(20px, -40px) rotate(-1deg) scale(0.95); 
+  }
+  75% { 
+    transform: translate(-10px, -30px) rotate(0.5deg) scale(1.02); 
+  }
+}
+
+@keyframes mistDrift2 {
+  0%, 100% { 
+    transform: translate(0, 0) rotate(0deg) scale(1); 
+  }
+  33% { 
+    transform: translate(25px, -15px) rotate(-0.8deg) scale(1.03); 
+  }
+  66% { 
+    transform: translate(-15px, -35px) rotate(0.8deg) scale(0.97); 
+  }
+}
+
+@keyframes tendrilFlow {
+  0% { 
+    transform: translateX(0) translateY(0) skewX(0deg); 
+  }
+  25% { 
+    transform: translateX(-20px) translateY(-10px) skewX(1deg); 
+  }
+  50% { 
+    transform: translateX(15px) translateY(-20px) skewX(-1deg); 
+  }
+  75% { 
+    transform: translateX(-10px) translateY(-15px) skewX(0.5deg); 
+  }
+  100% { 
+    transform: translateX(0) translateY(0) skewX(0deg); 
+  }
 }
 
 /* Floating particles */
