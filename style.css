@@ -315,7 +315,7 @@ h2 {
   width: 100%;
   height: 100%;
   text-align: center;
-  transition: transform 0.6s;
+  transition: transform 0.4s; /* Faster base transition */
   transform-style: preserve-3d;
 }
 
@@ -352,9 +352,9 @@ h2 {
   box-shadow: 0 5px 15px rgba(222, 184, 135, 0.3);
 }
 
-/* Back face - with background image */
+/* Back face - beautiful brown design with pattern */
 .card-back {
-  background: rgba(0, 0, 0, 0.4) url('images/card-back.webp') center/cover;
+  background: rgba(0, 0, 0, 0.4) url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140"><defs><pattern id="cardPattern" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="2" fill="%23654321" opacity="0.3"/></pattern></defs><rect width="100" height="140" fill="%232a1810"/><rect width="100" height="140" fill="url(%23cardPattern)"/><path d="M20 20 L80 20 L50 50 Z" fill="%234a2820" opacity="0.6"/><path d="M20 120 L80 120 L50 90 Z" fill="%234a2820" opacity="0.6"/></svg>') center/cover;
   background-blend-mode: overlay;
   border: 2px solid rgba(138, 43, 226, 0.6);
   backdrop-filter: blur(15px);
@@ -362,9 +362,16 @@ h2 {
   color: rgba(222, 184, 135, 0.9);
 }
 
-/* Market card animations */
+.cost {
+  font-size: 0.8em;
+  color: rgba(222, 184, 135, 0.9);
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* Market card animations - faster */
 .card-flip.market-bought .card-flip-inner {
-  animation: flipAndFade 1.0s ease-in-out forwards;
+  animation: flipAndFade 0.8s ease-in-out forwards; /* Faster */
 }
 
 @keyframes flipAndFade {
@@ -374,20 +381,14 @@ h2 {
   100% { transform: rotateY(180deg); opacity: 0; transform: scale(0.8) rotateY(180deg); }
 }
 
-/* Hand card animations */
+/* Hand card animations - faster */
 .card-flip.hand-played .card-flip-inner {
-  animation: flipAndStay 0.7s ease-in-out forwards;
+  animation: flipAndStay 0.5s ease-in-out forwards; /* Faster */
 }
 
 @keyframes flipAndStay {
   0% { transform: rotateY(0deg); }
   100% { transform: rotateY(180deg); }
-}
-
-.cost { 
-  font-size: 0.8em; 
-  color: rgba(222, 184, 135, 0.9);
-  font-weight: bold;
 }
 
 #map { 
