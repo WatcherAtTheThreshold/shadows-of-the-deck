@@ -210,10 +210,37 @@ function replayLastCard() {
   } else if (lastEffect.type === 'move') {
     movePlayer(lastEffect.value);
     logMsg(`Dream Echo: Moved ${lastEffect.value} more spaces`);
+  } else if (lastEffect.type === 'move_safe') {
+    movePlayer(lastEffect.value, true);
+    logMsg(`Dream Echo: Moved ${lastEffect.value} more spaces safely`);
   } else if (lastEffect.type === 'special') {
-    logMsg(`Dream Echo: Replayed ${handleSpecialEffect(lastEffect)}`);
+    // Handle special effects carefully to avoid problematic double-effects
+    switch (lastEffect.effect) {
+      case 'lucky_find':
+        let gain = Math.ceil(Math.random() * 3);
+        coins += gain;
+        logMsg(`Dream Echo: Found ${gain} more orb${gain === 1 ? '' : 's'}!`);
+        break;
+      case 'move_and_coin':
+        movePlayer(lastEffect.move);
+        coins += lastEffect.coins;
+        logMsg(`Dream Echo: Moved ${lastEffect.move} more, gained ${lastEffect.coins} more orb`);
+        break;
+      case 'coin_and_draw':
+        coins += lastEffect.coins;
+        if (playerDeck.length > 0) {
+          playerHand.push(playerDeck.shift());
+          logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, drew 1 more card`);
+        } else {
+          logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, deck empty`);
+        }
+        break;
+      default:
+        logMsg(`Dream Echo: Cannot replay ${lastPlayedCard} (special effect not repeatable)`);
+    }
   }
   
+  updateAllUI();
 }
 
 // Move player on the map
