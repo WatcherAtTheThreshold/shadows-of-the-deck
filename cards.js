@@ -15,6 +15,7 @@ export const CARD_EFFECTS = {
   'Shadow Blocker': { type: 'special', effect: 'shadow_block' },
   'Dream Sight': { type: 'special', effect: 'dream_sight' },
   'Fragment 2pts': { type: 'special', effect: 'fragment_boost', value: 2 },
+  'Ethereal Leap': { type: 'special', effect: 'jump_to_fragment' },
   'Coin Burst': { type: 'coins', value: 3 },
   'Astral Drift': { type: 'move', value: 4 },
   'Dream Echo': { type: 'special', effect: 'replay_last' },
@@ -31,7 +32,7 @@ export function generateTooltip(cardName) {
   
   switch (effect.type) {
     case 'coins': 
-      return `Gain ${effect.value} coins when played`;
+      return `Gain ${effect.value} orb${effect.value === 1 ? '' : 's'} when played`;
     case 'move': 
       return `Move ${effect.value} spaces on the map`;
     case 'move_safe': 
@@ -39,19 +40,21 @@ export function generateTooltip(cardName) {
     case 'special':
       switch (effect.effect) {
         case 'lucky_find': 
-          return "Gain 1-3 random coins";
+          return "Gain 1-3 random orbs";
         case 'shadow_block': 
           return "Block the next Cruxflare effect";
         case 'dream_sight': 
           return "Look at top Cruxflare card";
         case 'fragment_boost': 
           return `Next fragment collected counts as ${effect.value}`;
+        case 'jump_to_fragment':
+          return "Teleport to the next uncollected fragment";
         case 'replay_last': 
           return "Replay your last played card";
         case 'move_and_coin': 
-          return `Move ${effect.move} spaces, gain ${effect.coins} coin`;
+          return `Move ${effect.move} spaces, gain ${effect.coins} orb`;
         case 'coin_and_draw': 
-          return `Gain ${effect.coins} coins, draw 1 card`;
+          return `Gain ${effect.coins} orbs, draw 1 card`;
         case 'move_and_protect': 
           return `Move ${effect.move} spaces, avoid next Cruxflare`;
         default: 
