@@ -53,7 +53,7 @@ export function renderMarket(marketRow, coins, onBuyCard) {
   });
 }
 
-// Render player hand with flip animations
+// Render player hand with flip animations and placeholder backs
 export function renderHand(playerHand, onPlayCard) {
   let h = document.getElementById('player-hand');
   h.innerHTML = '';
@@ -72,9 +72,11 @@ export function renderHand(playerHand, onPlayCard) {
     `;
     el.onclick = () => {
       if (!el.classList.contains('hand-played')) {
-        el.classList.add('hand-played');
-        // Wait for flip animation before processing card play
-        setTimeout(() => onPlayCard(card, i), 500); // Faster timing
+        el.classList.add('hand-played'); // Flip to back
+        el.style.pointerEvents = 'none'; // Disable further clicks
+        el.style.cursor = 'default'; // Change cursor to show it's disabled
+        // Process the game logic after flip animation
+        setTimeout(() => onPlayCard(card, i), 500);
       }
     };
     h.appendChild(el);
