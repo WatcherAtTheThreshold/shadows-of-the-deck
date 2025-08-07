@@ -44,7 +44,7 @@ export function renderMarket(marketRow, coins, onBuyCard) {
       if (coins >= cardObj.cost && !el.classList.contains('market-bought')) {
         el.classList.add('market-bought');
         // Wait for flip animation to complete before processing purchase
-        setTimeout(() => onBuyCard(i), 800); // Faster timing
+        setTimeout(() => onBuyCard(i), 500); // Process after flip completes
       } else {
         onBuyCard(i); // Still show "not enough orbs" message immediately
       }
