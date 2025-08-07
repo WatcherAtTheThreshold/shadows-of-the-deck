@@ -203,7 +203,7 @@ function replayLastCard() {
   } else if (lastEffect.type === 'special') {
     logMsg(`Dream Echo: Replayed ${handleSpecialEffect(lastEffect)}`);
   }
-  updateAllUI();
+  
 }
 
 // Move player on the map
