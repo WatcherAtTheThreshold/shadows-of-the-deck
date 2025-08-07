@@ -7,12 +7,12 @@ class IntroTutorial {
       {
         text: "Gain focus orbs and move by playing cards from your hand",
         highlight: "#player-hand",
-        overlay: "Your Hand",
+        overlay: "Your Hand", 
         duration: 2000
       },
       {
         text: "Buy powerful cards from the market using your orbs",
-        highlight: "#market", 
+        highlight: "#market",
         overlay: "Market",
         duration: 2000
       },
@@ -40,13 +40,14 @@ class IntroTutorial {
 
   start() {
     if (localStorage.getItem('shadows-tutorial-complete')) {
-      return; // Skip if already completed
+      return false; // Skip if already completed
     }
     
     this.isActive = true;
     this.currentStep = 0;
     this.createTutorialOverlay();
     this.showStep(0);
+    return true; // Tutorial started
   }
 
   createTutorialOverlay() {
@@ -266,3 +267,28 @@ document.head.appendChild(styleSheet);
 
 // Export the tutorial class
 export default IntroTutorial;
+
+/* 
+INTEGRATION INSTRUCTIONS:
+
+1. Add to game.js imports:
+import IntroTutorial from './intro.js';
+
+2. Replace the logMsg('Welcome to the game!') in initGame() with:
+const tutorial = new IntroTutorial();
+setTimeout(() => {
+  if (!tutorial.start()) {
+    logMsg('Welcome to the game!');
+  }
+}, 800);
+
+3. Add these CSS updates to style.css for bigger cards:
+.card-flip {
+  width: 120px;  
+  height: 170px; 
+}
+
+.card-front, .card-back {
+  font-size: 0.9em; 
+}
+*/
