@@ -221,7 +221,7 @@ export function clearGameAreas() {
   document.getElementById('map').innerHTML = '';
 }
 
-// Show game over screen
+// Show game over screen as overlay
 export function showGameOverScreen(isWin, fragmentsCollected, totalFragments) {
   let flavorText;
   if (isWin) {
