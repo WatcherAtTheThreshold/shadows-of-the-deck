@@ -1,97 +1,268 @@
-// intro.js - drop-in onboarding that injects its own CSS and requires no HTML changes
-(function(){
-  const css = `
-  .sotd-highlight-glow {
-    box-shadow: 0 0 20px rgba(222,184,135,.9) !important;
-    border-color: rgba(222,184,135,.85) !important;
-  }
-  .sotd-highlight-ring {
-    outline: 2px solid rgba(222,184,135,.6);
-    outline-offset: 8px;
-    border-radius: 12px;
-    transition: outline-color .25s ease;
-  }
-  .sotd-overlay-label {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    pointer-events: none;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.8rem;
-    color: rgba(255,255,255,.85);
-    text-shadow: 0 6px 18px rgba(0,0,0,.55);
-    opacity: 0;
-    transition: opacity .35s ease;
-  }
-  .sotd-overlay-label.sotd-show { opacity: 1; }
-  `;
-  const style = document.createElement('style');
-  style.textContent = css;
-  document.head.appendChild(style);
-
-  function highlight(selector, opts = {}) {
-    const el = document.querySelector(selector);
-    if (!el) return () => {};
-    if (opts.ring) el.classList.add('sotd-highlight-ring');
-    else el.classList.add('sotd-highlight-glow');
-    return () => el && el.classList.remove('sotd-highlight-ring','sotd-highlight-glow');
-  }
-
-  function showOverlayLabel(selector, text) {
-    const host = document.querySelector(selector);
-    if (!host) return () => {};
-    if (getComputedStyle(host).position === 'static') {
-      host.setAttribute('data-sotd-pos-static','');
-      host.style.position = 'relative';
-    }
-    const label = document.createElement('div');
-    label.className = 'sotd-overlay-label';
-    label.textContent = text;
-    host.appendChild(label);
-    requestAnimationFrame(()=>label.classList.add('sotd-show'));
-    return () => {
-      label.classList.remove('sotd-show');
-      setTimeout(()=>label.remove(), 350);
-      if (host.hasAttribute('data-sotd-pos-static')) {
-        host.style.position = '';
-        host.removeAttribute('data-sotd-pos-static');
+// Interactive tutorial system for Shadows in the Deck
+class IntroTutorial {
+  constructor() {
+    this.currentStep = 0;
+    this.isActive = false;
+    this.steps = [
+      {
+        text: "Gain focus orbs and move by playing cards from your hand",
+        highlight: "#player-hand",
+        overlay: "Your Hand",
+        duration: 2000
+      },
+      {
+        text: "Buy powerful cards from the market using your orbs",
+        highlight: "#market", 
+        overlay: "Market",
+        duration: 2000
+      },
+      {
+        text: "Collect all 5 fragments",
+        highlight: "#frags",
+        glow: true,
+        duration: 1500
+      },
+      {
+        text: "Explore the dream map to find them",
+        highlight: "#map",
+        overlay: "Dream Map", 
+        duration: 2000
+      },
+      {
+        text: "Before the Cruxflare deck runs out!",
+        highlight: "#crux-remaining",
+        glow: true,
+        pulse: true,
+        duration: 2000
       }
-    };
-  }
-
-  function runIntroSequence() {
-    const log = document.getElementById('log');
-    const headers = document.querySelectorAll('.section-header');
-    headers.forEach(h => h.classList.add('hidden'));
-
-    const steps = [
-      { text: "Welcome to the game!", effect: () => () => {} },
-      { text: "Play cards in your hand to gain Focus and movement.",
-        effect: () => { const off1 = highlight('#player-hand',{ring:true}); const off2 = showOverlayLabel('#player-hand','Your Hand'); return ()=>{off1();off2();}; } },
-      { text: "Buy new cards from the market to grow your deck.",
-        effect: () => { const off1 = highlight('#market',{ring:true}); const off2 = showOverlayLabel('#market','Market'); return ()=>{off1();off2();}; } },
-      { text: "Find five fragments on the Dream Map.",
-        effect: () => { const off1 = highlight('#frags'); const off2 = highlight('#map',{ring:true}); const off3 = showOverlayLabel('#map','Dream Map'); return ()=>{off1();off2();off3();}; } },
-      { text: "Do it before the Cruxflare runs out of cards.",
-        effect: () => highlight('#crux-remaining') }
     ];
-
-    let i = 0, cleanup = () => {};
-    const tick = () => {
-      cleanup();
-      if (i >= steps.length) {
-        headers.forEach(h => h.classList.remove('hidden'));
-        if (log) log.textContent = "Good hunting.";
-        return;
-      }
-      const s = steps[i++];
-      if (log) log.textContent = s.text;
-      cleanup = s.effect?.() || (()=>{});
-      setTimeout(tick, 2800);
-    };
-    tick();
   }
 
-  window.addEventListener('load', () => setTimeout(runIntroSequence, 150));
-})();
+  start() {
+    if (localStorage.getItem('shadows-tutorial-complete')) {
+      return; // Skip if already completed
+    }
+    
+    this.isActive = true;
+    this.currentStep = 0;
+    this.createTutorialOverlay();
+    this.showStep(0);
+  }
+
+  createTutorialOverlay() {
+    // Create main tutorial overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'tutorial-overlay';
+    overlay.innerHTML = `
+      <div class="tutorial-content">
+        <div class="tutorial-text" id="tutorial-text"></div>
+        <div class="tutorial-overlay-text" id="tutorial-overlay-text"></div>
+        <button class="tutorial-skip" id="tutorial-skip">Skip Tutorial</button>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    // Add event listeners
+    document.getElementById('tutorial-skip').onclick = () => this.skip();
+    
+    // Auto-advance through steps
+    this.stepTimer = null;
+  }
+
+  showStep(stepIndex) {
+    if (stepIndex >= this.steps.length) {
+      this.complete();
+      return;
+    }
+
+    const step = this.steps[stepIndex];
+    const tutorialText = document.getElementById('tutorial-text');
+    const overlayText = document.getElementById('tutorial-overlay-text');
+    
+    // Clear previous highlights
+    this.clearHighlights();
+    
+    // Set tutorial text
+    tutorialText.textContent = step.text;
+    tutorialText.classList.add('fade-in');
+    
+    // Add highlight effects
+    if (step.highlight) {
+      const element = document.querySelector(step.highlight);
+      if (element) {
+        element.classList.add('tutorial-highlight');
+        
+        if (step.glow) element.classList.add('tutorial-glow');
+        if (step.pulse) element.classList.add('tutorial-pulse');
+      }
+    }
+    
+    // Add overlay text if specified
+    if (step.overlay && step.highlight) {
+      const element = document.querySelector(step.highlight);
+      if (element) {
+        overlayText.textContent = step.overlay;
+        overlayText.classList.add('tutorial-overlay-visible');
+        this.positionOverlayText(element, overlayText);
+      }
+    }
+    
+    // Auto advance to next step
+    this.stepTimer = setTimeout(() => {
+      this.currentStep++;
+      this.showStep(this.currentStep);
+    }, step.duration);
+  }
+
+  positionOverlayText(targetElement, overlayElement) {
+    const rect = targetElement.getBoundingClientRect();
+    overlayElement.style.position = 'fixed';
+    overlayElement.style.left = rect.left + (rect.width / 2) - (overlayElement.offsetWidth / 2) + 'px';
+    overlayElement.style.top = (rect.top - 40) + 'px';
+    overlayElement.style.zIndex = '10001';
+  }
+
+  clearHighlights() {
+    // Remove all tutorial classes
+    document.querySelectorAll('.tutorial-highlight').forEach(el => {
+      el.classList.remove('tutorial-highlight', 'tutorial-glow', 'tutorial-pulse');
+    });
+    
+    // Clear overlay text
+    const overlayText = document.getElementById('tutorial-overlay-text');
+    if (overlayText) {
+      overlayText.classList.remove('tutorial-overlay-visible');
+      overlayText.textContent = '';
+    }
+  }
+
+  skip() {
+    this.complete();
+  }
+
+  complete() {
+    this.isActive = false;
+    clearTimeout(this.stepTimer);
+    this.clearHighlights();
+    
+    // Remove tutorial overlay
+    const overlay = document.getElementById('tutorial-overlay');
+    if (overlay) {
+      overlay.classList.add('fade-out');
+      setTimeout(() => overlay.remove(), 500);
+    }
+    
+    // Mark tutorial as complete
+    localStorage.setItem('shadows-tutorial-complete', 'true');
+    
+    // Show normal welcome message
+    document.getElementById('log').textContent = 'Welcome to the game!';
+  }
+
+  // Method to reset tutorial (for testing or player choice)
+  reset() {
+    localStorage.removeItem('shadows-tutorial-complete');
+  }
+}
+
+// CSS styles for tutorial (add to your style.css)
+const tutorialStyles = `
+#tutorial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+
+.tutorial-content {
+  text-align: center;
+  color: white;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.tutorial-text {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.tutorial-text.fade-in {
+  opacity: 1;
+}
+
+.tutorial-overlay-text {
+  position: fixed;
+  background: rgba(222, 184, 135, 0.9);
+  color: #000;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tutorial-overlay-text.tutorial-overlay-visible {
+  opacity: 1;
+}
+
+.tutorial-skip {
+  background: rgba(138, 43, 226, 0.3);
+  border: 1px solid rgba(138, 43, 226, 0.6);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tutorial-skip:hover {
+  background: rgba(138, 43, 226, 0.5);
+}
+
+.tutorial-highlight {
+  position: relative;
+  z-index: 9999;
+  border: 3px solid rgba(222, 184, 135, 0.8) !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.tutorial-glow {
+  box-shadow: 0 0 20px rgba(222, 184, 135, 0.6) !important;
+}
+
+.tutorial-pulse {
+  animation: tutorial-pulse 1s infinite;
+}
+
+@keyframes tutorial-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+`;
+
+// Add styles to document
+const styleSheet = document.createElement('style');
+styleSheet.textContent = tutorialStyles;
+document.head.appendChild(styleSheet);
+
+// Export the tutorial class
+export default IntroTutorial;
