@@ -299,8 +299,8 @@ h2 {
 
 /* Card flip container */
 .card-flip {
-  width: 100px;
-  height: 140px;
+  width: 120px;
+  height: 170px;
   perspective: 1000px;
   position: relative;
   margin: 5px;
@@ -330,7 +330,7 @@ h2 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 0.85em;
+  font-size: 0.9em;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
