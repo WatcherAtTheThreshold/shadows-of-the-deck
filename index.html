@@ -10,7 +10,7 @@
 <body>
   <!-- Atmospheric Effects -->
   <div class="mist-layer" id="mist-layer"></div>
-<div class="mist-tendrils"></div>
+  <div class="mist-tendrils"></div>
   <div class="particles" id="particles"></div>
 
   <!-- Game Container -->
@@ -19,9 +19,10 @@
     
     <!-- HUD -->
     <div id="hud">
-      <span class="legend-icon" style="background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);"></span><span id="coins">0</span> | 
-      Fragments: <span id="frags">0</span> | 
-      Cruxflare Cards Left: <span id="crux-remaining">0</span>
+      <span class="legend-icon" style="background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);"></span>
+      <span id="coins">0</span> | 
+      Fragments: <span id="frags-container"><span id="frags">0</span></span> | 
+      Cruxflare Cards Left: <span id="crux-container"><span id="crux-remaining">0</span></span>
     </div>
     
     <!-- Legend -->
@@ -59,11 +60,13 @@
     <div id="game-over-container"></div>
 
     <!-- Log and Controls -->
-    <div id="log">Welcome to the game!</div>
+    <div id="log" aria-live="polite">Welcome to the game!</div>
     <button id="restart-btn" style="display:none;" onclick="restartGame()">Restart Game</button>
   </div>
 
   <!-- Game Logic -->
   <script type="module" src="game.js"></script>
+  <!-- Onboarding sequence (safe standalone module) -->
+  <script type="module" src="intro.js"></script>
 </body>
 </html>
