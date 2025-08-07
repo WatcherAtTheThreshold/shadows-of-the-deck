@@ -252,9 +252,14 @@ body.danger-mode .mist-tendrils {
   line-height: 1.4;
 }
 
-/* Start with headers able to hide */
-.section-header { transition: opacity 0.5s ease; }
-.section-header.hidden { opacity: 0; pointer-events: none; }
+.section-header {
+  transition: opacity 0.5s ease;
+}
+
+.section-header.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 
 #game { 
   max-width: 1000px; 
@@ -292,10 +297,10 @@ h2 {
   flex-wrap: wrap; 
 }
 
-/* Card flip container (bigger) */
+/* Card flip container */
 .card-flip {
-  width: 130px;    /* was 100px */
-  height: 180px;   /* was 140px */
+  width: 100px;
+  height: 140px;
   perspective: 1000px;
   position: relative;
   margin: 5px;
@@ -311,7 +316,9 @@ h2 {
   transform-style: preserve-3d;
 }
 
-.card-flip.flipped .card-flip-inner { transform: rotateY(180deg); }
+.card-flip.flipped .card-flip-inner {
+  transform: rotateY(180deg);
+}
 
 .card-front, .card-back {
   position: absolute;
@@ -323,11 +330,11 @@ h2 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 1em; /* was 0.85em */
+  font-size: 0.85em;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
-/* Front face */
+/* Front face - clean, no background image */
 .card-front {
   background: rgba(0, 0, 0, 0.6);
   border: 2px solid rgba(138, 43, 226, 0.4);
@@ -335,13 +342,14 @@ h2 {
   color: #f2f2f2;
   transition: all 0.3s ease;
 }
+
 .card-front:hover {
   border-color: rgba(222, 184, 135, 0.8);
   background: rgba(0, 0, 0, 0.7);
   box-shadow: 0 5px 15px rgba(222, 184, 135, 0.3);
 }
 
-/* Back face */
+/* Back face - card-back.webp layered over brown SVG pattern */
 .card-back {
   background: 
     url('images/card-back.webp') center/cover,
@@ -360,11 +368,12 @@ h2 {
   margin-top: 5px;
 }
 
-/* Flip animation */
+/* Both market and hand cards flip and stay visible */
 .card-flip.market-bought .card-flip-inner,
 .card-flip.hand-played .card-flip-inner {
   animation: flipAndStay 0.5s ease-in-out forwards;
 }
+
 @keyframes flipAndStay {
   0% { transform: rotateY(0deg); }
   100% { transform: rotateY(180deg); }
@@ -392,6 +401,7 @@ h2 {
   backdrop-filter: blur(5px);
   transition: all 0.3s ease;
 }
+
 .node:hover {
   border-color: rgba(222, 184, 135, 0.8);
   background: rgba(192, 192, 192, 0.4);
@@ -510,7 +520,11 @@ h2 {
 }
 
 /* Tooltip styles */
-.tooltip { position: relative; cursor: help; }
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+
 .tooltip::after {
   content: attr(data-tooltip);
   position: absolute;
@@ -529,36 +543,13 @@ h2 {
   z-index: 1000;
   border: 1px solid rgba(138, 43, 226, 0.5);
 }
-.tooltip:hover::after { opacity: 1; }
 
-/* Highlight helpers */
-.highlight-glow {
-  box-shadow: 0 0 20px rgba(222, 184, 135, 0.9) !important;
-  border-color: rgba(222, 184, 135, 0.85) !important;
+.tooltip:hover::after {
+  opacity: 1;
 }
-.highlight-ring {
-  outline: 2px solid rgba(222, 184, 135, 0.6);
-  outline-offset: 8px;
-  border-radius: 12px;
-  transition: outline-color .25s ease;
-}
-.overlay-label {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.8rem;
-  color: rgba(255,255,255,.85);
-  text-shadow: 0 6px 18px rgba(0,0,0,.55);
-  opacity: 0;
-  transition: opacity .35s ease;
-}
-.overlay-label.show { opacity: 1; }
 
 @media (max-width: 768px) {
   h1 { font-size: 2.5rem; }
   #game { padding: 10px; }
-  .card { width: 100px; height: 150px; font-size: 0.9em; }
+  .card { width: 85px; height: 120px; font-size: 0.8em; }
 }
