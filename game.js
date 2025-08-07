@@ -47,7 +47,14 @@ function initGame() {
   // Initial draws and renders
   drawHand();
   updateAllUI();
-  logMsg('Welcome to the game!');
+  
+  // Start tutorial for new players (replaces logMsg('Welcome to the game!'))
+  const tutorial = new IntroTutorial();
+  setTimeout(() => {
+    if (!tutorial.start()) {
+      logMsg('Welcome to the game!');
+    }
+  }, 800);
 }
 
 // Draw a card from market deck to market row
