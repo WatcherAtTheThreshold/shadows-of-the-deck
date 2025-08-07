@@ -253,7 +253,7 @@ body.danger-mode .mist-tendrils {
 }
 
 .section-header {
-  transition: opacity 0.5s ease;
+  display: none;
 }
 
 .section-header.hidden {
@@ -293,7 +293,7 @@ h2 {
 #market, #player-hand { 
   display: flex; 
   justify-content: center; 
-  margin: 10px 0; 
+  margin: 25px 0; 
   flex-wrap: wrap; 
 }
 
@@ -301,9 +301,9 @@ h2 {
 .card-flip {
   width: 120px;
   height: 170px;
+  margin: 8px;
   perspective: 1000px;
   position: relative;
-  margin: 5px;
   cursor: pointer;
 }
 
@@ -330,7 +330,7 @@ h2 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 0.9em;
+  font-size: 0.95em;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
 }
 
@@ -385,8 +385,7 @@ h2 {
   margin: 20px 0; 
   flex-wrap: wrap;
   max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 30px auto 25px auto;
 }
 
 .node { 
@@ -446,16 +445,18 @@ h2 {
   z-index: 1;
 }
 
-#log { 
-  background: rgba(0, 0, 0, 0.4); 
-  padding: 15px; 
-  min-height: 60px; 
-  margin-top: 20px; 
-  border-radius: 8px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(138, 43, 226, 0.3);
+#log {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  min-height: 80px;
+  margin: 20px auto;
+  border-radius: 12px;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(222, 184, 135, 0.4);
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  max-width: 600px;
+  font-weight: 500;
 }
 
 #restart-btn, #end-turn-btn { 
@@ -498,7 +499,8 @@ h2 {
   background: rgba(0, 0, 0, 0.4);
   padding: 10px;
   border-radius: 8px;
-  margin: 10px 0;
+  margin: 10px auto 25px auto;
+  max-width: 800px;
   font-size: 0.9em;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(138, 43, 226, 0.3);
