@@ -84,7 +84,7 @@ function buyCard(marketIndex) {
     drawMarketCard();
     updateAllUI();
   } else {
-    logMsg(`Not enough coins to buy ${cardObj.name}`);
+    logMsg(`Not enough orbs to buy ${cardObj.name}`);
   }
 }
 
@@ -97,7 +97,7 @@ function playCard(card, index) {
     switch (effect.type) {
       case 'coins':
         coins += effect.value;
-        message += ` - Gained ${effect.value} coins`;
+        message += ` - Gained ${effect.value} orb${effect.value === 1 ? '' : 's'}`;
         break;
         
       case 'move':
@@ -132,7 +132,7 @@ function handleSpecialEffect(effect) {
     case 'lucky_find':
       let gain = Math.ceil(Math.random() * 3);
       coins += gain;
-      return `Found ${gain} coins!`;
+      return `Found ${gain} orb${gain === 1 ? '' : 's'}!`;
       
     case 'shadow_block':
       shadowBlocked = true;
@@ -148,9 +148,22 @@ function handleSpecialEffect(effect) {
       fragmentBoostActive = effect.value;
       return `Next fragment worth ${effect.value} points!`;
       
+    case 'jump_to_fragment':
+      if (fragmentPositions.length > 0) {
+        // Find the nearest fragment position ahead of player, or wrap to first
+        const nextFragment = fragmentPositions.find(pos => pos > playerPos) || fragmentPositions[0];
+        // Use movePlayer with skipEncounters to teleport safely
+        const oldPos = playerPos;
+        playerPos = nextFragment;
+        movePlayer(0, true); // This will trigger fragment collection if landing on one
+        return `Leaped from node ${oldPos} to fragment at node ${nextFragment}!`;
+      }
+      return `No fragments remaining to leap to`;
+      
     case 'replay_last':
       if (lastPlayedCard && CARD_EFFECTS[lastPlayedCard]) {
-        setTimeout(() => replayLastCard(), 500);
+        // Use requestAnimationFrame to ensure proper timing
+        requestAnimationFrame(() => replayLastCard());
         return `Replaying ${lastPlayedCard}`;
       }
       return `No previous card to replay`;
@@ -158,15 +171,15 @@ function handleSpecialEffect(effect) {
     case 'move_and_coin':
       movePlayer(effect.move);
       coins += effect.coins;
-      return `Moved ${effect.move}, gained ${effect.coins} coin`;
+      return `Moved ${effect.move}, gained ${effect.coins} orb`;
       
     case 'coin_and_draw':
       coins += effect.coins;
       if (playerDeck.length > 0) {
         playerHand.push(playerDeck.shift());
-        return `Gained ${effect.coins} coins, drew 1 card`;
+        return `Gained ${effect.coins} orbs, drew 1 card`;
       }
-      return `Gained ${effect.coins} coins, deck empty`;
+      return `Gained ${effect.coins} orbs, deck empty`;
       
     case 'move_and_protect':
       movePlayer(effect.move);
@@ -183,12 +196,14 @@ function replayLastCard() {
   const lastEffect = CARD_EFFECTS[lastPlayedCard];
   if (lastEffect.type === 'coins') {
     coins += lastEffect.value;
-    logMsg(`Dream Echo: Gained ${lastEffect.value} more coins`);
-    updateHUD(coins, fragmentsCollected, cruxflareDeck);
+    logMsg(`Dream Echo: Gained ${lastEffect.value} more orb${lastEffect.value === 1 ? '' : 's'}`);
   } else if (lastEffect.type === 'move') {
     movePlayer(lastEffect.value);
     logMsg(`Dream Echo: Moved ${lastEffect.value} more spaces`);
+  } else if (lastEffect.type === 'special') {
+    logMsg(`Dream Echo: Replayed ${handleSpecialEffect(lastEffect)}`);
   }
+  updateAllUI();
 }
 
 // Move player on the map
@@ -238,11 +253,11 @@ function triggerEncounter() {
   if (roll < 0.6) {
     let gain = Math.ceil(Math.random() * 3) + 1;
     coins += gain;
-    logMsg(`Encounter: Found treasure! +${gain} coins.`);
+    logMsg(`Encounter: Found treasure! +${gain} orb${gain === 1 ? '' : 's'}.`);
   } else {
     let loss = Math.ceil(Math.random() * 2);
     coins = Math.max(0, coins - loss);
-    logMsg(`Encounter: Shadow drains you. -${loss} coins.`);
+    logMsg(`Encounter: Shadow drains you. -${loss} orb${loss === 1 ? '' : 's'}.`);
   }
   
   encounterFeedback(playerPos);
