@@ -37,7 +37,6 @@ export function renderMarket(marketRow, coins, onBuyCard) {
           <div class='cost'>Cost: ${cardObj.cost}</div>
         </div>
         <div class="card-back">
-          <div>Card Back</div>
         </div>
       </div>
     `;
@@ -45,7 +44,7 @@ export function renderMarket(marketRow, coins, onBuyCard) {
       if (coins >= cardObj.cost && !el.classList.contains('market-bought')) {
         el.classList.add('market-bought');
         // Wait for flip animation to complete before processing purchase
-        setTimeout(() => onBuyCard(i), 1000);
+        setTimeout(() => onBuyCard(i), 800); // Faster timing
       } else {
         onBuyCard(i); // Still show "not enough orbs" message immediately
       }
@@ -68,7 +67,6 @@ export function renderHand(playerHand, onPlayCard) {
           <div>${card}</div>
         </div>
         <div class="card-back">
-          <div>Card Back</div>
         </div>
       </div>
     `;
@@ -76,7 +74,7 @@ export function renderHand(playerHand, onPlayCard) {
       if (!el.classList.contains('hand-played')) {
         el.classList.add('hand-played');
         // Wait for flip animation before processing card play
-        setTimeout(() => onPlayCard(card, i), 700);
+        setTimeout(() => onPlayCard(card, i), 500); // Faster timing
       }
     };
     h.appendChild(el);
