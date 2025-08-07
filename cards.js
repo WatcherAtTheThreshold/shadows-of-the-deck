@@ -14,7 +14,7 @@ export const CARD_EFFECTS = {
   'Lucky Find': { type: 'special', effect: 'lucky_find' },
   'Shadow Blocker': { type: 'special', effect: 'shadow_block' },
   'Dream Sight': { type: 'special', effect: 'dream_sight' },
-  'Fragment 3pts': { type: 'special', effect: 'fragment_boost', value: 3 },
+  'Fragment 2pts': { type: 'special', effect: 'fragment_boost', value: 2 },
   'Coin Burst': { type: 'coins', value: 3 },
   'Astral Drift': { type: 'move', value: 4 },
   'Dream Echo': { type: 'special', effect: 'replay_last' },
@@ -67,7 +67,7 @@ export function createMarketDeck() {
   const marketCards = [
     { name: "Focus +2", cost: 3 },
     { name: "Move +2", cost: 4 },
-    { name: "Fragment 3pts", cost: 5 },
+    { name: "Fragment 2pts", cost: 5 },
     { name: "Shadow Blocker", cost: 4 },
     { name: "Focus +3", cost: 5 },
     { name: "Move +3", cost: 6 },
