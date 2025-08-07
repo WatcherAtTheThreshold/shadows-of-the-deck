@@ -271,24 +271,65 @@ export default IntroTutorial;
 /* 
 INTEGRATION INSTRUCTIONS:
 
-1. Add to game.js imports:
+1. Add to game.js imports (at the top):
 import IntroTutorial from './intro.js';
 
-2. Replace the logMsg('Welcome to the game!') in initGame() with:
-const tutorial = new IntroTutorial();
-setTimeout(() => {
-  if (!tutorial.start()) {
-    logMsg('Welcome to the game!');
-  }
-}, 800);
+2. Replace this line in initGame():
+  logMsg('Welcome to the game!');
+  
+With this:
+  const tutorial = new IntroTutorial();
+  setTimeout(() => {
+    if (!tutorial.start()) {
+      logMsg('Welcome to the game!');
+    }
+  }, 800);
 
-3. Add these CSS updates to style.css for bigger cards:
+3. Add these CSS updates to style.css:
+*/
+
+/* Hide section headers by default */
+.section-header {
+  display: none;
+}
+
+/* Make welcome message more prominent */
+#log {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  min-height: 80px;
+  margin: 20px auto;
+  border-radius: 12px;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(222, 184, 135, 0.4);
+  text-align: center;
+  font-size: 1.2rem;
+  max-width: 600px;
+  font-weight: 500;
+}
+
+/* Bigger cards */
 .card-flip {
-  width: 120px;  
-  height: 170px; 
+  width: 120px;
+  height: 170px;
+  margin: 8px;
 }
 
 .card-front, .card-back {
-  font-size: 0.9em; 
+  font-size: 0.95em;
 }
-*/
+
+/* Adjust spacing without headers */
+#market, #player-hand {
+  margin: 25px 0;
+}
+
+#map {
+  margin: 30px auto 25px auto;
+}
+
+/* Move legend closer to map */
+#legend {
+  margin: 10px auto 25px auto;
+  max-width: 800px;
+}
