@@ -22,30 +22,63 @@ export function createParticles() {
   }
 }
 
-// Render market cards
+// Render market cards with flip animations
 export function renderMarket(marketRow, coins, onBuyCard) {
   let m = document.getElementById('market');
   m.innerHTML = '';
   marketRow.forEach((cardObj, i) => {
     let el = document.createElement('div');
-    el.className = 'card tooltip';
+    el.className = 'card-flip tooltip';
     el.setAttribute('data-tooltip', cardObj.tooltip);
-    el.innerHTML = `<div>${cardObj.name}</div><div class='cost'>Cost: ${cardObj.cost}</div>`;
-    el.onclick = () => onBuyCard(i);
+    el.innerHTML = `
+      <div class="card-flip-inner">
+        <div class="card-front">
+          <div>${cardObj.name}</div>
+          <div class='cost'>Cost: ${cardObj.cost}</div>
+        </div>
+        <div class="card-back">
+          <div>Card Back</div>
+        </div>
+      </div>
+    `;
+    el.onclick = () => {
+      if (coins >= cardObj.cost && !el.classList.contains('market-bought')) {
+        el.classList.add('market-bought');
+        // Wait for flip animation to complete before processing purchase
+        setTimeout(() => onBuyCard(i), 1000);
+      } else {
+        onBuyCard(i); // Still show "not enough orbs" message immediately
+      }
+    };
     m.appendChild(el);
   });
 }
 
-// Render player hand
+// Render player hand with flip animations
 export function renderHand(playerHand, onPlayCard) {
   let h = document.getElementById('player-hand');
   h.innerHTML = '';
   playerHand.forEach((card, i) => {
     let el = document.createElement('div');
-    el.className = 'card tooltip';
+    el.className = 'card-flip tooltip';
     el.setAttribute('data-tooltip', generateTooltip(card));
-    el.textContent = card;
-    el.onclick = () => onPlayCard(card, i);
+    el.innerHTML = `
+      <div class="card-flip-inner">
+        <div class="card-front">
+          <div>${card}</div>
+        </div>
+        <div class="card-back">
+          <div>Card Back</div>
+        </div>
+      </div>
+    `;
+    el.onclick = () => {
+      if (!el.classList.contains('hand-played')) {
+        el.classList.add('hand-played');
+        // Wait for flip animation before processing card play
+        setTimeout(() => onPlayCard(card, i), 700);
+      }
+    };
     h.appendChild(el);
   });
 }
@@ -108,14 +141,16 @@ export function logMsg(msg) {
   document.getElementById('log').textContent = msg;
 }
 
-// Visual feedback for card play
+// Visual feedback for card play (now handled by flip animations)
 export function cardPlayFeedback(cardElement) {
-  cardElement.style.transform = 'scale(1.1)';
-  cardElement.style.boxShadow = '0 0 20px rgba(222, 184, 135, 0.8)';
-  setTimeout(() => {
-    cardElement.style.transform = '';
-    cardElement.style.boxShadow = '';
-  }, 300);
+  // This function is now primarily handled by the flip animations
+  // But we can add extra sparkle effects here if desired
+  if (cardElement) {
+    cardElement.style.boxShadow = '0 0 20px rgba(222, 184, 135, 0.8)';
+    setTimeout(() => {
+      cardElement.style.boxShadow = '';
+    }, 300);
+  }
 }
 
 // Visual feedback for encounters
