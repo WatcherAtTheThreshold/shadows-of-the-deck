@@ -1,5 +1,9 @@
 import { generateTooltip } from './cards.js';
 
+// Track played cards for visual consistency
+let playedCardsThisTurn = [];
+let lastHandSize = 0;
+
 // Create floating particles effect
 export function createParticles() {
   const container = document.getElementById('particles');
@@ -56,7 +60,16 @@ export function renderMarket(marketRow, coins, onBuyCard) {
 // Render player hand with flip animations and placeholder backs
 export function renderHand(playerHand, onPlayCard) {
   let h = document.getElementById('player-hand');
+  
+  // Clear played cards if we have a new hand (detected by hand size increase)
+  if (playerHand.length > lastHandSize) {
+    playedCardsThisTurn = [];
+  }
+  lastHandSize = playerHand.length;
+  
   h.innerHTML = '';
+  
+  // Render active cards
   playerHand.forEach((card, i) => {
     let el = document.createElement('div');
     el.className = 'card-flip tooltip';
@@ -75,10 +88,32 @@ export function renderHand(playerHand, onPlayCard) {
         el.classList.add('hand-played'); // Flip to back
         el.style.pointerEvents = 'none'; // Disable further clicks
         el.style.cursor = 'default'; // Change cursor to show it's disabled
+        
+        // Add to played cards for persistent display
+        playedCardsThisTurn.push(card);
+        
         // Process the game logic after flip animation
         setTimeout(() => onPlayCard(card, i), 500);
       }
     };
+    h.appendChild(el);
+  });
+  
+  // Render played card placeholders (always showing backs)
+  playedCardsThisTurn.forEach((card) => {
+    let el = document.createElement('div');
+    el.className = 'card-flip';
+    el.innerHTML = `
+      <div class="card-flip-inner" style="transform: rotateY(180deg);">
+        <div class="card-front">
+          <div>${card}</div>
+        </div>
+        <div class="card-back">
+        </div>
+      </div>
+    `;
+    el.style.pointerEvents = 'none'; // Always disabled
+    el.style.cursor = 'default';
     h.appendChild(el);
   });
 }
@@ -213,6 +248,11 @@ export function showGameOverScreen(isWin, fragmentsCollected, totalFragments) {
       <div class="game-over-flavor">${flavorText}</div>
     </div>
   `;
+}
+
+// Clear played cards (call this at start of new turn if needed)
+export function clearPlayedCards() {
+  playedCardsThisTurn = [];
 }
 
 // Show/hide UI elements
