@@ -232,6 +232,42 @@ body.danger-mode .mist-tendrils {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
+/* Position game over screen as overlay over cards */
+#game-over-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  width: 90%;
+  max-width: 600px;
+  pointer-events: none; /* Allow clicks through when empty */
+}
+
+#game-over-container .game-over-screen {
+  pointer-events: auto; /* Re-enable clicks on the actual screen */
+  background: rgba(0, 0, 0, 0.9); /* More opaque for better readability */
+  padding: 40px;
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  border: 3px solid rgba(222, 184, 135, 0.6);
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+  animation: game-over-appear 0.5s ease-out;
+}
+
+@keyframes game-over-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Existing game over styles - keep these the same */
 .game-over-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: 2.5rem;
