@@ -144,9 +144,19 @@ function handleSpecialEffect(effect) {
       }
       return `No Cruxflare cards remaining`;
       
-    case 'fragment_boost':
+   case 'fragment_boost':
       fragmentBoostActive = effect.value;
       return `Next fragment worth ${effect.value} points!`;
+      
+    case 'instant_fragments':
+      fragmentsCollected += effect.value;
+      if (fragmentsCollected >= totalFragments) {
+        setTimeout(() => {
+          logMsg(`You collected all fragments! You win!`);
+          endGame();
+        }, 500);
+      }
+      return `Gained ${effect.value} fragment${effect.value === 1 ? '' : 's'} instantly!`;
       
     case 'jump_to_fragment':
       if (fragmentPositions.length > 0) {
