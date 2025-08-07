@@ -233,6 +233,17 @@ body.danger-mode .mist-tendrils {
 }
 
 /* Position game over screen as overlay over cards */
+.game-over-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(3px);
+  z-index: 9999;
+}
+
 #game-over-container {
   position: fixed;
   top: 50%;
