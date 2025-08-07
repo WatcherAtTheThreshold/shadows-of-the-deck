@@ -1,3 +1,10 @@
+import IntroTutorial from './intro.js';
+
+  // Start tutorial for new players
+  const tutorial = new IntroTutorial();
+  setTimeout(() => tutorial.start(), 500); // Small delay for UI to render
+}
+
 import { CARD_EFFECTS, createMarketDeck, createPlayerDeck, createCruxflareDeck } from './cards.js';
 import { 
   createParticles, renderMarket, renderHand, renderMap, updateHUD, 
