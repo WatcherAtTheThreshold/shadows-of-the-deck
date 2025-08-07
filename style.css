@@ -449,14 +449,15 @@ h2 {
   background: rgba(0, 0, 0, 0.6);
   padding: 20px;
   min-height: 80px;
-  margin: 20px auto;
+  margin: 15px auto 25px auto;  /* Reduced top margin, added bottom margin */
   border-radius: 12px;
   backdrop-filter: blur(15px);
   border: 2px solid rgba(222, 184, 135, 0.4);
   text-align: center;
-  font-size: 1.2rem;
-  max-width: 600px;
+  font-size: 1.3rem;  /* Slightly bigger text */
+  max-width: 700px;   /* Slightly wider */
   font-weight: 500;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);  /* Add subtle shadow */
 }
 
 #restart-btn, #end-turn-btn { 
