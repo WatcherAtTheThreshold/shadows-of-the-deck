@@ -200,7 +200,7 @@ export function cardPlayFeedback(cardElement) {
   }
 }
 
-// ENHANCED visual feedback for encounters with dramatic animation
+// ENHANCED visual feedback for encounters with JAVASCRIPT animation
 export function encounterFeedback(playerPos) {
   console.log('🔥 encounterFeedback called for position:', playerPos);
   const nodes = document.querySelectorAll('.node');
@@ -208,16 +208,57 @@ export function encounterFeedback(playerPos) {
   
   if (playerPos < nodes.length) {
     const currentNode = nodes[playerPos];
-    console.log('🔥 Adding encounter-active class to node', playerPos);
+    console.log('🔥 Starting JavaScript animation for node', playerPos);
     
-    // Add the encounter animation class
-    currentNode.classList.add('encounter-active');
+    // Save original styles
+    const originalBackground = currentNode.style.background;
+    const originalTransform = currentNode.style.transform;
+    const originalBoxShadow = currentNode.style.boxShadow;
+    const originalBorder = currentNode.style.border;
     
-    // Remove the class after animation completes
-    setTimeout(() => {
-      currentNode.classList.remove('encounter-active');
-      console.log('🔥 Removed encounter-active class from node', playerPos);
-    }, 1200);
+    // JavaScript animation sequence
+    let step = 0;
+    const animationSteps = [
+      // Step 0: Normal
+      { background: '', transform: 'scale(1)', boxShadow: '', border: '' },
+      // Step 1: Start pulse
+      { background: 'rgba(255, 0, 255, 0.8)', transform: 'scale(1.5)', boxShadow: '0 0 20px rgba(255, 0, 255, 0.8)', border: '3px solid rgba(255, 0, 255, 1)' },
+      // Step 2: Peak pulse  
+      { background: 'rgba(255, 100, 255, 1)', transform: 'scale(2)', boxShadow: '0 0 40px rgba(255, 100, 255, 1)', border: '4px solid rgba(255, 100, 255, 1)' },
+      // Step 3: Fade back
+      { background: 'rgba(255, 0, 255, 0.5)', transform: 'scale(1.3)', boxShadow: '0 0 15px rgba(255, 0, 255, 0.5)', border: '2px solid rgba(255, 0, 255, 0.8)' },
+      // Step 4: Return to normal
+      { background: '', transform: 'scale(1)', boxShadow: '', border: '' }
+    ];
+    
+    function animateStep() {
+      if (step < animationSteps.length) {
+        const styles = animationSteps[step];
+        currentNode.style.background = styles.background;
+        currentNode.style.transform = styles.transform;
+        currentNode.style.boxShadow = styles.boxShadow;
+        currentNode.style.border = styles.border;
+        currentNode.style.transition = 'all 0.2s ease-out';
+        currentNode.style.zIndex = '1000';
+        
+        console.log('🔥 Animation step', step, 'applied');
+        step++;
+        setTimeout(animateStep, 200); // 200ms per step = 1s total
+      } else {
+        // Reset all styles
+        currentNode.style.background = originalBackground;
+        currentNode.style.transform = originalTransform;
+        currentNode.style.boxShadow = originalBoxShadow;
+        currentNode.style.border = originalBorder;
+        currentNode.style.transition = '';
+        currentNode.style.zIndex = '';
+        console.log('🔥 Animation complete for node', playerPos);
+      }
+    }
+    
+    // Start the animation
+    animateStep();
+    
   } else {
     console.log('🔥 ERROR: playerPos', playerPos, 'is out of range for', nodes.length, 'nodes');
   }
