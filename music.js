@@ -13,7 +13,7 @@ class MusicManager {
     
     // Track URLs
     this.tracks = {
-      start: 'music/moonlitReflections.mp3',
+      start: 'music/moonlitRefelctions.mp3',
       danger: 'music/rogue.mp3',
       final: 'music/grove.mp3'
     };
