@@ -337,6 +337,7 @@ function endTurn() {
   }
   drawHand();
   updateAllUI();
+  updateMusicPhase();
 }
 
 // Resolve Cruxflare events
