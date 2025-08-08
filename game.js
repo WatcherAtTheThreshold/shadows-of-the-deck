@@ -179,7 +179,7 @@ function handleSpecialEffect(effect) {
       }
       return `No fragments remaining to leap to`;
       
-   case 'replay_last':
+ case 'replay_last':
   if (lastPlayedCard && CARD_EFFECTS[lastPlayedCard] && lastPlayedCard !== 'Dream Echo') {
     // Use requestAnimationFrame to ensure proper timing
     requestAnimationFrame(() => replayLastCard());
