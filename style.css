@@ -1,16 +1,607 @@
-#log {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 20px;
-  min-height: 80px;
-  margin: 15px auto 25px auto;  /* Reduced top margin, added bottom margin */
-  border-radius: 12px;
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(222, 184, 135, 0.4);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 18px; /* Increased base font size */
+  color: #fff;
+  position: relative;
+  background: #333;
+  overflow-x: hidden;
+}
+
+/* Enhanced HUD Layout */
+#hud {
+  margin: 10px;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 15px;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(138, 43, 226, 0.3);
   text-align: center;
-  font-size: 1.5rem;  /* Increased from 1.3rem to 1.5rem */
-  max-width: 700px;   /* Slightly wider */
-  font-weight: 500;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);  /* Add subtle shadow */
+  font-size: 1.3rem; /* Increased from 1.1rem */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.hud-info {
+  flex: 1;
+  min-width: 300px;
+}
+
+.hud-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Music and Tutorial Buttons */
+.hud-button {
+  background: rgba(138, 43, 226, 0.3);
+  border: 1px solid rgba(138, 43, 226, 0.6);
+  color: rgba(222, 184, 135, 0.9);
+  padding: 10px 15px; /* Increased padding */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1rem; /* Increased from 0.9rem */
+  backdrop-filter: blur(5px);
+}
+
+.hud-button:hover {
+  background: rgba(138, 43, 226, 0.5);
+  border-color: rgba(222, 184, 135, 0.8);
+  transform: translateY(-1px);
+}
+
+.hud-button.active {
+  background: rgba(222, 184, 135, 0.3);
+  border-color: rgba(222, 184, 135, 0.8);
+  color: #fff;
+}
+
+/* Volume Control */
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(138, 43, 226, 0.4);
+}
+
+.volume-slider {
+  width: 80px;
+  height: 4px;
+  background: rgba(138, 43, 226, 0.3);
+  border-radius: 2px;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: rgba(222, 184, 135, 0.9);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(222, 184, 135, 0.5);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: rgba(222, 184, 135, 0.9);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 5px rgba(222, 184, 135, 0.5);
+}
+
+.volume-icon {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  #hud {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .hud-info {
+    min-width: auto;
+  }
+  
+  .volume-control {
+    order: -1;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Enhanced Mist Layers */
+.mist-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Multiple mist layers for depth */
+.mist-layer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.02) 0%, transparent 25%),
+    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.04) 0%, transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(255,255,255,0.02) 0%, transparent 25%),
+    radial-gradient(circle at 30% 70%, rgba(255,255,255,0.03) 0%, transparent 25%);
+  animation: mistDrift1 45s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.mist-layer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(255,255,255,0.02) 0%, transparent 30%),
+    radial-gradient(circle at 20% 60%, rgba(255,255,255,0.03) 0%, transparent 30%),
+    radial-gradient(circle at 60% 90%, rgba(255,255,255,0.02) 0%, transparent 30%),
+    radial-gradient(circle at 90% 50%, rgba(255,255,255,0.025) 0%, transparent 30%);
+  animation: mistDrift2 60s ease-in-out infinite reverse;
+  opacity: 0.4;
+}
+
+/* Additional atmospheric tendrils */
+.mist-tendrils {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.01) 35%, transparent 40%),
+    linear-gradient(-45deg, transparent 60%, rgba(255,255,255,0.015) 65%, transparent 70%),
+    linear-gradient(90deg, transparent 20%, rgba(255,255,255,0.008) 25%, transparent 30%);
+  animation: tendrilFlow 35s linear infinite;
+  opacity: 0.7;
+}
+
+/* Warning mode - purple mist (7 cards or less) */
+body.warning-mode .mist-layer::before {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(138,43,226,0.08) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(120,30,180,0.06) 0%, transparent 25%),
+    radial-gradient(circle at 40% 40%, rgba(160,60,220,0.10) 0%, transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(100,20,150,0.05) 0%, transparent 25%),
+    radial-gradient(circle at 30% 70%, rgba(140,50,200,0.07) 0%, transparent 25%);
+  animation-duration: 30s;
+  opacity: 0.7;
+}
+
+body.warning-mode .mist-layer::after {
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(120,20,170,0.05) 0%, transparent 30%),
+    radial-gradient(circle at 20% 60%, rgba(140,40,190,0.07) 0%, transparent 30%),
+    radial-gradient(circle at 60% 90%, rgba(100,15,140,0.04) 0%, transparent 30%),
+    radial-gradient(circle at 90% 50%, rgba(150,50,210,0.06) 0%, transparent 30%);
+  animation-duration: 40s;
+  opacity: 0.5;
+}
+
+body.warning-mode .mist-tendrils {
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(138,43,226,0.025) 35%, transparent 40%),
+    linear-gradient(-45deg, transparent 60%, rgba(120,30,180,0.03) 65%, transparent 70%),
+    linear-gradient(90deg, transparent 20%, rgba(140,40,200,0.02) 25%, transparent 30%);
+  animation-duration: 25s;
+}
+
+/* Danger mode - red mist (2 cards or less) */
+body.danger-mode .mist-layer::before {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255,100,100,0.08) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(200,50,50,0.06) 0%, transparent 25%),
+    radial-gradient(circle at 40% 40%, rgba(255,80,80,0.10) 0%, transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(180,40,40,0.05) 0%, transparent 25%),
+    radial-gradient(circle at 30% 70%, rgba(255,60,60,0.08) 0%, transparent 25%);
+  animation-duration: 15s;
+  opacity: 0.9;
+}
+
+body.danger-mode .mist-layer::after {
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(200,30,30,0.06) 0%, transparent 30%),
+    radial-gradient(circle at 20% 60%, rgba(255,40,40,0.08) 0%, transparent 30%),
+    radial-gradient(circle at 60% 90%, rgba(180,20,20,0.05) 0%, transparent 30%),
+    radial-gradient(circle at 90% 50%, rgba(255,50,50,0.07) 0%, transparent 30%);
+  animation-duration: 20s;
+  opacity: 0.7;
+}
+
+body.danger-mode .mist-tendrils {
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(255,50,50,0.03) 35%, transparent 40%),
+    linear-gradient(-45deg, transparent 60%, rgba(200,30,30,0.035) 65%, transparent 70%),
+    linear-gradient(90deg, transparent 20%, rgba(255,40,40,0.025) 25%, transparent 30%);
+  animation-duration: 12s;
+}
+
+/* Keyframe animations */
+@keyframes mistDrift1 {
+  0%, 100% { 
+    transform: translate(0, 0) rotate(0deg) scale(1); 
+  }
+  25% { 
+    transform: translate(-30px, -20px) rotate(1deg) scale(1.05); 
+  }
+  50% { 
+    transform: translate(20px, -40px) rotate(-1deg) scale(0.95); 
+  }
+  75% { 
+    transform: translate(-10px, -30px) rotate(0.5deg) scale(1.02); 
+  }
+}
+
+@keyframes mistDrift2 {
+  0%, 100% { 
+    transform: translate(0, 0) rotate(0deg) scale(1); 
+  }
+  33% { 
+    transform: translate(25px, -15px) rotate(-0.8deg) scale(1.03); 
+  }
+  66% { 
+    transform: translate(-15px, -35px) rotate(0.8deg) scale(0.97); 
+  }
+}
+
+@keyframes tendrilFlow {
+  0% { 
+    transform: translateX(0) translateY(0) skewX(0deg); 
+  }
+  25% { 
+    transform: translateX(-20px) translateY(-10px) skewX(1deg); 
+  }
+  50% { 
+    transform: translateX(15px) translateY(-20px) skewX(-1deg); 
+  }
+  75% { 
+    transform: translateX(-10px) translateY(-15px) skewX(0.5deg); 
+  }
+  100% { 
+    transform: translateX(0) translateY(0) skewX(0deg); 
+  }
+}
+
+/* Floating particles */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  animation: float 25s infinite linear;
+  opacity: 0;
+}
+
+.particle.golden {
+  background: radial-gradient(circle, rgba(222, 184, 135, 0.6) 0%, rgba(222, 184, 135, 0.1) 70%, transparent 100%);
+  box-shadow: 0 0 4px rgba(222, 184, 135, 0.4);
+}
+
+.particle.purple {
+  background: radial-gradient(circle, rgba(138, 43, 226, 0.5) 0%, rgba(138, 43, 226, 0.1) 70%, transparent 100%);
+  box-shadow: 0 0 4px rgba(138, 43, 226, 0.3);
+}
+
+.particle.silver {
+  background: radial-gradient(circle, rgba(192, 192, 192, 0.4) 0%, rgba(192, 192, 192, 0.1) 70%, transparent 100%);
+  box-shadow: 0 0 3px rgba(192, 192, 192, 0.2);
+}
+
+@keyframes float {
+  0% { 
+    transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.5); 
+    opacity: 0; 
+  }
+  5% { 
+    opacity: 0.8;
+    transform: translateY(95vh) translateX(10px) rotate(18deg) scale(0.8);
+  }
+  50% {
+    transform: translateY(50vh) translateX(var(--drift, 50px)) rotate(180deg) scale(1);
+    opacity: 0.6;
+  }
+  95% { 
+    opacity: 0.4; 
+  }
+  100% { 
+    transform: translateY(-10vh) translateX(calc(var(--drift, 50px) * 2)) rotate(360deg) scale(0.3); 
+    opacity: 0; 
+  }
+}
+
+@keyframes pulse-warning {
+  0%   { 
+    border-color: rgba(138, 43, 226, 0.3); 
+    box-shadow: 0 0 5px rgba(138, 43, 226, 0.2);
+  }
+  50%  { 
+    border-color: rgba(138, 43, 226, 0.8); 
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+  }
+  100% { 
+    border-color: rgba(138, 43, 226, 0.3);
+    box-shadow: 0 0 5px rgba(138, 43, 226, 0.2);
+  }
+}
+
+@keyframes pulse-danger {
+  0%   { 
+    border-color: rgba(255, 100, 100, 0.4); 
+    background: rgba(0, 0, 0, 0.4); 
+    box-shadow: 0 0 5px rgba(255, 100, 100, 0.3);
+  }
+  50%  { 
+    border-color: rgba(255, 100, 100, 0.9); 
+    background: rgba(255, 100, 100, 0.1); 
+    box-shadow: 0 0 20px rgba(255, 100, 100, 0.6);
+  }
+  100% { 
+    border-color: rgba(255, 100, 100, 0.4); 
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 5px rgba(255, 100, 100, 0.3);
+  }
+}
+
+/* Game over container positioning */
+#game-over-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  width: 90%;
+  max-width: 600px;
+  pointer-events: none;
+}
+
+/* Background overlay - no backdrop-filter */
+.game-over-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Darker background instead of blur */
+  z-index: 9999;
+}
+
+/* Crisp text box - no backdrop-filter at all */
+.game-over-screen {
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.95);
+  padding: 40px;
+  border-radius: 16px;
+  border: 3px solid rgba(222, 184, 135, 0.8);
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  animation: game-over-appear 0.5s ease-out;
+  position: relative;
+  z-index: 10001; /* Above backdrop */
+}
+
+@keyframes game-over-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Existing game over styles - keep these the same */
+.game-over-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: rgba(222, 184, 135, 0.9);
+}
+
+.game-over-score {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.game-over-flavor {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.section-header {
+  display: block;
+}
+
+.section-header.hidden {
+  display: none;
+}
+
+#game { 
+  max-width: 1000px; 
+  margin: auto; 
+  position: relative; 
+  z-index: 2;
+  backdrop-filter: blur(1px);
+  padding: 20px;
+}
+
+h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem; /* Increased from 1.5rem */
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  margin: 20px 0 10px 0;
+}
+
+#market, #player-hand { 
+  display: flex; 
+  justify-content: center; 
+  margin: 25px 0; 
+  flex-wrap: wrap; 
+}
+
+/* Card flip container */
+.card-flip {
+  width: 120px;
+  height: 170px;
+  margin: 8px;
+  perspective: 1000px;
+  position: relative;
+  cursor: pointer;
+}
+
+.card-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.4s;
+  transform-style: preserve-3d;
+}
+
+.card-flip.flipped .card-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1em; /* Increased from 0.95em */
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Front face - clean, no background image */
+.card-front {
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(138, 43, 226, 0.4);
+  backdrop-filter: blur(10px);
+  color: #f2f2f2;
+  transition: all 0.3s ease;
+}
+
+.card-front:hover {
+  border-color: rgba(222, 184, 135, 0.8);
+  background: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 5px 15px rgba(222, 184, 135, 0.3);
+}
+
+/* Back face - card-back.webp layered over brown SVG pattern */
+.card-back {
+  background: 
+    url('images/card-back.webp') center/cover,
+    rgba(0, 0, 0, 0.3) url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140"><defs><pattern id="cardPattern" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="2" fill="%23654321" opacity="0.3"/></pattern></defs><rect width="100" height="140" fill="%232a1810"/><rect width="100" height="140" fill="url(%23cardPattern)"/><path d="M20 20 L80 20 L50 50 Z" fill="%234a2820" opacity="0.6"/><path d="M20 120 L80 120 L50 90 Z" fill="%234a2820" opacity="0.6"/></svg>') center/cover;
+  background-blend-mode: normal, overlay;
+  border: 2px solid rgba(138, 43, 226, 0.6);
+  backdrop-filter: blur(15px);
+  transform: rotateY(180deg);
+  color: rgba(222, 184, 135, 0.9);
+}
+
+.cost {
+  font-size: 0.9em; /* Increased from 0.8em */
+  color: rgba(222, 184, 135, 0.9);
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+/* Both market and hand cards flip and stay visible */
+.card-flip.market-bought .card-flip-inner,
+.card-flip.hand-played .card-flip-inner {
+  animation: flipAndStay 0.5s ease-in-out forwards;
+}
+
+@keyframes flipAndStay {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(180deg); }
+}
+
+#map { 
+  display: flex; 
+  justify-content: center; 
+  margin: 20px 0; 
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin: 20px auto; /* Adjusted margin since moved up */
+}
+
+.node { 
+  width: 40px; 
+  height: 40px; 
+  border-radius: 50%; 
+  background: rgba(192, 192, 192, 0.3);
+  border: 2px solid rgba(192, 192, 192, 0.6);
+  margin: 5px; 
+  position: relative;
+  cursor: help;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.node:hover {
+  border-color: rgba(222, 184, 135, 0.8);
+  background: rgba(192, 192, 192, 0.4);
 }
 
 /* Enhanced encounter feedback */
@@ -79,4 +670,237 @@
     height: 120px !important;
     opacity: 0 !important;
   }
+}
+
+.player { 
+  width: 16px; 
+  height: 16px; 
+  border-radius: 50%; 
+  background: cyan; 
+  position: absolute; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 15px cyan;
+  z-index: 3;
+}
+
+.fragment { 
+  width: 12px; 
+  height: 12px; 
+  border-radius: 50%; 
+  background: rgba(222, 184, 135, 0.9);
+  position: absolute; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(222, 184, 135, 0.8);
+  z-index: 1;
+}
+
+.encounter { 
+  width: 12px; 
+  height: 12px; 
+  border-radius: 50%; 
+  background: rgba(138, 43, 226, 0.9);
+  position: absolute; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px rgba(138, 43, 226, 0.7);
+  z-index: 1;
+}
+
+#log {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px;
+  min-height: 80px;
+  margin: 15px auto 25px auto;  /* Reduced top margin, added bottom margin */
+  border-radius: 12px;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(222, 184, 135, 0.4);
+  text-align: center;
+  font-size: 1.5rem;  /* Increased from 1.3rem to 1.5rem */
+  max-width: 700px;   /* Slightly wider */
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);  /* Add subtle shadow */
+}
+
+#restart-btn, #end-turn-btn { 
+  margin: 15px 5px; 
+  padding: 18px 36px; /* Increased padding significantly */
+  border: 1px solid rgba(222, 184, 135, 0.5); 
+  border-radius: 8px; 
+  background: rgba(0, 0, 0, 0.4); 
+  color: rgba(222, 184, 135, 0.9); 
+  font-weight: bold; 
+  font-size: 1.2rem; /* Added explicit larger font size */
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  font-family: 'Source Sans Pro', sans-serif;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#restart-btn:hover, #end-turn-btn:hover { 
+  background: rgba(222, 184, 135, 0.1);
+  border-color: rgba(222, 184, 135, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(222, 184, 135, 0.2);
+}
+
+#legend {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  border-radius: 8px;
+  margin: 25px auto 15px auto; /* Adjusted margin since moved down */
+  max-width: 800px;
+  font-size: 1.1em; /* Increased from 0.9em */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  text-align: center;
+}
+
+.legend-item {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+.legend-icon {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+/* Tooltip styles */
+.tooltip {
+  position: relative;
+  cursor: help;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 0.9em; /* Increased from 0.8em */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 1000;
+  border: 1px solid rgba(138, 43, 226, 0.5);
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  #game { padding: 10px; }
+  .card-flip { width: 85px; height: 120px; font-size: 0.9em; } /* Slightly increased */
+  body, html { font-size: 16px; } /* Slightly smaller base on mobile */
+  #hud { font-size: 1.1rem; } /* Adjust HUD for mobile */
+}
+
+/* Tutorial Styles */
+#tutorial-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+}
+
+.tutorial-content {
+  text-align: center;
+  color: white;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.tutorial-text {
+  font-size: 1.6rem; /* Increased from 1.4rem */
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.tutorial-text.fade-in {
+  opacity: 1;
+}
+
+.tutorial-overlay-text {
+  position: fixed;
+  background: rgba(222, 184, 135, 0.9);
+  color: #000;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.1rem; /* Increased from 1rem */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tutorial-overlay-text.tutorial-overlay-visible {
+  opacity: 1;
+}
+
+.tutorial-skip {
+  background: rgba(138, 43, 226, 0.3);
+  border: 1px solid rgba(138, 43, 226, 0.6);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tutorial-skip:hover {
+  background: rgba(138, 43, 226, 0.5);
+}
+
+.tutorial-highlight {
+  position: relative;
+  z-index: 9999;
+  border: 3px solid rgba(222, 184, 135, 0.8) !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.tutorial-glow {
+  box-shadow: 0 0 20px rgba(222, 184, 135, 0.6) !important;
+}
+
+.tutorial-pulse {
+  animation: tutorial-pulse 1s infinite;
+}
+
+@keyframes tutorial-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
