@@ -450,8 +450,12 @@ function updateAllUI() {
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
   
   // Update music based on game state
-  const dangerMode = document.body.classList.contains('danger-mode');
-  musicManager.onGameStateChange(cruxflareDeck.length, dangerMode);
+if (cruxflareDeck.length <= 2) {
+  setTrackByPhase('danger');
+} else if (document.body.classList.contains('danger-mode')) {
+  setTrackByPhase('warning');
+} else {
+  setTrackByPhase('start');
 }
 
 // Make functions globally available for HTML onclick
