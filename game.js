@@ -1,3 +1,4 @@
+import { musicManager } from './music.js';
 import IntroTutorial from './intro.js';
 import { CARD_EFFECTS, createMarketDeck, createPlayerDeck, createCruxflareDeck } from './cards.js';
 // ... rest of your imports
@@ -49,7 +50,10 @@ function initGame() {
   drawHand();
   updateAllUI();
   
-  // Start tutorial for new players (replaces logMsg('Welcome to the game!'))
+  // Start music system
+  musicManager.startGame();
+  
+  // Start tutorial for new players
   const tutorial = new IntroTutorial();
   setTimeout(() => {
     if (!tutorial.start()) {
@@ -125,7 +129,9 @@ function playCard(card, index) {
     }
   }
   
-  lastPlayedCard = card;
+  if (card !== 'Dream Echo') {
+    lastPlayedCard = card;
+  }
   logMsg(message);
   
   // Move card to discard
@@ -432,6 +438,10 @@ function updateAllUI() {
   renderMarket(marketRow, coins, buyCard);
   renderHand(playerHand, playCard);
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
+  
+  // Update music based on game state
+  const dangerMode = document.body.classList.contains('danger-mode');
+  musicManager.onGameStateChange(cruxflareDeck.length, dangerMode);
 }
 
 // Make functions globally available for HTML onclick

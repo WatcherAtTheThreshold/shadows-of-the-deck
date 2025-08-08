@@ -17,12 +17,31 @@
   <div id="game">
     <h1>Shadows in the Deck</h1>
     
-    <!-- HUD -->
-    <div id="hud">
-      <span class="legend-icon" style="background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);"></span><span id="coins">0</span> | 
-      Fragments: <span id="frags">0</span> | 
-      Cruxflare Cards Left: <span id="crux-remaining">0</span>
+   <!-- HUD -->
+<div id="hud">
+  <div class="hud-info">
+    <span class="legend-icon" style="background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);"></span><span id="coins">0</span> | 
+    Fragments: <span id="frags">0</span> | 
+    Cruxflare Cards Left: <span id="crux-remaining">0</span>
+  </div>
+  
+  <div class="hud-controls">
+    <button id="music-toggle" class="hud-button">
+      <span class="music-icon">🎵</span>
+      <span id="music-text">Play Shadows</span>
+    </button>
+    
+    <div id="volume-control" class="volume-control" style="display: none;">
+      <span class="volume-icon">🔊</span>
+      <input type="range" id="volume-slider" min="0" max="100" value="70" class="volume-slider">
     </div>
+    
+    <button id="tutorial-toggle" class="hud-button">
+      <span>❓</span>
+      <span>Tutorial</span>
+    </button>
+  </div>
+</div>
     
     <!-- Legend -->
     <div id="legend">
