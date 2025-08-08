@@ -463,7 +463,11 @@ body.danger-mode .mist-tendrils {
 }
 
 .section-header {
-  display: block;
+  display: none; /* Hide headers by default */
+}
+
+.section-header.show {
+  display: block; /* Only show when explicitly needed */
 }
 
 .section-header.hidden {
