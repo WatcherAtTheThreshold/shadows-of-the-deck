@@ -18,6 +18,13 @@ let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, player
 function setupGameData() {
   marketDeck = createMarketDeck();
   playerDeck = createPlayerDeck();
+  
+  // Randomize starting deck
+  for (let i = playerDeck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
+  }
+  
   discardPile = [];
   playerHand = [];
   marketRow = [];
@@ -69,10 +76,13 @@ function drawMarketCard() {
   }
 }
 
-// Draw cards to player hand
+// Draw cards to player hand - NOW WITH RANDOM DRAWING
 function drawHand() {
   while (playerHand.length < 5 && playerDeck.length > 0) {
-    playerHand.push(playerDeck.shift());
+    // Draw random card from deck instead of always taking from front
+    const randomIndex = Math.floor(Math.random() * playerDeck.length);
+    const drawnCard = playerDeck.splice(randomIndex, 1)[0];
+    playerHand.push(drawnCard);
   }
   if (playerDeck.length === 0 && discardPile.length > 0) {
     playerDeck = [...discardPile];
