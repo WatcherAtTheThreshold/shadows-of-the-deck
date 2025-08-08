@@ -220,17 +220,6 @@ body.danger-mode .mist-tendrils {
   100% { border-color: rgba(138, 43, 226, 0.3); background: rgba(0, 0, 0, 0.4); }
 }
 
-/* Game over screen */
-.game-over-screen {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 30px;
-  border-radius: 12px;
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(222, 184, 135, 0.5);
-  text-align: center;
-  margin: 20px 0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
 
 /* Apply blur only to backdrop */
 .game-over-backdrop {
