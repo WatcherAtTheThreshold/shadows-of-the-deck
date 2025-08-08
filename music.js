@@ -19,7 +19,7 @@ class MusicManager {
 
   initializeTracks() {
     // Preload all audio tracks
-    this.tracks.start = new Audio('./music/moonlitreflections.mp3');
+    this.tracks.start = new Audio('./music/moonlitrReflections.mp3');
 this.tracks.danger = new Audio('./music/rogue.mp3');
 this.tracks.final = new Audio('./music/grove.mp3');
 
