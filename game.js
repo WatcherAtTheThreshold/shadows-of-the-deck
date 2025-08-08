@@ -50,7 +50,10 @@ function initGame() {
   drawHand();
   updateAllUI();
   
-  // Start tutorial for new players (replaces logMsg('Welcome to the game!'))
+  // Start music system
+  musicManager.startGame();
+  
+  // Start tutorial for new players
   const tutorial = new IntroTutorial();
   setTimeout(() => {
     if (!tutorial.start()) {
@@ -435,6 +438,10 @@ function updateAllUI() {
   renderMarket(marketRow, coins, buyCard);
   renderHand(playerHand, playCard);
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
+  
+  // Update music based on game state
+  const dangerMode = document.body.classList.contains('danger-mode');
+  musicManager.onGameStateChange(cruxflareDeck.length, dangerMode);
 }
 
 // Make functions globally available for HTML onclick
