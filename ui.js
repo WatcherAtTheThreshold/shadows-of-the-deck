@@ -200,104 +200,118 @@ export function cardPlayFeedback(cardElement) {
   }
 }
 
-// ENHANCED visual feedback for encounters - TEST VERSION
+// Enhanced visual and text feedback for encounters
 export function encounterFeedback(playerPos) {
   console.log('🔥 encounterFeedback called for position:', playerPos);
   const nodes = document.querySelectorAll('.node');
-  console.log('🔥 Found', nodes.length, 'nodes total');
+  const logArea = document.getElementById('log');
   
-  // DOUBLE TEST: Animate both the node AND the log area
-  if (playerPos < nodes.length) {
+  if (playerPos < nodes.length && logArea) {
     const currentNode = nodes[playerPos];
-    const logArea = document.getElementById('log');
+    console.log('🔥 Starting encounter feedback for node', playerPos);
     
-    console.log('🔥 Starting DOUBLE animation test for node', playerPos);
+    // Get the current log message to determine what happened
+    const currentLogText = logArea.textContent;
+    let encounterType = 'unknown';
     
-    // TEST 1: Animate the log area (this should definitely be visible)
-    if (logArea) {
-      console.log('🔥 Animating log area for visibility test');
-      
-      // Save original log styles
-      const originalLogBg = logArea.style.background;
-      const originalLogTransform = logArea.style.transform;
-      const originalLogBorder = logArea.style.border;
-      
-      // Animate log area
-      logArea.style.background = 'rgba(255, 0, 255, 0.8)';
-      logArea.style.transform = 'scale(1.1)';
-      logArea.style.border = '4px solid rgba(255, 0, 255, 1)';
-      logArea.style.transition = 'all 0.3s ease';
-      
-      setTimeout(() => {
-        logArea.style.background = 'rgba(255, 255, 0, 1)';
-        logArea.style.transform = 'scale(1.2)';
-        logArea.style.border = '6px solid rgba(255, 255, 0, 1)';
-      }, 300);
-      
-      setTimeout(() => {
-        logArea.style.background = originalLogBg;
-        logArea.style.transform = originalLogTransform;
-        logArea.style.border = originalLogBorder;
-      }, 600);
+    if (currentLogText.includes('Found treasure')) {
+      encounterType = 'treasure';
+    } else if (currentLogText.includes('Shadow drains')) {
+      encounterType = 'drain';
     }
     
-    // TEST 2: Animate the node with extreme visibility
-    const originalStyles = {
-      background: currentNode.style.background,
-      transform: currentNode.style.transform,
-      boxShadow: currentNode.style.boxShadow,
-      border: currentNode.style.border,
-      position: currentNode.style.position,
-      zIndex: currentNode.style.zIndex,
-      overflow: currentNode.style.overflow
-    };
-    
-    // Force the node to be visible and not clipped
-    currentNode.style.position = 'relative';
-    currentNode.style.zIndex = '9999';
-    currentNode.style.overflow = 'visible';
-    
-    let step = 0;
-    const animationSteps = [
-      { transform: 'scale(1)', background: 'rgba(255, 0, 0, 1)', border: '2px solid red' },
-      { transform: 'scale(3)', background: 'rgba(0, 255, 0, 1)', border: '8px solid lime' },
-      { transform: 'scale(4)', background: 'rgba(0, 0, 255, 1)', border: '12px solid blue' },
-      { transform: 'scale(2)', background: 'rgba(255, 255, 0, 1)', border: '6px solid yellow' },
-      { transform: 'scale(1)', background: '', border: '' }
-    ];
-    
-    function animateStep() {
-      if (step < animationSteps.length) {
-        const styles = animationSteps[step];
-        
-        // Force styles with maximum priority
-        currentNode.style.setProperty('transform', styles.transform, 'important');
-        currentNode.style.setProperty('background', styles.background, 'important');
-        currentNode.style.setProperty('border', styles.border, 'important');
-        currentNode.style.setProperty('transition', 'all 0.5s ease', 'important');
-        
-        // Also try changing the parent container overflow
-        const mapContainer = document.getElementById('map');
-        if (mapContainer) {
-          mapContainer.style.overflow = 'visible';
-        }
-        
-        console.log(`🔥 EXTREME Animation step ${step}: transform=${styles.transform}, bg=${styles.background}`);
-        step++;
-        setTimeout(animateStep, 500);
+    // Add descriptive feedback to the log
+    setTimeout(() => {
+      if (encounterType === 'treasure') {
+        logArea.textContent = currentLogText + ' ✨ The purple mist swirls with fortune!';
+      } else if (encounterType === 'drain') {
+        logArea.textContent = currentLogText + ' 👻 Dark tendrils reach from the void...';
       } else {
-        // Reset
-        Object.keys(originalStyles).forEach(prop => {
-          currentNode.style[prop] = originalStyles[prop];
-        });
-        console.log('🔥 Animation complete');
+        logArea.textContent = currentLogText + ' 🌀 You sense a disturbance in the dream...';
       }
-    }
+    }, 100);
     
-    animateStep();
+    // Visual animation for the log area (we know this works!)
+    const originalLogBg = logArea.style.background;
+    const originalLogBorder = logArea.style.border;
+    const originalLogBoxShadow = logArea.style.boxShadow;
+    
+    if (encounterType === 'treasure') {
+      // Golden treasure effect
+      logArea.style.background = 'rgba(255, 215, 0, 0.3)';
+      logArea.style.border = '3px solid rgba(255, 215, 0, 0.8)';
+      logArea.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.6)';
+    } else {
+      // Purple danger effect  
+      logArea.style.background = 'rgba(138, 43, 226, 0.3)';
+      logArea.style.border = '3px solid rgba(138, 43, 226, 0.8)';
+      logArea.style.boxShadow = '0 0 20px rgba(138, 43, 226, 0.6)';
+    }
+    logArea.style.transition = 'all 0.3s ease';
+    
+    // Reset after 2 seconds
+    setTimeout(() => {
+      logArea.style.background = originalLogBg;
+      logArea.style.border = originalLogBorder;
+      logArea.style.boxShadow = originalLogBoxShadow;
+    }, 2000);
+    
+    // Fixed node animation - address the overflow issue
+    const mapContainer = document.getElementById('map');
+    if (mapContainer) {
+      // Temporarily allow overflow
+      const originalMapOverflow = mapContainer.style.overflow;
+      mapContainer.style.overflow = 'visible';
+      mapContainer.style.zIndex = '10';
+      
+      // Fix node positioning and scaling
+      const originalStyles = {
+        position: currentNode.style.position,
+        zIndex: currentNode.style.zIndex,
+        transform: currentNode.style.transform,
+        background: currentNode.style.background,
+        border: currentNode.style.border
+      };
+      
+      // Force positioning that will be visible
+      currentNode.style.position = 'relative';
+      currentNode.style.zIndex = '1000';
+      currentNode.style.transformOrigin = 'center center';
+      
+      // Simple, visible animation
+      let step = 0;
+      const steps = [
+        { transform: 'scale(1)', background: 'rgba(138, 43, 226, 0.8)', border: '3px solid rgba(138, 43, 226, 1)' },
+        { transform: 'scale(1.5)', background: 'rgba(160, 60, 255, 0.9)', border: '4px solid rgba(160, 60, 255, 1)' },
+        { transform: 'scale(1)', background: '', border: '' }
+      ];
+      
+      function animateNodeStep() {
+        if (step < steps.length) {
+          const styles = steps[step];
+          currentNode.style.transform = styles.transform;
+          currentNode.style.background = styles.background;
+          currentNode.style.border = styles.border;
+          currentNode.style.transition = 'all 0.4s ease-out';
+          
+          console.log('🔥 Node animation step', step, styles.transform);
+          step++;
+          setTimeout(animateNodeStep, 400);
+        } else {
+          // Reset everything
+          Object.keys(originalStyles).forEach(prop => {
+            currentNode.style[prop] = originalStyles[prop];
+          });
+          mapContainer.style.overflow = originalMapOverflow;
+          console.log('🔥 Node animation complete');
+        }
+      }
+      
+      animateNodeStep();
+    }
     
   } else {
-    console.log('🔥 ERROR: playerPos', playerPos, 'is out of range for', nodes.length, 'nodes');
+    console.log('🔥 ERROR: Invalid position or missing log area');
   }
 }
 
