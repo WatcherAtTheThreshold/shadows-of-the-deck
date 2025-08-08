@@ -1,177 +1,202 @@
 // Music System for Shadows in the Deck
+// Simplified approach based on Rook's Gambit pattern
+
 class MusicManager {
   constructor() {
+    this.musicPlaying = false;
+    this.shadowsMusic = null;
+    this.musicToggle = null;
+    this.volumeSlider = null;
+    this.currentStage = 'start';
+    this.isEnabled = localStorage.getItem('shadows-music-enabled') === 'true';
+    this.volume = parseFloat(localStorage.getItem('shadows-music-volume')) || 0.7;
+    
+    // Track URLs
     this.tracks = {
-      start: null,
-      danger: null,
-      final: null
+      start: 'music/moonlitReflections.mp3',
+      danger: 'music/rogue.mp3',
+      final: 'music/grove.mp3'
     };
     
-    this.currentTrack = null;
-    this.currentStage = 'start';
-    this.isEnabled = localStorage.getItem('shadows-music-enabled') !== 'false';
-    this.volume = parseFloat(localStorage.getItem('shadows-music-volume')) || 0.7;
-    this.crossfadeDuration = 1000; // 1 second crossfade
-    
-    this.initializeTracks();
-    this.setupControls();
+    // Wait for DOM to be ready before initializing (like Rook's Gambit)
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => this.initialize());
+    } else {
+      this.initialize();
+    }
   }
 
-  initializeTracks() {
-    // Preload all audio tracks
-    this.tracks.start = new Audio('/music/moonlitreflections.mp3');
-    this.tracks.danger = new Audio('/music/rogue.mp3');
-    this.tracks.final = new Audio('/music/grove.mp3');
-
-    // Configure all tracks
-    Object.values(this.tracks).forEach(track => {
-      track.loop = true;
-      track.volume = 0;
-      track.preload = 'auto';
-      
-      // Handle loading errors gracefully
-      track.onerror = () => {
-        console.log('Music file not found, continuing without audio');
-      };
-    });
+  initialize() {
+    console.log('MusicManager: Initializing...');
+    
+    // Get DOM elements
+    this.shadowsMusic = document.getElementById('shadowsMusic');
+    this.musicToggle = document.getElementById('music-toggle');
+    this.volumeSlider = document.getElementById('volume-slider');
+    
+    // Debug: Check if elements exist
+    console.log('MusicManager: Audio element found:', !!this.shadowsMusic);
+    console.log('MusicManager: Toggle button found:', !!this.musicToggle);
+    console.log('MusicManager: Volume slider found:', !!this.volumeSlider);
+    
+    if (!this.shadowsMusic) {
+      console.error('MusicManager: Audio element with id "shadowsMusic" not found');
+      return;
+    }
+    
+    this.setupControls();
+    this.setInitialVolume();
+    this.setupAudioEventListeners();
+    
+    console.log('MusicManager: Initialization complete');
   }
 
   setupControls() {
-    const musicToggle = document.getElementById('music-toggle');
-    const musicText = document.getElementById('music-text');
-    const volumeControl = document.getElementById('volume-control');
-    const volumeSlider = document.getElementById('volume-slider');
-    const tutorialToggle = document.getElementById('tutorial-toggle');
-
-    // Set initial states
-    this.updateMusicButton();
-    volumeSlider.value = this.volume * 100;
-
-    // Music toggle button
-    musicToggle.onclick = () => {
-      this.isEnabled = !this.isEnabled;
-      localStorage.setItem('shadows-music-enabled', this.isEnabled);
-      this.updateMusicButton();
+    // Set up music toggle button
+    if (this.musicToggle) {
+      this.musicToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('MusicManager: Toggle button clicked');
+        this.toggleMusic();
+      });
       
-      if (this.isEnabled) {
-        this.playStage(this.currentStage);
-      } else {
-        this.stopAll();
-      }
-    };
+      console.log('MusicManager: Music toggle listener attached');
+    }
+    
+    // Set up volume slider
+    if (this.volumeSlider) {
+      this.volumeSlider.addEventListener('input', (e) => {
+        console.log('MusicManager: Volume changed to:', e.target.value);
+        this.setVolume(e.target.value);
+        // Save volume preference
+        localStorage.setItem('shadows-music-volume', e.target.value / 100);
+      });
+      
+      console.log('MusicManager: Volume slider listener attached');
+    }
+    
+    // Set initial button state
+    this.updateMusicButton();
+  }
 
-    // Volume control
-    volumeSlider.oninput = (e) => {
-      this.volume = e.target.value / 100;
-      localStorage.setItem('shadows-music-volume', this.volume);
-      if (this.currentTrack) {
-        this.currentTrack.volume = this.volume;
-      }
-    };
+  setupAudioEventListeners() {
+    if (!this.shadowsMusic) return;
+    
+    // Playback events
+    this.shadowsMusic.addEventListener('play', () => {
+      console.log('MusicManager: Audio started playing');
+      this.musicPlaying = true;
+      this.updateMusicButton();
+    });
+    
+    this.shadowsMusic.addEventListener('pause', () => {
+      console.log('MusicManager: Audio paused');
+      this.musicPlaying = false;
+      this.updateMusicButton();
+    });
+    
+    // Error events
+    this.shadowsMusic.addEventListener('error', (e) => {
+      console.error('MusicManager: Audio error:', e);
+      this.onMusicError();
+    });
+    
+    // Set initial volume
+    this.shadowsMusic.volume = this.volume;
+    
+    console.log('MusicManager: Audio source:', this.shadowsMusic.src || this.shadowsMusic.currentSrc);
+  }
 
-    // Tutorial button
-    tutorialToggle.onclick = () => {
-      // Reset tutorial and trigger it
-      localStorage.removeItem('shadows-tutorial-complete');
-      location.reload(); // Simple way to restart with tutorial
-    };
+  setInitialVolume() {
+    if (this.shadowsMusic) {
+      this.shadowsMusic.volume = this.volume;
+      console.log('MusicManager: Initial volume set to:', this.volume);
+    }
+    if (this.volumeSlider) {
+      this.volumeSlider.value = this.volume * 100;
+    }
+  }
+
+  toggleMusic() {
+    console.log('MusicManager: Toggle music called, current state:', this.musicPlaying);
+    
+    if (!this.shadowsMusic) {
+      console.error('MusicManager: No audio element available');
+      return;
+    }
+    
+    this.isEnabled = !this.isEnabled;
+    localStorage.setItem('shadows-music-enabled', this.isEnabled);
+    
+    if (this.isEnabled) {
+      this.playMusic();
+    } else {
+      this.pauseMusic();
+    }
+    
+    this.updateMusicButton();
+  }
+
+  async playMusic() {
+    if (!this.shadowsMusic) {
+      console.error('MusicManager: No audio element for playback');
+      return;
+    }
+    
+    console.log('MusicManager: Attempting to play music...');
+    
+    try {
+      const playPromise = this.shadowsMusic.play();
+      
+      if (playPromise !== undefined) {
+        await playPromise;
+        console.log('MusicManager: Music started successfully');
+      }
+      
+    } catch (error) {
+      console.error('MusicManager: Failed to play music:', error);
+      
+      // Handle specific error types
+      if (error.name === 'NotAllowedError') {
+        console.log('MusicManager: Autoplay blocked by browser - user interaction required');
+      }
+    }
+  }
+
+  pauseMusic() {
+    if (!this.shadowsMusic) return;
+    
+    console.log('MusicManager: Pausing music');
+    this.shadowsMusic.pause();
   }
 
   updateMusicButton() {
-    const musicToggle = document.getElementById('music-toggle');
+    if (!this.musicToggle) return;
+    
     const musicText = document.getElementById('music-text');
-
-    if (this.isEnabled) {
-      musicToggle.classList.add('active');
+    if (!musicText) return;
+    
+    if (this.isEnabled && this.musicPlaying) {
+      this.musicToggle.classList.add('active');
       musicText.textContent = 'Pause';
     } else {
-      musicToggle.classList.remove('active');
+      this.musicToggle.classList.remove('active');
       musicText.textContent = 'Play';
     }
-  }
-
-  playStage(stage) {
-    if (!this.isEnabled) return;
     
-    const newTrack = this.tracks[stage];
-    if (!newTrack || newTrack === this.currentTrack) return;
-
-    this.currentStage = stage;
-
-    if (this.currentTrack) {
-      // Crossfade from current to new track
-      this.crossfade(this.currentTrack, newTrack);
-    } else {
-      // First track - just fade in
-      this.currentTrack = newTrack;
-      this.fadeIn(newTrack);
-    }
+    console.log('MusicManager: Button updated -', musicText.textContent);
   }
 
-  crossfade(fromTrack, toTrack) {
-    const steps = 20;
-    const stepDuration = this.crossfadeDuration / steps;
-    let step = 0;
-
-    // Start the new track at volume 0
-    toTrack.volume = 0;
-    toTrack.currentTime = 0;
-    toTrack.play().catch(() => {
-      console.log('Could not play audio - user interaction may be required');
-    });
-
-    const fadeInterval = setInterval(() => {
-      step++;
-      const progress = step / steps;
-      
-      // Fade out old track
-      fromTrack.volume = Math.max(0, this.volume * (1 - progress));
-      
-      // Fade in new track
-      toTrack.volume = Math.min(this.volume, this.volume * progress);
-
-      if (step >= steps) {
-        clearInterval(fadeInterval);
-        fromTrack.pause();
-        fromTrack.currentTime = 0;
-        this.currentTrack = toTrack;
-      }
-    }, stepDuration);
+  setVolume(value) {
+    if (!this.shadowsMusic) return;
+    
+    const volume = Math.max(0, Math.min(100, parseInt(value))) / 100;
+    this.shadowsMusic.volume = volume;
+    this.volume = volume;
+    console.log('MusicManager: Volume set to:', volume);
   }
 
-  fadeIn(track) {
-    const steps = 20;
-    const stepDuration = 500 / steps; // 0.5 second fade in
-    let step = 0;
-
-    track.volume = 0;
-    track.currentTime = 0;
-    track.play().catch(() => {
-      console.log('Could not play audio - user interaction may be required');
-    });
-
-    const fadeInterval = setInterval(() => {
-      step++;
-      track.volume = Math.min(this.volume, this.volume * (step / steps));
-
-      if (step >= steps) {
-        clearInterval(fadeInterval);
-      }
-    }, stepDuration);
-  }
-
-  stopAll() {
-    Object.values(this.tracks).forEach(track => {
-      if (track) {
-        track.pause();
-        track.currentTime = 0;
-        track.volume = 0;
-      }
-    });
-    this.currentTrack = null;
-  }
-
-  // Called by game logic to trigger music changes
+  // Change track based on game stage (like our original plan)
   onGameStateChange(cruxflareCardsLeft, dangerMode = false) {
     let newStage;
     
@@ -184,16 +209,49 @@ class MusicManager {
     }
 
     if (newStage !== this.currentStage) {
-      console.log(`Music: Switching to ${newStage} stage`);
+      console.log(`MusicManager: Switching to ${newStage} stage`);
       this.playStage(newStage);
     }
   }
 
-  // Method to start music when game begins
+  // Switch to different track (like changing radio stations)
+  playStage(stage) {
+    if (!this.isEnabled || !this.shadowsMusic) return;
+    
+    const trackUrl = this.tracks[stage];
+    if (!trackUrl) {
+      console.error('MusicManager: Unknown stage:', stage);
+      return;
+    }
+    
+    this.currentStage = stage;
+    
+    // If music is currently playing, switch source smoothly
+    if (this.musicPlaying) {
+      console.log('MusicManager: Switching track to:', trackUrl);
+      this.shadowsMusic.src = trackUrl;
+      this.shadowsMusic.load();
+      this.shadowsMusic.play().catch(e => {
+        console.error('MusicManager: Error switching track:', e);
+      });
+    } else {
+      // Just change the source for when music starts
+      this.shadowsMusic.src = trackUrl;
+      this.shadowsMusic.load();
+    }
+  }
+
+  // Start game - only play if enabled
   startGame() {
     if (this.isEnabled) {
-      this.playStage('start');
+      this.playMusic();
     }
+  }
+
+  onMusicError() {
+    console.error('MusicManager: Music error occurred');
+    this.musicPlaying = false;
+    this.updateMusicButton();
   }
 }
 
