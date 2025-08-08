@@ -200,122 +200,100 @@ export function cardPlayFeedback(cardElement) {
   }
 }
 
-// ENHANCED visual feedback for encounters with SUPER DRAMATIC JavaScript animation
+// ENHANCED visual feedback for encounters - TEST VERSION
 export function encounterFeedback(playerPos) {
   console.log('🔥 encounterFeedback called for position:', playerPos);
   const nodes = document.querySelectorAll('.node');
   console.log('🔥 Found', nodes.length, 'nodes total');
   
+  // DOUBLE TEST: Animate both the node AND the log area
   if (playerPos < nodes.length) {
     const currentNode = nodes[playerPos];
-    console.log('🔥 Starting DRAMATIC animation for node', playerPos);
+    const logArea = document.getElementById('log');
     
-    // Save original styles
+    console.log('🔥 Starting DOUBLE animation test for node', playerPos);
+    
+    // TEST 1: Animate the log area (this should definitely be visible)
+    if (logArea) {
+      console.log('🔥 Animating log area for visibility test');
+      
+      // Save original log styles
+      const originalLogBg = logArea.style.background;
+      const originalLogTransform = logArea.style.transform;
+      const originalLogBorder = logArea.style.border;
+      
+      // Animate log area
+      logArea.style.background = 'rgba(255, 0, 255, 0.8)';
+      logArea.style.transform = 'scale(1.1)';
+      logArea.style.border = '4px solid rgba(255, 0, 255, 1)';
+      logArea.style.transition = 'all 0.3s ease';
+      
+      setTimeout(() => {
+        logArea.style.background = 'rgba(255, 255, 0, 1)';
+        logArea.style.transform = 'scale(1.2)';
+        logArea.style.border = '6px solid rgba(255, 255, 0, 1)';
+      }, 300);
+      
+      setTimeout(() => {
+        logArea.style.background = originalLogBg;
+        logArea.style.transform = originalLogTransform;
+        logArea.style.border = originalLogBorder;
+      }, 600);
+    }
+    
+    // TEST 2: Animate the node with extreme visibility
     const originalStyles = {
       background: currentNode.style.background,
       transform: currentNode.style.transform,
       boxShadow: currentNode.style.boxShadow,
       border: currentNode.style.border,
-      transition: currentNode.style.transition,
+      position: currentNode.style.position,
       zIndex: currentNode.style.zIndex,
-      position: currentNode.style.position
+      overflow: currentNode.style.overflow
     };
     
-    // Make sure position is set for z-index to work
+    // Force the node to be visible and not clipped
     currentNode.style.position = 'relative';
+    currentNode.style.zIndex = '9999';
+    currentNode.style.overflow = 'visible';
     
-    // Animation sequence - much more dramatic and longer
     let step = 0;
     const animationSteps = [
-      // Step 0: Start normal
-      { 
-        background: 'rgba(192, 192, 192, 0.3)', 
-        transform: 'scale(1)', 
-        boxShadow: '0 0 0 rgba(255, 0, 255, 0)', 
-        border: '2px solid rgba(192, 192, 192, 0.6)',
-        zIndex: '1'
-      },
-      // Step 1: Begin explosion
-      { 
-        background: 'rgba(255, 0, 255, 0.9)', 
-        transform: 'scale(1.8)', 
-        boxShadow: '0 0 30px rgba(255, 0, 255, 1)', 
-        border: '4px solid rgba(255, 0, 255, 1)',
-        zIndex: '1000'
-      },
-      // Step 2: Peak explosion
-      { 
-        background: 'rgba(255, 100, 255, 1)', 
-        transform: 'scale(2.5)', 
-        boxShadow: '0 0 50px rgba(255, 100, 255, 1)', 
-        border: '6px solid rgba(255, 255, 0, 1)',
-        zIndex: '1000'
-      },
-      // Step 3: Hold peak
-      { 
-        background: 'rgba(255, 255, 0, 1)', 
-        transform: 'scale(2.8)', 
-        boxShadow: '0 0 60px rgba(255, 255, 0, 1)', 
-        border: '8px solid rgba(255, 0, 0, 1)',
-        zIndex: '1000'
-      },
-      // Step 4: Start fade
-      { 
-        background: 'rgba(255, 0, 255, 0.7)', 
-        transform: 'scale(2)', 
-        boxShadow: '0 0 40px rgba(255, 0, 255, 0.8)', 
-        border: '4px solid rgba(255, 0, 255, 0.8)',
-        zIndex: '1000'
-      },
-      // Step 5: Continue fade
-      { 
-        background: 'rgba(138, 43, 226, 0.5)', 
-        transform: 'scale(1.5)', 
-        boxShadow: '0 0 20px rgba(138, 43, 226, 0.6)', 
-        border: '3px solid rgba(138, 43, 226, 0.6)',
-        zIndex: '1000'
-      },
-      // Step 6: Return to normal
-      { 
-        background: 'rgba(192, 192, 192, 0.3)', 
-        transform: 'scale(1)', 
-        boxShadow: '0 0 0 rgba(255, 0, 255, 0)', 
-        border: '2px solid rgba(192, 192, 192, 0.6)',
-        zIndex: '1'
-      }
+      { transform: 'scale(1)', background: 'rgba(255, 0, 0, 1)', border: '2px solid red' },
+      { transform: 'scale(3)', background: 'rgba(0, 255, 0, 1)', border: '8px solid lime' },
+      { transform: 'scale(4)', background: 'rgba(0, 0, 255, 1)', border: '12px solid blue' },
+      { transform: 'scale(2)', background: 'rgba(255, 255, 0, 1)', border: '6px solid yellow' },
+      { transform: 'scale(1)', background: '', border: '' }
     ];
     
     function animateStep() {
       if (step < animationSteps.length) {
         const styles = animationSteps[step];
         
-        // Apply all styles with important
-        currentNode.style.setProperty('background', styles.background, 'important');
+        // Force styles with maximum priority
         currentNode.style.setProperty('transform', styles.transform, 'important');
-        currentNode.style.setProperty('box-shadow', styles.boxShadow, 'important');
+        currentNode.style.setProperty('background', styles.background, 'important');
         currentNode.style.setProperty('border', styles.border, 'important');
-        currentNode.style.setProperty('z-index', styles.zIndex, 'important');
-        currentNode.style.setProperty('transition', 'all 0.3s ease-out', 'important');
+        currentNode.style.setProperty('transition', 'all 0.5s ease', 'important');
         
-        console.log('🔥 DRAMATIC Animation step', step, 'applied with transform:', styles.transform);
+        // Also try changing the parent container overflow
+        const mapContainer = document.getElementById('map');
+        if (mapContainer) {
+          mapContainer.style.overflow = 'visible';
+        }
+        
+        console.log(`🔥 EXTREME Animation step ${step}: transform=${styles.transform}, bg=${styles.background}`);
         step++;
-        setTimeout(animateStep, 400); // 400ms per step = 2.8s total
+        setTimeout(animateStep, 500);
       } else {
-        // Reset all styles
+        // Reset
         Object.keys(originalStyles).forEach(prop => {
           currentNode.style[prop] = originalStyles[prop];
         });
-        currentNode.style.removeProperty('background');
-        currentNode.style.removeProperty('transform');
-        currentNode.style.removeProperty('box-shadow');
-        currentNode.style.removeProperty('border');
-        currentNode.style.removeProperty('z-index');
-        currentNode.style.removeProperty('transition');
-        console.log('🔥 DRAMATIC Animation complete for node', playerPos);
+        console.log('🔥 Animation complete');
       }
     }
     
-    // Start the animation
     animateStep();
     
   } else {
