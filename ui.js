@@ -202,16 +202,22 @@ export function cardPlayFeedback(cardElement) {
 
 // ENHANCED visual feedback for encounters with dramatic animation
 export function encounterFeedback(playerPos) {
+  console.log('encounterFeedback called for position:', playerPos); // Debug log
   const nodes = document.querySelectorAll('.node');
+  console.log('Found nodes:', nodes.length); // Debug log
   const currentNode = nodes[playerPos];
   if (currentNode) {
+    console.log('Adding encounter-active class to node', playerPos); // Debug log
     // Add the encounter animation class
     currentNode.classList.add('encounter-active');
     
     // Remove the class after animation completes
     setTimeout(() => {
       currentNode.classList.remove('encounter-active');
+      console.log('Removed encounter-active class from node', playerPos); // Debug log
     }, 1200);
+  } else {
+    console.log('No node found at position', playerPos); // Debug log
   }
 }
 
