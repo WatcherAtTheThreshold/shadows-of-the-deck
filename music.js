@@ -80,16 +80,13 @@ class MusicManager {
   updateMusicButton() {
     const musicToggle = document.getElementById('music-toggle');
     const musicText = document.getElementById('music-text');
-    const volumeControl = document.getElementById('volume-control');
 
     if (this.isEnabled) {
       musicToggle.classList.add('active');
-      musicText.textContent = 'Playing';
-      volumeControl.style.display = 'flex';
+      musicText.textContent = 'Pause';
     } else {
       musicToggle.classList.remove('active');
-      musicText.textContent = 'Play Shadows';
-      volumeControl.style.display = 'none';
+      musicText.textContent = 'Play';
     }
   }
 
