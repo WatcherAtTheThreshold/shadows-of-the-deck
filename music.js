@@ -13,9 +13,9 @@ class MusicManager {
     
     // Track URLs
     this.tracks = {
-      start: 'music/moonlitRefelctions.mp3',
-      danger: 'music/rogue.mp3',
-      final: 'music/grove.mp3'
+      start: 'music/echoes1.mp3',
+      danger: 'music/echoes2.mp3',
+      final: 'music/echoes3.mp3'
     };
     
     // Wait for DOM to be ready before initializing (like Rook's Gambit)
