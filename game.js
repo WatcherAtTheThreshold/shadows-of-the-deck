@@ -125,7 +125,9 @@ function playCard(card, index) {
     }
   }
   
-  lastPlayedCard = card;
+  if (card !== 'Dream Echo') {
+    lastPlayedCard = card;
+  }
   logMsg(message);
   
   // Move card to discard
