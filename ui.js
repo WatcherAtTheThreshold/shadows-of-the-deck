@@ -156,18 +156,30 @@ export function updateHUD(coins, fragmentsCollected, cruxflareDeck) {
   document.getElementById('crux-remaining').textContent = cruxflareDeck.length;
 }
 
-// Update mist overlay based on danger level
+// Update mist overlay based on danger level with NEW THREE-STAGE PROGRESSION
 export function updateMistOverlay(cruxflareDeck) {
-  if (cruxflareDeck.length <= 7) {
-    document.body.classList.add('danger-mode');
-  }
+  const cardsLeft = cruxflareDeck.length;
   
-  if (cruxflareDeck.length <= 2) {
+  // Remove existing classes
+  document.body.classList.remove('warning-mode', 'danger-mode');
+  
+  if (cardsLeft <= 2) {
+    // Final panic - red
+    document.body.classList.add('danger-mode');
     const hud = document.getElementById('hud');
-    hud.style.borderColor = 'rgba(255, 100, 100, 0.6)';
-  } else if (cruxflareDeck.length <= 4) {
+    hud.style.borderColor = 'rgba(255, 100, 100, 0.8)';
+    hud.style.animation = 'pulse-danger 1.5s infinite';
+  } else if (cardsLeft <= 7) {
+    // Warning stage - purple
+    document.body.classList.add('warning-mode');
     const hud = document.getElementById('hud');
-    hud.style.borderColor = 'rgba(222, 184, 135, 0.6)';
+    hud.style.borderColor = 'rgba(138, 43, 226, 0.8)';
+    hud.style.animation = 'pulse-warning 2s infinite';
+  } else {
+    // Reset HUD to normal when not in warning/danger
+    const hud = document.getElementById('hud');
+    hud.style.borderColor = 'rgba(138, 43, 226, 0.3)';
+    hud.style.animation = 'none';
   }
 }
 
@@ -188,17 +200,18 @@ export function cardPlayFeedback(cardElement) {
   }
 }
 
-// Visual feedback for encounters
+// ENHANCED visual feedback for encounters with dramatic animation
 export function encounterFeedback(playerPos) {
   const nodes = document.querySelectorAll('.node');
   const currentNode = nodes[playerPos];
   if (currentNode) {
-    currentNode.style.background = 'rgba(138, 43, 226, 0.8)';
-    currentNode.style.transform = 'scale(1.2)';
+    // Add the encounter animation class
+    currentNode.classList.add('encounter-active');
+    
+    // Remove the class after animation completes
     setTimeout(() => {
-      currentNode.style.background = 'rgba(192, 192, 192, 0.3)';
-      currentNode.style.transform = 'scale(1)';
-    }, 800);
+      currentNode.classList.remove('encounter-active');
+    }, 1200);
   }
 }
 
