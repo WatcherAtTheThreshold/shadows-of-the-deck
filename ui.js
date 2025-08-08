@@ -242,6 +242,7 @@ export function showGameOverScreen(isWin, fragmentsCollected, totalFragments) {
   
   const gameOverContainer = document.getElementById('game-over-container');
   gameOverContainer.innerHTML = `
+    <div class="game-over-backdrop"></div>
     <div class="game-over-screen">
       <div class="game-over-title">${isWin ? '✧ Victory ✧' : '◯ Dream Lost ◯'}</div>
       <div class="game-over-score">Fragments Collected: ${fragmentsCollected} / ${totalFragments}</div>

@@ -160,32 +160,11 @@ class IntroTutorial {
     document.getElementById('log').textContent = 'Welcome to the game!';
   }
 
-// Show game over screen as overlay
-export function showGameOverScreen(isWin, fragmentsCollected, totalFragments) {
-  let flavorText;
-  if (isWin) {
-    const flavorTexts = [
-      "The dream fragments coalesce into crystalline truth. You have mastered the shifting realm.",
-      "Through shadow and mist, you have gathered the scattered pieces of the dreaming mind.",
-      "The Cruxflare fades as your collection of fragments forms a complete vision of the dreamscape."
-    ];
-    flavorText = flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
-  } else {
-    const flavorTexts = [
-      "The dream collapses, fragments scattered to the void. The shadows claim what remains.",
-      "Cruxflare consumes the last vestiges of the dream. The fragments slip through ethereal fingers.",
-      "The mist thickens, obscuring the path. Some fragments were never meant to be found."
-    ];
-    flavorText = flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
+  // Method to reset tutorial (for testing or player choice)
+  reset() {
+    localStorage.removeItem('shadows-tutorial-complete');
   }
-  
-  const gameOverContainer = document.getElementById('game-over-container');
-  gameOverContainer.innerHTML = `
-    <div class="game-over-backdrop"></div>
-    <div class="game-over-screen">
-      <div class="game-over-title">${isWin ? '✧ Victory ✧' : '◯ Dream Lost ◯'}</div>
-      <div class="game-over-score">Fragments Collected: ${fragmentsCollected} / ${totalFragments}</div>
-      <div class="game-over-flavor">${flavorText}</div>
-    </div>
-  `;
 }
+
+// Export the tutorial class
+export default IntroTutorial;
