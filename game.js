@@ -51,7 +51,7 @@ function initGame() {
   updateAllUI();
   
   // Start music system
-  musicManager.startGame();
+  // musicManager.startGame();
   
   // Start tutorial for new players
   const tutorial = new IntroTutorial();
