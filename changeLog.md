@@ -1,5 +1,7 @@
 # Shadows of the Deck – Intended Changes Log V2
 
+-Link: https://watcheratthethreshold.github.io/shadows-of-the-deck/
+
 ## 1. Gameplay & Mechanics
 - **Randomize starting hand** – *Still needs to be implemented*  
   Cards dealt to the player's hand should be randomized at the start.
