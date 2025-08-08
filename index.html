@@ -11,7 +11,7 @@
  <!-- Music System Audio Elements -->
  <!-- Single audio element like Rook's Gambit -->
 <audio id="shadowsMusic" loop preload="auto">
-  <source src="music/moonlitRefelctions.mp3" type="audio/mpeg">
+  <source src="music/moonlitReflections.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
 </audio>
   
@@ -22,7 +22,6 @@
 
   <!-- Game Container -->
   <div id="game">
-    <h1>Shadows in the Deck</h1>
     
 <!-- HUD -->
 <div id="hud">
@@ -40,7 +39,7 @@
     
     <div id="volume-control" class="volume-control">
       <span class="volume-icon">🔊</span>
-      <input type="range" id="volume-slider" min="0" max="100" value="30" class="volume-slider">
+      <input type="range" id="volume-slider" min="0" max="100" value="70" class="volume-slider">
     </div>
     
     <button id="tutorial-toggle" class="hud-button">
@@ -50,8 +49,12 @@
   </div>
 </div>
     
-    <!-- Legend -->
-    <div id="legend">
+    <!-- Dream Map Section (moved up) -->
+    <h2 class="section-header" id="map-header">Dream Map</h2>
+    <div id="map"></div>
+
+    <!-- Legend (moved down, hidden by default) -->
+    <div id="legend" style="display: none;">
       <div class="legend-item">
         <span class="legend-icon" style="background: cyan; box-shadow: 0 0 5px cyan;"></span>You
       </div>
@@ -69,7 +72,6 @@
     <!-- Log  -->
     <div id="log">Welcome to the game!</div>
 
-
     <!-- Market Section -->
     <h2 class="section-header" id="market-header">Market</h2>
     <div id="market"></div>
@@ -80,10 +82,6 @@
 
     <!-- Turn Controls -->
     <button id="end-turn-btn" onclick="endTurn()">End Turn</button>
-
-    <!-- Map Section -->
-    <h2 class="section-header" id="map-header">Dream Map</h2>
-    <div id="map"></div>
 
     <!-- Game Over Screen -->
     <div id="game-over-container"></div>
