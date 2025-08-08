@@ -9,7 +9,7 @@ class MusicManager {
     this.volumeSlider = null;
     this.currentStage = 'start';
     this.isEnabled = localStorage.getItem('shadows-music-enabled') === 'true';
-    this.volume = parseFloat(localStorage.getItem('shadows-music-volume')) || 0.7;
+    this.volume = parseFloat(localStorage.getItem('shadows-music-volume')) || 0.3;
     
     // Track URLs
     this.tracks = {
