@@ -407,7 +407,7 @@ function discardRandomCard() {
 // End the game
 function endGame() {
   toggleSectionHeaders(false);
-  clearGameAreas();
+  // clearGameAreas(); // ← Remove this line to keep cards visible
   hideElement('end-turn-btn');
   
   const isWin = fragmentsCollected >= totalFragments;
@@ -418,6 +418,7 @@ function endGame() {
 // Restart the game
 function restartGame() {
   toggleSectionHeaders(true);
+  clearGameAreas(); // ← Move the clear here instead
   clearElement('game-over-container');
   showElement('end-turn-btn');
   
