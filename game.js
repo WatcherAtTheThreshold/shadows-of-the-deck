@@ -476,7 +476,7 @@ if (cruxflareDeck.length <= 2) {
 } else {
   setTrackByPhase('start');
 }
-
+}
 // Make functions globally available for HTML onclick
 window.endTurn = endTurn;
 window.restartGame = restartGame;
