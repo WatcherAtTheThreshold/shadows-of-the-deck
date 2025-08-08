@@ -9,6 +9,24 @@ import {
   showElement, hideElement, clearElement 
 } from './ui.js';
 
+// ---- music phase helpers (game.js) ----
+function pickMusicPhase() {
+  // adjust to your real state
+  const cruxLeft = (window.cruxflareDeck?.length ?? 0);
+  const isDangerMode = document.body.classList.contains('danger-mode');
+
+  if (cruxLeft <= 2) return 'danger';
+  if (isDangerMode) return 'warning';
+  return 'start';
+}
+
+function updateMusicPhase() {
+  const phase = pickMusicPhase();
+  // call into music.js
+  window.MusicManager?.setTrackByPhase(phase);
+}
+
+
 // Game state variables
 let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, 
     fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, 
