@@ -156,7 +156,7 @@ export function updateHUD(coins, fragmentsCollected, cruxflareDeck) {
   document.getElementById('crux-remaining').textContent = cruxflareDeck.length;
 }
 
-// Update mist overlay based on danger level with NEW THREE-STAGE PROGRESSION
+// Update mist overlay based on danger level with THREE-STAGE PROGRESSION
 export function updateMistOverlay(cruxflareDeck) {
   const cardsLeft = cruxflareDeck.length;
   
@@ -202,22 +202,24 @@ export function cardPlayFeedback(cardElement) {
 
 // ENHANCED visual feedback for encounters with dramatic animation
 export function encounterFeedback(playerPos) {
-  console.log('encounterFeedback called for position:', playerPos); // Debug log
+  console.log('🔥 encounterFeedback called for position:', playerPos);
   const nodes = document.querySelectorAll('.node');
-  console.log('Found nodes:', nodes.length); // Debug log
-  const currentNode = nodes[playerPos];
-  if (currentNode) {
-    console.log('Adding encounter-active class to node', playerPos); // Debug log
+  console.log('🔥 Found', nodes.length, 'nodes total');
+  
+  if (playerPos < nodes.length) {
+    const currentNode = nodes[playerPos];
+    console.log('🔥 Adding encounter-active class to node', playerPos);
+    
     // Add the encounter animation class
     currentNode.classList.add('encounter-active');
     
     // Remove the class after animation completes
     setTimeout(() => {
       currentNode.classList.remove('encounter-active');
-      console.log('Removed encounter-active class from node', playerPos); // Debug log
+      console.log('🔥 Removed encounter-active class from node', playerPos);
     }, 1200);
   } else {
-    console.log('No node found at position', playerPos); // Debug log
+    console.log('🔥 ERROR: playerPos', playerPos, 'is out of range for', nodes.length, 'nodes');
   }
 }
 
