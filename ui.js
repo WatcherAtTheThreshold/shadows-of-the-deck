@@ -200,7 +200,7 @@ export function cardPlayFeedback(cardElement) {
   }
 }
 
-// ENHANCED visual feedback for encounters with JAVASCRIPT animation
+// ENHANCED visual feedback for encounters with SUPER DRAMATIC JavaScript animation
 export function encounterFeedback(playerPos) {
   console.log('🔥 encounterFeedback called for position:', playerPos);
   const nodes = document.querySelectorAll('.node');
@@ -208,51 +208,110 @@ export function encounterFeedback(playerPos) {
   
   if (playerPos < nodes.length) {
     const currentNode = nodes[playerPos];
-    console.log('🔥 Starting JavaScript animation for node', playerPos);
+    console.log('🔥 Starting DRAMATIC animation for node', playerPos);
     
     // Save original styles
-    const originalBackground = currentNode.style.background;
-    const originalTransform = currentNode.style.transform;
-    const originalBoxShadow = currentNode.style.boxShadow;
-    const originalBorder = currentNode.style.border;
+    const originalStyles = {
+      background: currentNode.style.background,
+      transform: currentNode.style.transform,
+      boxShadow: currentNode.style.boxShadow,
+      border: currentNode.style.border,
+      transition: currentNode.style.transition,
+      zIndex: currentNode.style.zIndex,
+      position: currentNode.style.position
+    };
     
-    // JavaScript animation sequence
+    // Make sure position is set for z-index to work
+    currentNode.style.position = 'relative';
+    
+    // Animation sequence - much more dramatic and longer
     let step = 0;
     const animationSteps = [
-      // Step 0: Normal
-      { background: '', transform: 'scale(1)', boxShadow: '', border: '' },
-      // Step 1: Start pulse
-      { background: 'rgba(255, 0, 255, 0.8)', transform: 'scale(1.5)', boxShadow: '0 0 20px rgba(255, 0, 255, 0.8)', border: '3px solid rgba(255, 0, 255, 1)' },
-      // Step 2: Peak pulse  
-      { background: 'rgba(255, 100, 255, 1)', transform: 'scale(2)', boxShadow: '0 0 40px rgba(255, 100, 255, 1)', border: '4px solid rgba(255, 100, 255, 1)' },
-      // Step 3: Fade back
-      { background: 'rgba(255, 0, 255, 0.5)', transform: 'scale(1.3)', boxShadow: '0 0 15px rgba(255, 0, 255, 0.5)', border: '2px solid rgba(255, 0, 255, 0.8)' },
-      // Step 4: Return to normal
-      { background: '', transform: 'scale(1)', boxShadow: '', border: '' }
+      // Step 0: Start normal
+      { 
+        background: 'rgba(192, 192, 192, 0.3)', 
+        transform: 'scale(1)', 
+        boxShadow: '0 0 0 rgba(255, 0, 255, 0)', 
+        border: '2px solid rgba(192, 192, 192, 0.6)',
+        zIndex: '1'
+      },
+      // Step 1: Begin explosion
+      { 
+        background: 'rgba(255, 0, 255, 0.9)', 
+        transform: 'scale(1.8)', 
+        boxShadow: '0 0 30px rgba(255, 0, 255, 1)', 
+        border: '4px solid rgba(255, 0, 255, 1)',
+        zIndex: '1000'
+      },
+      // Step 2: Peak explosion
+      { 
+        background: 'rgba(255, 100, 255, 1)', 
+        transform: 'scale(2.5)', 
+        boxShadow: '0 0 50px rgba(255, 100, 255, 1)', 
+        border: '6px solid rgba(255, 255, 0, 1)',
+        zIndex: '1000'
+      },
+      // Step 3: Hold peak
+      { 
+        background: 'rgba(255, 255, 0, 1)', 
+        transform: 'scale(2.8)', 
+        boxShadow: '0 0 60px rgba(255, 255, 0, 1)', 
+        border: '8px solid rgba(255, 0, 0, 1)',
+        zIndex: '1000'
+      },
+      // Step 4: Start fade
+      { 
+        background: 'rgba(255, 0, 255, 0.7)', 
+        transform: 'scale(2)', 
+        boxShadow: '0 0 40px rgba(255, 0, 255, 0.8)', 
+        border: '4px solid rgba(255, 0, 255, 0.8)',
+        zIndex: '1000'
+      },
+      // Step 5: Continue fade
+      { 
+        background: 'rgba(138, 43, 226, 0.5)', 
+        transform: 'scale(1.5)', 
+        boxShadow: '0 0 20px rgba(138, 43, 226, 0.6)', 
+        border: '3px solid rgba(138, 43, 226, 0.6)',
+        zIndex: '1000'
+      },
+      // Step 6: Return to normal
+      { 
+        background: 'rgba(192, 192, 192, 0.3)', 
+        transform: 'scale(1)', 
+        boxShadow: '0 0 0 rgba(255, 0, 255, 0)', 
+        border: '2px solid rgba(192, 192, 192, 0.6)',
+        zIndex: '1'
+      }
     ];
     
     function animateStep() {
       if (step < animationSteps.length) {
         const styles = animationSteps[step];
-        currentNode.style.background = styles.background;
-        currentNode.style.transform = styles.transform;
-        currentNode.style.boxShadow = styles.boxShadow;
-        currentNode.style.border = styles.border;
-        currentNode.style.transition = 'all 0.2s ease-out';
-        currentNode.style.zIndex = '1000';
         
-        console.log('🔥 Animation step', step, 'applied');
+        // Apply all styles with important
+        currentNode.style.setProperty('background', styles.background, 'important');
+        currentNode.style.setProperty('transform', styles.transform, 'important');
+        currentNode.style.setProperty('box-shadow', styles.boxShadow, 'important');
+        currentNode.style.setProperty('border', styles.border, 'important');
+        currentNode.style.setProperty('z-index', styles.zIndex, 'important');
+        currentNode.style.setProperty('transition', 'all 0.3s ease-out', 'important');
+        
+        console.log('🔥 DRAMATIC Animation step', step, 'applied with transform:', styles.transform);
         step++;
-        setTimeout(animateStep, 200); // 200ms per step = 1s total
+        setTimeout(animateStep, 400); // 400ms per step = 2.8s total
       } else {
         // Reset all styles
-        currentNode.style.background = originalBackground;
-        currentNode.style.transform = originalTransform;
-        currentNode.style.boxShadow = originalBoxShadow;
-        currentNode.style.border = originalBorder;
-        currentNode.style.transition = '';
-        currentNode.style.zIndex = '';
-        console.log('🔥 Animation complete for node', playerPos);
+        Object.keys(originalStyles).forEach(prop => {
+          currentNode.style[prop] = originalStyles[prop];
+        });
+        currentNode.style.removeProperty('background');
+        currentNode.style.removeProperty('transform');
+        currentNode.style.removeProperty('box-shadow');
+        currentNode.style.removeProperty('border');
+        currentNode.style.removeProperty('z-index');
+        currentNode.style.removeProperty('transition');
+        console.log('🔥 DRAMATIC Animation complete for node', playerPos);
       }
     }
     
