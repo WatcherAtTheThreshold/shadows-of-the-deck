@@ -9,7 +9,7 @@ class MusicManager {
     
     this.currentTrack = null;
     this.currentStage = 'start';
-    this.isEnabled = localStorage.getItem('shadows-music-enabled') !== 'false';
+   this.isEnabled = localStorage.getItem('shadows-music-enabled') === 'true';
     this.volume = parseFloat(localStorage.getItem('shadows-music-volume')) || 0.7;
     this.crossfadeDuration = 1000; // 1 second crossfade
     
