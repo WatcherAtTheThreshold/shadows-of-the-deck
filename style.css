@@ -72,6 +72,18 @@ body, html {
   color: #fff;
 }
 
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+#end-turn-btn, #restart-btn {
+  position: static;
+  transform: none;
+}
+
 /* Volume Control */
 .volume-control {
   display: flex;
