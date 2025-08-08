@@ -8,34 +8,50 @@ class IntroTutorial {
         text: "Gain focus orbs and move by playing cards from your hand",
         highlight: "#player-hand",
         overlay: "Your Hand", 
-        duration: 3500
+        duration: 7000  // Doubled duration
       },
       {
         text: "Buy powerful cards from the market using your orbs",
         highlight: "#market",
         overlay: "Market",
-        duration: 3500
+        duration: 7000  // Doubled duration
       },
       {
         text: "Collect all 5 fragments",
         highlight: "#frags",
         glow: true,
-        duration: 3000
+        duration: 6000  // Doubled duration
       },
       {
         text: "Explore the dream map to find them",
         highlight: "#map",
         overlay: "Dream Map", 
-        duration: 3500
+        duration: 7000  // Doubled duration
       },
       {
         text: "Before the Cruxflare deck runs out!",
         highlight: "#crux-remaining",
         glow: true,
         pulse: true,
-        duration: 3000
+        duration: 6000  // Doubled duration
       }
     ];
+    
+    // Set up tutorial button when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => this.setupTutorialButton());
+    } else {
+      this.setupTutorialButton();
+    }
+  }
+
+  setupTutorialButton() {
+    const tutorialButton = document.getElementById('tutorial-toggle');
+    if (tutorialButton) {
+      tutorialButton.addEventListener('click', () => {
+        this.startManual();
+      });
+    }
   }
 
   start() {
@@ -45,9 +61,34 @@ class IntroTutorial {
     
     this.isActive = true;
     this.currentStep = 0;
+    this.showLegend();
     this.createTutorialOverlay();
     this.showStep(0);
     return true; // Tutorial started
+  }
+
+  // Manual start for tutorial button (ignores localStorage)
+  startManual() {
+    this.isActive = true;
+    this.currentStep = 0;
+    this.showLegend();
+    this.createTutorialOverlay();
+    this.showStep(0);
+    return true;
+  }
+
+  showLegend() {
+    const legend = document.getElementById('legend');
+    if (legend) {
+      legend.style.display = 'block';
+    }
+  }
+
+  hideLegend() {
+    const legend = document.getElementById('legend');
+    if (legend) {
+      legend.style.display = 'none';
+    }
   }
 
   createTutorialOverlay() {
@@ -145,6 +186,7 @@ class IntroTutorial {
     this.isActive = false;
     clearTimeout(this.stepTimer);
     this.clearHighlights();
+    this.hideLegend(); // Hide legend when tutorial ends
     
     // Remove tutorial overlay
     const overlay = document.getElementById('tutorial-overlay');
@@ -153,7 +195,7 @@ class IntroTutorial {
       setTimeout(() => overlay.remove(), 500);
     }
     
-    // Mark tutorial as complete
+    // Mark tutorial as complete (only for auto-start, not manual)
     localStorage.setItem('shadows-tutorial-complete', 'true');
     
     // Show normal welcome message
