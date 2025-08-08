@@ -221,18 +221,7 @@ body.danger-mode .mist-tendrils {
 }
 
 
-/* Apply blur only to backdrop */
-.game-over-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(3px); /* Blur only the background */
-  z-index: 9999;
-}
-
+/* Game over container positioning */
 #game-over-container {
   position: fixed;
   top: 50%;
@@ -241,20 +230,32 @@ body.danger-mode .mist-tendrils {
   z-index: 10000;
   width: 90%;
   max-width: 600px;
-  pointer-events: none; /* Allow clicks through when empty */
+  pointer-events: none;
 }
 
-/* Fix blurry end screen */
-#game-over-container .game-over-screen {
+/* Background overlay - no backdrop-filter */
+.game-over-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Darker background instead of blur */
+  z-index: 9999;
+}
+
+/* Crisp text box - no backdrop-filter at all */
+.game-over-screen {
   pointer-events: auto;
-  background: rgba(0, 0, 0, 0.95); /* More opaque, no blur on text area */
+  background: rgba(0, 0, 0, 0.95);
   padding: 40px;
   border-radius: 16px;
-  backdrop-filter: none; /* Remove blur from text area */
   border: 3px solid rgba(222, 184, 135, 0.8);
   text-align: center;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
   animation: game-over-appear 0.5s ease-out;
+  position: relative;
+  z-index: 10001; /* Above backdrop */
 }
 
 @keyframes game-over-appear {
