@@ -1,4 +1,36 @@
+
 // Music System for Shadows in the Deck
+
+// music.js
+const audio = document.getElementById('shadowsMusic');
+const musicText = document.getElementById('music-text');
+
+const TRACKS = {
+  start:   'music/echoes1.mp3',
+  warning: 'music/echoes2.mp3',
+  danger:  'music/echoes3.mp3',
+};
+
+function setTrackByPhase(phase) {
+  const next = TRACKS[phase] || TRACKS.start;
+  if (audio.src.endsWith(next)) return; // already set
+  audio.src = next;
+  audio.load();
+}
+
+function playMusic() {
+  audio.play().then(() => (musicText.textContent = 'Pause'))
+              .catch(e => console.log('Music needs a user click first', e));
+}
+
+function pauseMusic() {
+  audio.pause();
+  musicText.textContent = 'Play';
+}
+
+// expose a tiny API
+window.MusicManager = { setTrackByPhase, playMusic, pauseMusic };
+
 // Simplified approach based on Rook's Gambit pattern
 
 class MusicManager {
