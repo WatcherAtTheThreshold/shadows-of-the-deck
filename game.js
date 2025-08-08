@@ -179,13 +179,13 @@ function handleSpecialEffect(effect) {
       }
       return `No fragments remaining to leap to`;
       
-    case 'replay_last':
-      if (lastPlayedCard && CARD_EFFECTS[lastPlayedCard]) {
-        // Use requestAnimationFrame to ensure proper timing
-        requestAnimationFrame(() => replayLastCard());
-        return `Replaying ${lastPlayedCard}`;
-      }
-      return `No previous card to replay`;
+   case 'replay_last':
+  if (lastPlayedCard && CARD_EFFECTS[lastPlayedCard] && lastPlayedCard !== 'Dream Echo') {
+    // Use requestAnimationFrame to ensure proper timing
+    requestAnimationFrame(() => replayLastCard());
+    return `Replaying ${lastPlayedCard}`;
+  }
+  return `No previous card to replay`;
       
     case 'move_and_coin':
       movePlayer(effect.move);
