@@ -29,7 +29,9 @@ function updateMusicPhase() {
 // Game state variables
 let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, 
     fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, 
-    encounterPositions, shadowBlocked, lastPlayedCard, fragmentBoostActive;
+    encounterPositions, shadowBlocked, lastPlayedCard, fragmentBoostActive,
+    // ========== NEW CRUXFLARE STATE VARIABLES ==========
+    nextCardCostBonus, buyingBlocked, dreamTremorActive;
 
 // Initialize game data
 function setupGameData() {
@@ -60,6 +62,11 @@ function setupGameData() {
   shadowBlocked = false;
   lastPlayedCard = null;
   fragmentBoostActive = null;
+  // ========== INITIALIZE NEW CRUXFLARE STATE ==========
+  nextCardCostBonus = 0;
+  buyingBlocked = false;
+  dreamTremorActive = false;
+  // ==================================================
   cruxflareDeck = createCruxflareDeck();
   coins = 3;
 }
@@ -122,15 +129,39 @@ function drawHand() {
 // Handle buying a card from market
 function buyCard(marketIndex) {
   const cardObj = marketRow[marketIndex];
-  if (coins >= cardObj.cost) {
-    coins -= cardObj.cost;
-    logMsg(`Bought ${cardObj.name}`);
+  
+  // ========== CHECK FOR BUYING RESTRICTIONS ==========
+  if (buyingBlocked) {
+    logMsg(`Cannot buy cards this turn due to Shadow Whisper!`);
+    return;
+  }
+  
+  // Apply cost bonus from Mist Thickens
+  const actualCost = cardObj.cost + nextCardCostBonus;
+  // ==================================================
+  
+  if (coins >= actualCost) {
+    coins -= actualCost;
+    
+    // ========== HANDLE COST BONUS MESSAGING ==========
+    if (nextCardCostBonus > 0) {
+      logMsg(`Bought ${cardObj.name} for ${actualCost} orbs (${cardObj.cost} + ${nextCardCostBonus} from mist)`);
+      nextCardCostBonus = 0; // Reset after use
+    } else {
+      logMsg(`Bought ${cardObj.name}`);
+    }
+    // ==============================================
+    
     discardPile.push(cardObj.name);
     marketRow.splice(marketIndex, 1);
     drawMarketCard();
     updateAllUI();
   } else {
-    logMsg(`Not enough orbs to buy ${cardObj.name}`);
+    if (nextCardCostBonus > 0) {
+      logMsg(`Not enough orbs to buy ${cardObj.name} (costs ${actualCost} due to thick mist)`);
+    } else {
+      logMsg(`Not enough orbs to buy ${cardObj.name}`);
+    }
   }
 }
 
@@ -350,6 +381,10 @@ function triggerEncounter() {
 
 // End turn and trigger Cruxflare
 function endTurn() {
+  // ========== RESET TURN-BASED CRUXFLARE EFFECTS ==========
+  buyingBlocked = false; // Reset Shadow Whisper effect
+  // ======================================================
+  
   if (cruxflareDeck.length > 0) {
     let event = cruxflareDeck.shift();
     logMsg(`Cruxflare: ${event}`);
@@ -371,6 +406,7 @@ function resolveCruxflare(event) {
     return;
   }
   
+  // ========== ORIGINAL CRUXFLARE EFFECTS ==========
   if (event.includes('dead card')) {
     discardPile.push("Shadow (dead)");
   }
@@ -397,6 +433,43 @@ function resolveCruxflare(event) {
       endGame();
     }, 3000);
   }
+  
+  // ========== NEW CRUXFLARE EFFECTS ==========
+  if (event.includes('Mist Thickens')) {
+    nextCardCostBonus = 1;
+    logMsg(`The mist thickens around the market. Next card purchase costs +1 orb.`);
+  }
+  
+  if (event.includes('Dream Tremor') && playerDeck.length > 0) {
+    // Remove a random card from deck permanently
+    const randomIndex = Math.floor(Math.random() * playerDeck.length);
+    const lostCard = playerDeck.splice(randomIndex, 1)[0];
+    logMsg(`Dream tremor causes ${lostCard} to fade from existence permanently.`);
+  }
+  
+  if (event.includes('Shadow Whisper')) {
+    buyingBlocked = true;
+    logMsg(`Shadow whispers cloud your judgment. You cannot buy cards this turn.`);
+  }
+  
+  if (event.includes('Void Echo') && playerPos > 0) {
+    playerPos = Math.max(0, playerPos - 1);
+    logMsg(`Void echoes pull you backward 1 space.`);
+    renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
+  }
+  
+  if (event.includes('Reality Warp') && playerHand.length > 0) {
+    // Shuffle all hand cards back into deck
+    playerDeck.push(...playerHand);
+    playerHand = [];
+    // Shuffle the deck
+    for (let i = playerDeck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
+    }
+    logMsg(`Reality warps! Your hand cards dissolve back into the deck.`);
+  }
+  // ============================================
 }
 
 // Remove cheapest card from market
