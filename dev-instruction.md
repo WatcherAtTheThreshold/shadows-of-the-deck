@@ -30,6 +30,12 @@ Directives for best collaborative practices! We augment each other and I seek co
   - If working with partial snippets, slow way down - I may need multiple attempts and detailed integration instructions
   - No writing multiple files or snippets in sequence without approval between each one
 
+- **Project Completion Review**: 
+  - When we finish implementing a goal/feature, I should provide a summary of what we accomplished
+  - Include a clear list of all files that were modified during the session
+  - Remind you which files need to be updated in Project Knowledge to keep documentation current
+  - This helps ensure your uploaded project files stay synchronized with the actual codebase
+
 - I work slow and appreciate your patience! Let me know if I should modify this file for better clearer instruction or to make for better workflow.
 
 Jessop
