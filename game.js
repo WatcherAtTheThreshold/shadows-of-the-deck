@@ -546,16 +546,18 @@ function updateAllUI() {
   renderHand(playerHand, playCard);
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
   
-  // ========== BUG FIX: Use proper MusicManager calls ==========
-  // Update music based on game state
+  // ========== ENHANCED MUSIC PHASE MANAGEMENT ==========
+  // Determine current music phase based on Cruxflare cards remaining
+  let musicPhase = 'start';
   if (cruxflareDeck.length <= 2) {
-    window.MusicManager?.setTrackByPhase('danger');
-  } else if (document.body.classList.contains('danger-mode')) {
-    window.MusicManager?.setTrackByPhase('warning');
-  } else {
-    window.MusicManager?.setTrackByPhase('start');
+    musicPhase = 'danger';
+  } else if (cruxflareDeck.length <= 7) {
+    musicPhase = 'warning';
   }
-  // ==========================================================
+  
+  // Music system will only change if phase actually changed
+  window.MusicManager?.setTrackByPhase(musicPhase);
+  // ====================================================
 }
 // Make functions globally available for HTML onclick
 window.endTurn = endTurn;
