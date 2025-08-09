@@ -1,29 +1,34 @@
 # 🌌 Shadows of the Deck – Core Gameplay Overview
 
 This document outlines the fundamental systems, components, and flow of the game as they currently exist.  
-It’s intended as a **big-picture map** so you can more easily see where changes, additions, or refinements might happen.
+It's intended as a **big-picture map** so you can more easily see where changes, additions, or refinements might happen.
+
+**Current Version:** 18-Node Expansion (v1.1)
 
 ---
 
 ## 🎴 Deck & Hand System
 
 **Purpose:**  
-The deck system is the player’s main source of actions and strategy.  
+The deck system is the player's main source of actions and strategy.  
 
-**Flow:**
-1. **Starting Deck:** Player begins with a fixed set of basic cards (e.g., `Focus +1`, `Move +1`).
-2. **Draw Phase:** At the start of the turn, draw cards up to the maximum hand size (usually 5).
-3. **Card Play:** Player selects cards from hand to:
-   - Gain resources (orbs).
-   - Move across the map.
-   - Trigger special effects.
-4. **Discard:** Played cards go to the discard pile.
-5. **Shuffle:** When the draw deck is empty, shuffle the discard pile to form a new deck.
+**Core Mechanics:**
+1. **Starting Deck:** Player begins with 10 basic cards (7× Focus +1, 3× Move +1)
+2. **Hand Size:** Maximum 5 cards at any time
+3. **Draw Phase:** At start of turn, draw random cards from deck up to hand limit
+4. **Card Play:** Player selects cards from hand to:
+   - Gain resources (orbs)
+   - Move across the map
+   - Trigger special effects
+5. **Discard System:** Played cards go to discard pile
+6. **Deck Cycling:** When draw deck is empty, shuffle discard pile to form new deck
 
 **Market Interaction:**
-- A **market row** of cards is available for purchase using orbs.
-- Purchased cards go to the discard pile, becoming available on future turns.
-- The market is dynamic—cards can be removed by Cruxflare events.
+- **Market Row:** 5 cards available for purchase using orbs
+- **Market Deck:** 28 total cards with various costs (2-8 orbs)
+- **Purchased cards** go to discard pile, becoming available on future turns
+- **Dynamic Market:** Cards can be removed by Cruxflare events
+- **Market Refill:** Immediately replaced when cards are bought
 
 ---
 
@@ -32,88 +37,179 @@ The deck system is the player’s main source of actions and strategy.
 **Purpose:**  
 Acts as a countdown timer and escalating threat system.
 
-**Flow:**
-1. **Cruxflare Deck Setup:** A separate deck of event cards is shuffled at the start.
-2. **End of Turn Trigger:** At the end of each turn, reveal the top Cruxflare card.
-3. **Event Resolution:** Each card contains a negative or game-changing effect (e.g., remove market cards, shrink map, end the game in X turns).
-4. **Danger Escalation:**  
-   - As the deck gets smaller, the music and UI change to reflect increased danger.
-   - Certain thresholds (e.g., ≤2 cards) trigger a “danger phase.”
+**Core System:**
+1. **Cruxflare Deck Setup:** 19 event cards shuffled at game start
+2. **End of Turn Trigger:** Reveal top Cruxflare card after each turn
+3. **Event Categories:**
+   - **Resource Denial:** Lose coins, cards, or purchasing ability
+   - **Deck Manipulation:** Add dead cards, remove cards permanently
+   - **Map Changes:** Shrink map, move player backward
+   - **Hand Disruption:** Discard cards, shuffle hand into deck
+   - **Market Disruption:** Remove cheapest cards, increase costs
+   - **Game Enders:** Final countdown effects
 
-**Player Tools:**
-- Some player cards (e.g., `Shadow Blocker`, `Spirit Guide`) can negate or delay Cruxflare effects.
+**Escalation System:**
+- **Visual Feedback:** UI changes color as deck depletes
+- **Music Progression:** Atmospheric tracks intensify with danger
+- **Threshold Effects:**
+  - ≤7 cards: Warning mode (purple mist)
+  - ≤2 cards: Danger mode (red mist, pulsing HUD)
+
+**Player Defenses:**
+- **Shadow Blocker:** Negates any one Cruxflare effect
+- **Spirit Guide:** Provides protection from next Cruxflare
+- **Dream Sight:** Previews upcoming Cruxflare event
 
 ---
 
-## 🗺️ Node-Based “Dream Map”
+## 🗺️ Node-Based "Dream Map"
 
 **Purpose:**  
-Represents the dream world the player navigates to collect fragments and avoid hazards.
+Represents the dream world for fragment collection and navigation.
 
-**Structure:**
-- A fixed number of **nodes** connected in sequence.
-- Player position is tracked as a numeric node index.
-- Map is dynamically rendered each turn.
+**Map Structure (18-Node Expansion):**
+- **Total Nodes:** 18 (positions 0-17)
+- **Starting Position:** Node 0
+- **Linear Progression:** Move forward through numbered nodes
+- **Dynamic Rendering:** Map updates each turn to show current state
 
-**Node Types:**
-- **⚪ Focus Points:** Safe spaces that offer no immediate effect.
-- **🟡 Fragments:** Collectibles required to win the game.
-- **🟣 Encounters:** Chance-based events—either beneficial (coins) or harmful (orb loss).
+**Node Types & Distribution:**
+- **🟢 Safe Nodes:** Empty spaces with no immediate effects
+- **🟡 Fragment Nodes:** 7 total at positions [2, 5, 7, 10, 12, 15, 17]
+- **🟣 Encounter Nodes:** 6 total at positions [3, 6, 8, 11, 13, 16]
+- **📍 Player Position:** Cyan marker showing current location
 
 **Map Dynamics:**
-- Nodes can be **removed** (shrink map) by Cruxflare events.
-- Fragments may be **relocated** to safe positions when nodes disappear.
+- **Node Removal:** Cruxflare can shrink map (minimum 3 nodes)
+- **Fragment Preservation:** Lost fragments relocate to safe positions
+- **Encounter Cleanup:** Encounters beyond map boundaries are removed
+- **Backward Movement:** Some Cruxflare effects can push player back
+
+**Encounter System:**
+- **Treasure (60% chance):** Gain 2-4 orbs
+- **Shadow Drain (40% chance):** Lose 1-2 orbs  
+- **Visual Feedback:** Enhanced animations and log effects
 
 ---
 
 ## 🔄 Turn Structure
 
-Each player turn follows a consistent loop:
+Each player turn follows this structured loop:
 
-1. **Start Phase**
-   - Draw up to hand size.
-   - Evaluate any persistent effects (e.g., fragment boost).
+### **1. Start Phase**
+- Draw cards up to hand size (5 maximum)
+- Reset turn-based restrictions (buying blocks, etc.)
+- Evaluate persistent effects (fragment boosts, cost modifiers)
 
-2. **Action Phase**
-   - Play one or more cards from hand.
-   - Cards may:
-     - Gain orbs.
-     - Move the player across the map.
-     - Trigger special actions.
-   - Resolve movement:
-     - Collect fragments if landed on.
-     - Resolve encounters if landed on.
+### **2. Action Phase**
+- **Play Cards:** Use any number of cards from hand
+  - Immediate effects resolve (orbs, movement, special abilities)
+  - Cards move to discard pile
+- **Resolve Movement:**
+  - Collect fragments if landed on fragment node
+  - Trigger encounters if landed on encounter node (unless safe movement)
+  - Update map display
 
-3. **Purchase Phase**
-   - Spend orbs to buy cards from the market.
-   - Market immediately refills from the market deck.
+### **3. Market Phase**
+- **Purchase Cards:** Spend orbs to buy from market row
+  - Apply cost modifiers (Mist Thickens +1 orb)
+  - Check purchase restrictions (Shadow Whisper blocks buying)
+  - Purchased cards go to discard pile
+- **Market Refill:** Replace bought cards immediately
 
-4. **End Phase**
-   - Reveal top Cruxflare card.
-   - Resolve its effect.
-   - Check win/loss conditions.
-
----
-
-## 🏆 Win & Loss Conditions
-
-**Win:**
-- Collect all available fragments on the map.
-
-**Loss:**
-- The Cruxflare deck is exhausted and the “Final Darkness” triggers.
-- Optional: Additional fail states could be added (e.g., running out of orbs entirely).
+### **4. End Phase**
+- **Cruxflare Resolution:** Reveal and resolve top Cruxflare card
+  - Check for Shadow Blocker protection
+  - Apply negative effects
+  - Update game state accordingly
+- **Win/Loss Check:** Evaluate game ending conditions
+- **UI Updates:** Refresh all displays and atmospheric effects
 
 ---
 
-## 🎯 Current Design Notes
+## 🏆 Victory & Defeat Conditions
 
-- **Core tension:** Balancing resource gain (orbs) with movement and defensive plays.
-- **Pacing:** Market growth vs. Cruxflare escalation drives urgency.
-- **Replayability:** Deck shuffle randomness and dynamic market create variation each run.
-- **Potential Expansion Areas:**
-  - More fragment/encounter types.
-  - Alternate win conditions.
-  - Player abilities or persistent upgrades.
-  - Map variation (branching paths, alternate layouts).
+**Victory Requirements:**
+- Collect all 7 fragments scattered across the dream map
+- Fragments are collected automatically when landing on their nodes
+- **Fragment Boost** cards can make single fragments worth multiple points
 
+**Defeat Conditions:**
+- **Cruxflare Exhaustion:** The 19-card Cruxflare deck runs out
+- **Final Darkness:** Specific Cruxflare event triggers game-ending countdown
+- **Map Collapse:** Potential future fail state if map shrinks too much
+
+**Scoring System:**
+- Primary metric: Fragments collected vs. total available
+- Win condition: 7/7 fragments
+- Partial success: Any fragments collected before defeat
+
+---
+
+## 🎯 Current Design Philosophy
+
+**Core Tensions:**
+- **Resource Management:** Balancing orb gain with movement and defensive plays
+- **Time Pressure:** Market growth vs. Cruxflare countdown creates urgency
+- **Risk Assessment:** Safe movement vs. encounter rewards
+- **Deck Building:** Starting deck efficiency vs. market card power
+
+**Pacing Design:**
+- **Early Game (Turns 1-6):** Learning phase, basic resource building
+- **Mid Game (Turns 7-12):** Strategic depth, market investment decisions  
+- **Late Game (Turns 13-19):** High tension, critical decision making
+- **Endgame (Final turns):** Desperate optimization and calculated risks
+
+**Replayability Factors:**
+- **Randomized Elements:** Deck shuffling, encounter outcomes, Cruxflare order
+- **Strategic Variety:** Multiple viable approaches to fragment collection
+- **Market Variation:** Different card availability each game
+- **Dynamic Challenges:** Map changes and Cruxflare effects create unique situations
+
+---
+
+## 🔧 Technical Architecture
+
+**File Structure:**
+- **game.js:** Core game logic and state management
+- **cards.js:** Card definitions, effects, and deck creation
+- **ui.js:** Rendering, animations, and user interface
+- **music.js:** Atmospheric audio and dynamic music system
+- **intro.js:** Tutorial system and new player onboarding
+
+**State Management:**
+- **Game State:** Tracks all game variables and conditions
+- **Turn State:** Manages temporary effects and restrictions
+- **UI State:** Handles visual feedback and animations
+
+**Effect System:**
+- **Card Effects:** Modular system for different card abilities
+- **Cruxflare Effects:** Event-driven negative effects
+- **Persistent Effects:** Multi-turn impacts and conditions
+
+---
+
+## 🚀 Expansion Areas & Future Development
+
+**Potential Short-Term Enhancements:**
+- **Balance Refinements:** Cost adjustments, effect tuning
+- **Visual Polish:** Enhanced animations, particle effects
+- **Audio Expansion:** More atmospheric tracks, sound effects
+- **Tutorial Improvements:** Better onboarding experience
+
+**Medium-Term Expansion Ideas:**
+- **Fragment Types:** Different fragment values or special properties
+- **Alternative Win Conditions:** Multiple paths to victory
+- **Player Abilities:** Persistent upgrades or special powers
+- **Event Variety:** More diverse Cruxflare effects
+
+**Long-Term Vision:**
+- **Map Variants:** Branching paths, multiple route options
+- **Campaign Mode:** Progressive difficulty with unlockables
+- **Multiplayer Elements:** Competitive or cooperative variants
+- **Procedural Content:** Generated maps, cards, or events
+
+---
+
+*Last Updated: 18-Node Expansion Implementation*  
+*Document Version: 1.1*
