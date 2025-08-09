@@ -389,13 +389,23 @@ function endTurn() {
     let event = cruxflareDeck.shift();
     logMsg(`Cruxflare: ${event}`);
     resolveCruxflare(event);
+    
+    // ========== CHECK FOR MUSIC TRANSITIONS AFTER CRUXFLARE ==========
+    // Only check music phase AFTER we've removed a Cruxflare card
+    let musicPhase = 'start';
+    if (cruxflareDeck.length <= 2) {
+      musicPhase = 'danger';
+    } else if (cruxflareDeck.length <= 7) {
+      musicPhase = 'warning';
+    }
+    window.MusicManager?.setTrackByPhase(musicPhase);
+    // ================================================================
   } else {
     logMsg(`The dream collapses! You collected ${fragmentsCollected}/${totalFragments} fragments.`);
     endGame();
   }
   drawHand();
   updateAllUI();
-  updateMusicPhase();
 }
 
 // Resolve Cruxflare events
@@ -546,18 +556,11 @@ function updateAllUI() {
   renderHand(playerHand, playCard);
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
   
-  // ========== ENHANCED MUSIC PHASE MANAGEMENT ==========
-  // Determine current music phase based on Cruxflare cards remaining
-  let musicPhase = 'start';
-  if (cruxflareDeck.length <= 2) {
-    musicPhase = 'danger';
-  } else if (cruxflareDeck.length <= 7) {
-    musicPhase = 'warning';
-  }
-  
-  // Music system will only change if phase actually changed
-  window.MusicManager?.setTrackByPhase(musicPhase);
-  // ====================================================
+  // ========== MUSIC ONLY CHANGES AT THRESHOLDS ==========
+  // Music system handles its own phase tracking - no need to call every turn
+  // Only call when we actually need to check for transitions
+  // This prevents constant restarts and overlapping audio instances
+  // =====================================================
 }
 // Make functions globally available for HTML onclick
 window.endTurn = endTurn;
