@@ -118,9 +118,11 @@ export function createPlayerDeck() {
   ];
 }
 
-// Cruxflare events deck
+// ========== EXPANDED CRUXFLARE DECK FOR 18-NODE MAP ==========
+// Cruxflare events deck - NOW WITH 19 CARDS (was 14)
 export function createCruxflareDeck() {
   return [
+    // Original 14 cards
     "Shadow Surge: Add a dead card to discard.",
     "Corruption Pulse: Remove cheapest market card.",
     "Dream Collapse: Lose a node on the map.",
@@ -134,7 +136,15 @@ export function createCruxflareDeck() {
     "Memory Drain: Shuffle a card from hand into deck.",
     "Reality Shift: Rearrange fragment positions.",
     "Shadow Surge: Add a dead card to discard.",
-    "Final Darkness: Game ends in 2 turns."
+    "Final Darkness: Game ends in 2 turns.",
+    
+    // ========== 5 NEW CRUXFLARE EVENTS ==========
+    "Mist Thickens: Next card costs +1 orb.",
+    "Dream Tremor: Lose 1 card from deck permanently.",
+    "Shadow Whisper: Cannot buy cards this turn.",
+    "Void Echo: Move back 1 space if possible.",
+    "Reality Warp: Shuffle hand into deck."
+    // ============================================
   ];
 }
 
