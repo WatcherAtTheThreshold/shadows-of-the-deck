@@ -17,8 +17,20 @@ function setTrackByPhase(phase) {
   const next = TRACKS[phase] || TRACKS.start;
   // Avoid churn if already set
   if (audio.currentSrc && audio.currentSrc.endsWith(next)) return;
+  
+  // Remember if music was playing before track change
+  const wasPlaying = !audio.paused;
+  
   audio.src = next;
   audio.load();
+  
+  // ========== BUG FIX: Restart music if it was playing ==========
+  if (wasPlaying) {
+    audio.play()
+      .then(() => { if (musicText) musicText.textContent = 'Pause'; })
+      .catch(err => console.log('Music blocked:', err));
+  }
+  // ===========================================================
 }
 
 function playMusic() {
@@ -43,7 +55,7 @@ volumeSlider?.addEventListener('input', (e) => {
   audio.volume = Math.min(1, Math.max(0, v / 100));
 });
 
-// Set an initial volume that isn’t deafening
+// Set an initial volume that isn't deafening
 audio.volume = 0.7;
 
 // Expose a tiny global API so game.js can call it
