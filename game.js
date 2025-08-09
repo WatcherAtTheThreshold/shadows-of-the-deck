@@ -1,4 +1,3 @@
-
 import IntroTutorial from './intro.js';
 import { CARD_EFFECTS, createMarketDeck, createPlayerDeck, createCruxflareDeck } from './cards.js';
 // ... rest of your imports
@@ -46,12 +45,18 @@ function setupGameData() {
   discardPile = [];
   playerHand = [];
   marketRow = [];
-  mapNodes = 12;
+  
+  // ========== UPDATED FOR 18-NODE MAP ==========
+  mapNodes = 18; // CHANGED: Was 12, now 18
   playerPos = 0;
-  fragmentPositions = [3, 5, 7, 9, 11];
+  // CHANGED: New fragment positions for 18-node map (7 fragments total)
+  fragmentPositions = [2, 5, 7, 10, 12, 15, 17];
   fragmentsCollected = 0;
-  totalFragments = fragmentPositions.length;
-  encounterPositions = [2, 4, 6, 8, 10];
+  totalFragments = fragmentPositions.length; // CHANGED: Now 7 instead of 5
+  // CHANGED: New encounter positions for 18-node map (6 encounters total)
+  encounterPositions = [3, 6, 8, 11, 13, 16];
+  // ============================================
+  
   shadowBlocked = false;
   lastPlayedCard = null;
   fragmentBoostActive = null;
