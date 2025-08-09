@@ -546,14 +546,16 @@ function updateAllUI() {
   renderHand(playerHand, playCard);
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
   
+  // ========== BUG FIX: Use proper MusicManager calls ==========
   // Update music based on game state
-if (cruxflareDeck.length <= 2) {
-  setTrackByPhase('danger');
-} else if (document.body.classList.contains('danger-mode')) {
-  setTrackByPhase('warning');
-} else {
-  setTrackByPhase('start');
-}
+  if (cruxflareDeck.length <= 2) {
+    window.MusicManager?.setTrackByPhase('danger');
+  } else if (document.body.classList.contains('danger-mode')) {
+    window.MusicManager?.setTrackByPhase('warning');
+  } else {
+    window.MusicManager?.setTrackByPhase('start');
+  }
+  // ==========================================================
 }
 // Make functions globally available for HTML onclick
 window.endTurn = endTurn;
