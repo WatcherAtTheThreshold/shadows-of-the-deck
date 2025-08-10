@@ -136,7 +136,9 @@ function initGame() {
 function showActionPhase() {
   gamePhase = 'action';
   document.getElementById('market').classList.add('phase-hidden');
+  document.getElementById('market-header').classList.add('phase-hidden');
   document.getElementById('player-hand').classList.remove('phase-hidden');
+  document.getElementById('hand-header').classList.remove('phase-hidden');
   document.getElementById('player-hand').classList.add('phase-visible', 'cards-enlarged');
   
   // Update button
@@ -148,7 +150,9 @@ function showActionPhase() {
 function showMarketPhase() {
   gamePhase = 'market';
   document.getElementById('player-hand').classList.add('phase-hidden');
+  document.getElementById('hand-header').classList.add('phase-hidden');
   document.getElementById('market').classList.remove('phase-hidden');
+  document.getElementById('market-header').classList.remove('phase-hidden');
   document.getElementById('market').classList.add('phase-visible', 'cards-enlarged');
   
   // Update button
