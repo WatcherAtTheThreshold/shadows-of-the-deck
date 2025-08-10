@@ -8,6 +8,21 @@ import {
   showElement, hideElement, clearElement 
 } from './ui.js';
 
+
+// Add this new function anywhere in your existing ui.js
+export function logCruxflareMsg(event) {
+  const logElement = document.getElementById('log');
+  logElement.textContent = `⚡ CRUXFLARE ⚡ ${event}`;
+  
+  // Add special Cruxflare styling
+  logElement.classList.add('cruxflare-log');
+  
+  // Remove the special styling after 4 seconds
+  setTimeout(() => {
+    logElement.classList.remove('cruxflare-log');
+  }, 4000);
+}
+
 // ---- music phase helpers (game.js) ----
 function pickMusicPhase() {
   // adjust to your real state
