@@ -519,6 +519,9 @@ body.danger-mode #hud::after {
 
 /* Market and Hand Container Stability */
 #market, #player-hand { 
+  position: relative;
+  top: 0;
+  left: 0;
   min-height: 120px;
   display: flex; 
   justify-content: center; 
