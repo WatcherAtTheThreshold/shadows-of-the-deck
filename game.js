@@ -164,6 +164,7 @@ function drawHand() {
     const drawnCard = playerDeck.splice(randomIndex, 1)[0];
     playerHand.push(drawnCard);
   }
+  }
   if (playerDeck.length === 0 && discardPile.length > 0) {
     playerDeck = [...discardPile];
     discardPile = [];
@@ -175,7 +176,7 @@ function drawHand() {
     logMsg("Your deck is reshuffled.");
   }
 }
-}
+
 
 // Handle buying a card from market
 function buyCard(marketIndex) {
