@@ -519,13 +519,14 @@ body.danger-mode #hud::after {
 
 /* Market and Hand Container Stability */
 #market, #player-hand { 
-  min-height: 120px;          /* REDUCED from 200px */
+  min-height: 120px;
   display: flex; 
   justify-content: center; 
   align-items: flex-start;
   margin: 25px 0; 
   flex-wrap: wrap;
   padding: 10px 0;
+  transition: all 0.5s ease;  /* ADD THIS LINE */
 }
 
 /* Button Container Stability */
