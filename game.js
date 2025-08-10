@@ -175,6 +175,7 @@ function drawHand() {
     logMsg("Your deck is reshuffled.");
   }
 }
+}
 
 // Handle buying a card from market
 function buyCard(marketIndex) {
