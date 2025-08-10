@@ -1,4 +1,3 @@
-Here’s a brainstorm markdown of **all-new cards** for *Shadows of the Deck* — leaning into more novel mechanics, thematic depth, and unexpected twists that fit your dream/Cruxflare vibe.
 
 ---
 
@@ -73,5 +72,3 @@ Here’s a brainstorm markdown of **all-new cards** for *Shadows of the Deck* �
 * **Dream Keys**: Rare cards that “unlock” special fragments, worth extra points if collected.
 
 ---
-
-If you want, I can also make **mock card art directions** for these new ones so they match the style sheets we just generated for you. That way you’d have visuals to pair with the mechanics.
