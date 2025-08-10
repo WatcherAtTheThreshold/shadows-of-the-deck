@@ -33,7 +33,9 @@ let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, player
     // ========== NEW CRUXFLARE STATE VARIABLES ==========
     nextCardCostBonus, buyingBlocked, dreamTremorActive,
     // ========== FINAL DARKNESS COUNTDOWN ==========
-    finalDarknessCountdown;
+    finalDarknessCountdown,
+    // ========== HIDE/SHOW CARD SYSTEM ==========
+    gamePhase;
 
 // Initialize game data
 function setupGameData() {
