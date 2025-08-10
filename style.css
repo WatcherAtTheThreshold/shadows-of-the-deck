@@ -447,22 +447,22 @@ body.danger-mode #hud::after {
 }
 
 /* Stable Log Container */
-/* Stable Log Container - Single Line with Cruxflare Exception */
+/* Stable Log Container - Always Single Line */
 #log {
   background: rgba(0, 0, 0, 0.6);
   padding: 20px 30px;
-  height: 80px;               /* Fixed height for normal messages */
+  height: 80px;               /* Fixed height - never changes */
   margin: 15px auto 25px auto;
   border-radius: 12px;
   backdrop-filter: blur(15px);
   border: 2px solid rgba(222, 184, 135, 0.4);
   text-align: center;
   font-size: 1.5rem;
-  max-width: 90%;
+  max-width: 98%;             /* Much wider to fit more text */
   font-weight: 500;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   
-  /* Normal messages: single line */
+  /* Always single line - no exceptions */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -471,18 +471,27 @@ body.danger-mode #hud::after {
   align-items: center;
   justify-content: center;
   line-height: 1.2;
-  
-  /* Smooth height transitions */
-  transition: height 0.3s ease;
 }
 
-/* Cruxflare messages: allow expansion */
+/* Cruxflare messages: same single-line treatment but keep special styling */
 #log.cruxflare-log {
-  height: auto;               /* Allow expansion for important Cruxflare text */
-  min-height: 80px;           /* Minimum size */
-  max-height: 120px;          /* Maximum expansion */
-  white-space: normal;        /* Allow text wrapping */
-  overflow-y: auto;           /* Scroll if still too long */
+  /* Keep existing Cruxflare visual effects */
+  background: rgba(138, 43, 226, 0.4) !important;
+  border: 3px solid rgba(138, 43, 226, 0.9) !important;
+  box-shadow: 
+    0 0 20px rgba(138, 43, 226, 0.6),
+    0 4px 15px rgba(0, 0, 0, 0.5) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  animation: cruxflare-pulse 2s ease-in-out !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 8px rgba(138, 43, 226, 0.8) !important;
+  
+  /* But stay single-line like everything else */
+  height: 80px;               /* Same fixed height */
+  white-space: nowrap;        /* No wrapping */
+  overflow: hidden;           /* No expansion */
+  text-overflow: ellipsis;    /* Truncate if needed */
+}
   
   /* Keep existing Cruxflare styling */
   background: rgba(138, 43, 226, 0.4) !important;
