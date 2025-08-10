@@ -1,10 +1,10 @@
 import IntroTutorial from './intro.js';
 import { CARD_EFFECTS, createMarketDeck, createPlayerDeck, createCruxflareDeck } from './cards.js';
-// ... rest of your imports
+
 
 import { 
   createParticles, renderMarket, renderHand, renderMap, updateHUD, 
-  updateMistOverlay, logMsg, logCruxflareMsg, cardPlayFeedback, encounterFeedback,
+  updateMistOverlay, logMsg, /*logCruxflareMsg,*/ cardPlayFeedback, encounterFeedback,
   toggleSectionHeaders, clearGameAreas, showGameOverScreen, 
   showElement, hideElement, clearElement 
 } from './ui.js';
