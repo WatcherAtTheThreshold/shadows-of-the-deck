@@ -23,6 +23,17 @@ export function logCruxflareMsg(event) {
   }, 4000);
 }
 
+export function toggleSectionHeaders(show) {
+  const headers = ['market-header', 'hand-header', 'map-header'];
+  headers.forEach(id => {
+    if (show) {
+      document.getElementById(id).classList.remove('hidden');
+    } else {
+      document.getElementById(id).classList.add('hidden');
+    }
+  });
+}
+
 // ---- music phase helpers (game.js) ----
 function pickMusicPhase() {
   // adjust to your real state
