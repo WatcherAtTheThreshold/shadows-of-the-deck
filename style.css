@@ -1390,3 +1390,116 @@ h2 {
   opacity: 0;
   transition: opacity 0.5s ease;
 }
+
+/* ========== HIDE/SHOW CARD SYSTEM STYLES ========== */
+
+/* Phase visibility controls */
+.phase-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.phase-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: all 0.5s ease;
+  pointer-events: auto;
+}
+
+/* Enhanced card sizing for desktop */
+.cards-enlarged .card-flip {
+  width: 156px;              /* 30% larger than 120px */
+  height: 221px;             /* 30% larger than 170px */
+  transition: all 0.5s ease;
+}
+
+.cards-enlarged .card-flip .card-front,
+.cards-enlarged .card-flip .card-back {
+  font-size: 1.4em;          /* 30% larger than 1.1em */
+}
+
+.cards-enlarged .card-flip .cost {
+  font-size: 1.2em;          /* 30% larger than 0.9em */
+}
+
+/* Market and Hand container adjustments for larger cards */
+.cards-enlarged {
+  min-height: 260px;         /* Accommodate larger cards */
+  gap: 12px;                 /* More spacing between larger cards */
+}
+
+/* Smooth transitions for container size changes */
+
+
+/* Mobile: Keep current card sizes regardless of phase */
+@media (max-width: 768px) {
+  .cards-enlarged .card-flip {
+    width: 85px;             /* Keep mobile size */
+    height: 120px;           /* Keep mobile size */
+  }
+  
+  .cards-enlarged .card-flip .card-front,
+  .cards-enlarged .card-flip .card-back {
+    font-size: 0.9em;        /* Keep mobile size */
+  }
+  
+  .cards-enlarged .card-flip .cost {
+    font-size: 0.8em;        /* Keep mobile size */
+  }
+  
+  .cards-enlarged {
+    min-height: 160px;       /* Mobile container height */
+    gap: 8px;                /* Mobile spacing */
+  }
+}
+
+/* Enhanced button styling for phase transitions */
+
+
+/* Visual feedback during phase transitions */
+.phase-transition {
+  position: relative;
+}
+
+.phase-transition::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.1), transparent);
+  animation: phase-sweep 0.5s ease-out;
+  pointer-events: none;
+}
+
+@keyframes phase-sweep {
+  0% { 
+    transform: translateX(-100%); 
+    opacity: 0; 
+  }
+  50% { 
+    opacity: 1; 
+  }
+  100% { 
+    transform: translateX(100%); 
+    opacity: 0; 
+  }
+}
+
+/* Enhanced spacing for enlarged cards */
+.cards-enlarged {
+  padding: 15px 0;          /* More vertical padding */
+  justify-content: center;   /* Keep cards centered */
+  align-items: flex-start;   /* Align to top */
+}
+
+/* Ensure game sections don't interfere with transitions */
+.game-section {
+  position: relative;
+  overflow: visible;         /* Allow transition effects */
+}
