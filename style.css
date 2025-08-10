@@ -426,8 +426,8 @@ body.danger-mode #hud::after {
 
 /* Fixed Map Container */
 .map-container {
-  min-height: 200px;          /* Accommodate largest map (18 nodes) */
-  max-height: 200px;          /* Prevent expansion */
+  min-height: 160px;          /* REDUCED from 200px */
+  max-height: 160px;          /* REDUCED from 200px */
   display: flex;
   justify-content: center;
   align-items: center;
