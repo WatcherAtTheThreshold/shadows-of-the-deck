@@ -405,6 +405,23 @@ body.danger-mode #hud::after {
 .resource-item:hover::after {
   opacity: 1;
 }
+
+
+/* Button Container Fix */
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+#end-turn-btn, #restart-btn { 
+  position: static;
+  transform: none;
+}
+
+
 /* Enhanced Mist Layers */
 .mist-layer {
   position: fixed;
