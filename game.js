@@ -26,18 +26,26 @@ function updateMusicPhase() {
 }
 
 // ========== NEW DRAW NEW HAND FUNCTION ==========
+// Draw cards to player hand - NOW WITH RANDOM DRAWING
 function drawHand() {
-  // Draw new cards to hand
-  drawHand();
+  while (playerHand.length < 5 && playerDeck.length > 0) {
+    // Draw random card from deck instead of always taking from front
+    const randomIndex = Math.floor(Math.random() * playerDeck.length);
+    const drawnCard = playerDeck.splice(randomIndex, 1)[0];
+    playerHand.push(drawnCard);
+  }
   
-  // Switch back to action phase
-  showActionPhase();
-  
-  // Update UI and log
-  updateAllUI();
-  logMsg('New hand drawn. Play your cards!');
+  if (playerDeck.length === 0 && discardPile.length > 0) {
+    playerDeck = [...discardPile];
+    discardPile = [];
+    // Shuffle deck
+    for (let i = playerDeck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
+    }
+    logMsg("Your deck is reshuffled.");
+  }
 }
-
 
 // Game state variables
 let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, 
