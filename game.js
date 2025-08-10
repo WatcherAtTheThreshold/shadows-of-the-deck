@@ -661,3 +661,8 @@ window.restartGame = restartGame;
 
 // Initialize game when page loads
 document.addEventListener('DOMContentLoaded', initGame);
+
+// Make functions globally available for HTML onclick
+window.endTurn = endTurn;
+window.drawNewHand = drawNewHand;  // ADD THIS LINE
+window.restartGame = restartGame;
