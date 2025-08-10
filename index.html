@@ -23,25 +23,45 @@
   <!-- Game Container -->
   <div id="game">
     
-<!-- HUD -->
+<!-- Enhanced HUD with Sci-Fi Styling and Resource Icons -->
 <div id="hud">
+  <!-- Resource Information Section -->
   <div class="hud-info">
-    <span class="legend-icon" style="background: rgba(255, 255, 255, 0.9); box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);"></span><span id="coins">0</span> | 
-    Fragments: <span id="frags">0</span> | 
-    Cruxflare Cards Left: <span id="crux-remaining">0</span>
+    <!-- Orbs/Coins Resource -->
+    <div class="resource-item" data-tooltip="Energy orbs - spend these to buy cards from the market">
+      <span class="resource-icon orb-icon">🎯</span>
+      <span class="resource-value orb-count" id="coins">0</span>
+    </div>
+    
+    <!-- Fragments Resource -->
+    <div class="resource-item" data-tooltip="Dream fragments - collect all 7 to win the game">
+      <span class="resource-icon fragment-icon">💎</span>
+      <span class="resource-value fragment-count" id="frags">0</span>
+    </div>
+    
+    <!-- Cruxflare Countdown -->
+    <div class="resource-item cruxflare-display" data-tooltip="Cruxflare cards remaining - when this reaches 0, you lose">
+      <span class="resource-icon cruxflare-icon">⚡</span>
+      <span style="color: rgba(255, 255, 255, 0.8); margin-right: 5px;">Cruxflare:</span>
+      <span class="resource-value cruxflare-count" id="crux-remaining">0</span>
+    </div>
   </div>
   
+  <!-- Controls Section -->
   <div class="hud-controls">
+    <!-- Music Toggle Button -->
     <button id="music-toggle" class="hud-button">
       <span class="music-icon">🎵</span>
       <span id="music-text">Play</span>
     </button>
     
+    <!-- Volume Control -->
     <div id="volume-control" class="volume-control">
       <span class="volume-icon">🔊</span>
       <input type="range" id="volume-slider" min="0" max="100" value="70" class="volume-slider">
     </div>
     
+    <!-- Tutorial Button -->
     <button id="tutorial-toggle" class="hud-button">
       <span>❓</span>
       <span>Tutorial</span>
