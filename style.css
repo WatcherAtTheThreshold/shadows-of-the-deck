@@ -426,8 +426,8 @@ body.danger-mode #hud::after {
 
 /* Fixed Map Container */
 .map-container {
-  min-height: 140px;          /* REDUCED from 200px */
-  max-height: 140px;          /* REDUCED from 200px */
+  min-height: 120px;          /* REDUCED from 200px */
+  max-height: 120px;          /* REDUCED from 200px */
   display: flex;
   justify-content: center;
   align-items: center;
