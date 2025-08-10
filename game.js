@@ -215,7 +215,7 @@ function buyCard(marketIndex) {
       logMsg(`Not enough orbs to buy ${cardObj.name}`);
     }
   }
-
+}
 
 // Play a card from hand
 function playCard(card, index) {
