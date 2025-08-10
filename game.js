@@ -475,18 +475,18 @@ function endTurn() {
   updateAllUI();
   
   // Wait a moment for Cruxflare message to be read, then show market
-  setTimeout(() => {
+setTimeout(() => {
     logMsg('Browse the market and buy cards with your orbs.');
     showMarketPhase();
   }, 1500); // 1.5 second delay to read Cruxflare effect
 }
-    // ================================================================
-  } else {
-    logMsg(`The dream collapses! You collected ${fragmentsCollected}/${totalFragments} fragments.`);
-    endGame();
-  }
+
+// ========== NEW DRAW NEW HAND FUNCTION ==========
+function drawNewHand() {
   drawHand();
+  showActionPhase();
   updateAllUI();
+  logMsg('New hand drawn. Play your cards!');
 }
 
 // Resolve Cruxflare events
