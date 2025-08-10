@@ -121,7 +121,7 @@ export function createPlayerDeck() {
 // ========== EXPANDED CRUXFLARE DECK FOR 18-NODE MAP ==========
 // Cruxflare events deck - NOW WITH 19 CARDS (was 14)
 export function createCruxflareDeck() {
-  return [
+  const events = [
     // Original 14 cards
     "Shadow Surge: Add a dead card to discard.",
     "Corruption Pulse: Remove cheapest market card.",
@@ -146,6 +146,10 @@ export function createCruxflareDeck() {
     "Reality Warp: Shuffle hand into deck."
     // ============================================
   ];
+  
+  // ========== SHUFFLE THE CRUXFLARE DECK FOR RANDOMNESS ==========
+  return shuffleArray(events);
+  // =============================================================
 }
 
 // Utility function to shuffle arrays
