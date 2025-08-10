@@ -157,7 +157,7 @@ export function updateHUD(coins, fragmentsCollected, cruxflareDeck, finalDarknes
   // ========== ENHANCED HUD WITH FINAL DARKNESS COUNTDOWN ==========
   const cruxDisplay = document.getElementById('crux-remaining');
   if (finalDarknessCountdown !== null) {
-    cruxDisplay.textContent = `⚫ Final: ${finalDarknessCountdown}`;
+    cruxDisplay.textContent = finalDarknessCountdown;  // Just the number
     cruxDisplay.style.color = 'rgba(255, 100, 100, 0.9)';
     cruxDisplay.style.fontWeight = 'bold';
   } else {
