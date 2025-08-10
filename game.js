@@ -484,12 +484,6 @@ setTimeout(() => {
 }
 
 // ========== NEW DRAW NEW HAND FUNCTION ==========
-function drawNewHand() {
-  drawHand();
-  showActionPhase();
-  updateAllUI();
-  logMsg('New hand drawn. Play your cards!');
-}
 
 // Resolve Cruxflare events
 function resolveCruxflare(event) {
