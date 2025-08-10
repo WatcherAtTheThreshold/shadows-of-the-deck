@@ -26,7 +26,7 @@ function updateMusicPhase() {
 }
 
 // ========== NEW DRAW NEW HAND FUNCTION ==========
-function drawNewHand() {
+function drawHand() {
   // Draw new cards to hand
   drawHand();
   
