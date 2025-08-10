@@ -150,10 +150,22 @@ export function renderMap(mapNodes, playerPos, fragmentPositions, encounterPosit
 }
 
 // Update HUD display
-export function updateHUD(coins, fragmentsCollected, cruxflareDeck) {
+export function updateHUD(coins, fragmentsCollected, cruxflareDeck, finalDarknessCountdown = null) {
   document.getElementById('coins').textContent = coins;
   document.getElementById('frags').textContent = fragmentsCollected;
-  document.getElementById('crux-remaining').textContent = cruxflareDeck.length;
+  
+  // ========== ENHANCED HUD WITH FINAL DARKNESS COUNTDOWN ==========
+  const cruxDisplay = document.getElementById('crux-remaining');
+  if (finalDarknessCountdown !== null) {
+    cruxDisplay.textContent = `⚫ Final: ${finalDarknessCountdown}`;
+    cruxDisplay.style.color = 'rgba(255, 100, 100, 0.9)';
+    cruxDisplay.style.fontWeight = 'bold';
+  } else {
+    cruxDisplay.textContent = cruxflareDeck.length;
+    cruxDisplay.style.color = '';
+    cruxDisplay.style.fontWeight = '';
+  }
+  // ==========================================================
 }
 
 // Update mist overlay based on danger level with THREE-STAGE PROGRESSION
