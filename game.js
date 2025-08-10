@@ -93,6 +93,10 @@ function initGame() {
   drawHand();
   updateAllUI();
   
+  // ========== SET INITIAL PHASE ==========
+  gamePhase = 'action'; // Start with hand visible, market hidden
+  showActionPhase(); // Show hand, hide market
+  
   // Start music system
   // musicManager.startGame();
   
