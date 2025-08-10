@@ -417,10 +417,10 @@ function triggerEncounter() {
 }
 
 // End turn and trigger Cruxflare
+// ========== MODIFIED END TURN FUNCTION ==========
 function endTurn() {
   // ========== RESET TURN-BASED CRUXFLARE EFFECTS ==========
   buyingBlocked = false; // Reset Shadow Whisper effect
-  // ======================================================
   
   // ========== HANDLE FINAL DARKNESS COUNTDOWN ==========
   if (finalDarknessCountdown !== null) {
@@ -429,23 +429,19 @@ function endTurn() {
     if (finalDarknessCountdown <= 0) {
       logMsg(`Final darkness consumes the dream! Final score: ${fragmentsCollected}/${totalFragments} fragments.`);
       endGame();
-      return; // Don't process Cruxflare or continue turn
+      return; // Don't continue to market phase
     } else {
       logMsg(`⚫ Final Darkness approaches... ${finalDarknessCountdown} turn${finalDarknessCountdown === 1 ? '' : 's'} remaining! ⚫`);
     }
   }
-  // ====================================================
   
+  // ========== CRUXFLARE RESOLUTION ==========
   if (cruxflareDeck.length > 0) {
     let event = cruxflareDeck.shift();
-    // ========== ENHANCED CRUXFLARE VISIBILITY ==========
     logCruxflareMsg(event);
-    // =================================================
     resolveCruxflare(event);
     
-    // ========== CHECK FOR MUSIC TRANSITIONS AFTER CRUXFLARE ==========
-    // Only check music phase AFTER we've removed a Cruxflare card
-    // But skip if Final Darkness is active (already in danger mode)
+    // Check for music transitions after Cruxflare
     if (finalDarknessCountdown === null) {
       let musicPhase = 'start';
       if (cruxflareDeck.length <= 2) {
@@ -455,6 +451,22 @@ function endTurn() {
       }
       window.MusicManager?.setTrackByPhase(musicPhase);
     }
+  } else {
+    logMsg(`The dream collapses! You collected ${fragmentsCollected}/${totalFragments} fragments.`);
+    endGame();
+    return; // Don't continue to market phase
+  }
+  
+  // ========== TRANSITION TO MARKET PHASE ==========
+  // Instead of immediately drawing new hand, switch to market phase
+  updateAllUI();
+  
+  // Wait a moment for Cruxflare message to be read, then show market
+  setTimeout(() => {
+    logMsg('Browse the market and buy cards with your orbs.');
+    showMarketPhase();
+  }, 1500); // 1.5 second delay to read Cruxflare effect
+}
     // ================================================================
   } else {
     logMsg(`The dream collapses! You collected ${fragmentsCollected}/${totalFragments} fragments.`);
