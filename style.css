@@ -1508,3 +1508,70 @@ h2 {
   position: relative;
   overflow: visible;         /* Allow transition effects */
 }
+
+/* ========== HIDE/SHOW CARD SYSTEM STYLES ========== */
+
+/* Phase visibility controls */
+.phase-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.phase-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: all 0.5s ease;
+  pointer-events: auto;
+}
+
+/* Enhanced card sizing for desktop */
+.cards-enlarged .card-flip {
+  width: 156px;              /* 30% larger than 120px */
+  height: 221px;             /* 30% larger than 170px */
+  transition: all 0.5s ease;
+}
+
+.cards-enlarged .card-flip .card-front,
+.cards-enlarged .card-flip .card-back {
+  font-size: 1.4em;          /* 30% larger than 1.1em */
+}
+
+.cards-enlarged .card-flip .cost {
+  font-size: 1.2em;          /* 30% larger than 0.9em */
+}
+
+/* Market and Hand container adjustments for larger cards */
+.cards-enlarged {
+  min-height: 240px;         /* Accommodate larger cards */
+  padding: 15px 0;          /* More vertical padding */
+  margin: 15px 0;           /* Reduced spacing */
+  gap: 12px;                 /* More spacing between larger cards */
+  justify-content: center;   /* Keep cards centered */
+  align-items: flex-start;   /* Align to top */
+}
+
+/* Mobile: Keep current card sizes regardless of phase */
+@media (max-width: 768px) {
+  .cards-enlarged .card-flip {
+    width: 85px;             /* Keep mobile size */
+    height: 120px;           /* Keep mobile size */
+  }
+  
+  .cards-enlarged .card-flip .card-front,
+  .cards-enlarged .card-flip .card-back {
+    font-size: 0.9em;        /* Keep mobile size */
+  }
+  
+  .cards-enlarged .card-flip .cost {
+    font-size: 0.8em;        /* Keep mobile size */
+  }
+  
+  .cards-enlarged {
+    min-height: 160px;       /* Mobile container height */
+    gap: 8px;                /* Mobile spacing */
+  }
+}
