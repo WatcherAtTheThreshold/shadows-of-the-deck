@@ -447,32 +447,44 @@ body.danger-mode #hud::after {
 }
 
 /* Stable Log Container */
+/* Stable Log Container - Single Line with Cruxflare Exception */
 #log {
   background: rgba(0, 0, 0, 0.6);
-  padding: 20px;
-  min-height: 80px;           /* Minimum size for short messages */
-  max-height: 120px;          /* Allow some expansion for long Cruxflare text */
+  padding: 20px 30px;
+  height: 80px;               /* Fixed height for normal messages */
   margin: 15px auto 25px auto;
   border-radius: 12px;
   backdrop-filter: blur(15px);
   border: 2px solid rgba(222, 184, 135, 0.4);
   text-align: center;
   font-size: 1.5rem;
-  max-width: 700px;
+  max-width: 90%;
   font-weight: 500;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   
-  /* Handle text overflow gracefully */
-  overflow-y: auto;           /* Allow scrolling for extremely long text */
-  line-height: 1.4;           /* Better text spacing */
+  /* Normal messages: single line */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 1.2;
+  
+  /* Smooth height transitions */
+  transition: height 0.3s ease;
 }
 
-/* Enhanced log text wrapping */
+/* Cruxflare messages: allow expansion */
 #log.cruxflare-log {
-  /* Existing styles stay the same */
+  height: auto;               /* Allow expansion for important Cruxflare text */
+  min-height: 80px;           /* Minimum size */
+  max-height: 120px;          /* Maximum expansion */
+  white-space: normal;        /* Allow text wrapping */
+  overflow-y: auto;           /* Scroll if still too long */
+  
+  /* Keep existing Cruxflare styling */
   background: rgba(138, 43, 226, 0.4) !important;
   border: 3px solid rgba(138, 43, 226, 0.9) !important;
   box-shadow: 
@@ -483,7 +495,6 @@ body.danger-mode #hud::after {
   font-weight: 600 !important;
   text-shadow: 0 0 8px rgba(138, 43, 226, 0.8) !important;
 }
-
 /* Stable Game Section Heights */
 .game-section {
   margin: 20px 0;
