@@ -157,7 +157,7 @@ function drawMarketCard() {
 }
 
 // Draw cards to player hand - NOW WITH RANDOM DRAWING
-function drawHand() {
+function drawNewHand() {
   while (playerHand.length < 5 && playerDeck.length > 0) {
     // Draw random card from deck instead of always taking from front
     const randomIndex = Math.floor(Math.random() * playerDeck.length);
