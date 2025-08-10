@@ -135,11 +135,18 @@ function initGame() {
 // ========== NEW PHASE MANAGEMENT FUNCTIONS ==========
 function showActionPhase() {
   gamePhase = 'action';
+  
+  // Clear all phase classes first
+  document.getElementById('market').classList.remove('phase-hidden', 'phase-visible', 'cards-enlarged');
+  document.getElementById('market-header').classList.remove('phase-hidden', 'phase-visible');
+  document.getElementById('player-hand').classList.remove('phase-hidden', 'phase-visible', 'cards-enlarged');
+  document.getElementById('hand-header').classList.remove('phase-hidden', 'phase-visible');
+  
+  // Show hand, hide market
   document.getElementById('market').classList.add('phase-hidden');
   document.getElementById('market-header').classList.add('phase-hidden');
-  document.getElementById('player-hand').classList.remove('phase-hidden');
-  document.getElementById('hand-header').classList.remove('phase-hidden');
   document.getElementById('player-hand').classList.add('phase-visible', 'cards-enlarged');
+  document.getElementById('hand-header').classList.add('phase-visible');
   
   // Update button
   const button = document.getElementById('end-turn-btn');
@@ -149,11 +156,18 @@ function showActionPhase() {
 
 function showMarketPhase() {
   gamePhase = 'market';
+  
+  // Clear all phase classes first
+  document.getElementById('market').classList.remove('phase-hidden', 'phase-visible', 'cards-enlarged');
+  document.getElementById('market-header').classList.remove('phase-hidden', 'phase-visible');
+  document.getElementById('player-hand').classList.remove('phase-hidden', 'phase-visible', 'cards-enlarged');
+  document.getElementById('hand-header').classList.remove('phase-hidden', 'phase-visible');
+  
+  // Show market, hide hand
   document.getElementById('player-hand').classList.add('phase-hidden');
   document.getElementById('hand-header').classList.add('phase-hidden');
-  document.getElementById('market').classList.remove('phase-hidden');
-  document.getElementById('market-header').classList.remove('phase-hidden');
   document.getElementById('market').classList.add('phase-visible', 'cards-enlarged');
+  document.getElementById('market-header').classList.add('phase-visible');
   
   // Update button
   const button = document.getElementById('end-turn-btn');
