@@ -111,11 +111,16 @@
   <div id="player-hand"></div>
 </div>
 
-    <!-- Button Container for proper alignment -->
-    <div class="button-container">
-      <button id="end-turn-btn" onclick="endTurn()">End Turn</button>
-      <button id="restart-btn" style="display:none;" onclick="restartGame()">Restart Game</button>
-    </div>
+    <!-- Updated button container for hide/show system -->
+<!-- Replace the existing button container in index.html with this: -->
+
+<div class="button-container">
+  <button id="end-turn-btn">End Turn</button>
+  <button id="restart-btn" style="display:none;" onclick="restartGame()">Restart Game</button>
+</div>
+
+<!-- Note: The onclick for end-turn-btn is now handled dynamically by the phase system -->
+<!-- The button text and function will change between "End Turn" and "Draw New Hand" -->
 
     <!-- Game Over Screen -->
     <div id="game-over-container"></div>
