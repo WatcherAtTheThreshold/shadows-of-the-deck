@@ -3,7 +3,7 @@ import { CARD_EFFECTS, createMarketDeck, createPlayerDeck, createCruxflareDeck }
 // ... rest of your imports
 import { 
   createParticles, renderMarket, renderHand, renderMap, updateHUD, 
-  updateMistOverlay, logMsg, cardPlayFeedback, encounterFeedback,
+  updateMistOverlay, logMsg, logCruxflareMsg, cardPlayFeedback, encounterFeedback,
   toggleSectionHeaders, clearGameAreas, showGameOverScreen, 
   showElement, hideElement, clearElement 
 } from './ui.js';
@@ -387,7 +387,9 @@ function endTurn() {
   
   if (cruxflareDeck.length > 0) {
     let event = cruxflareDeck.shift();
-    logMsg(`Cruxflare: ${event}`);
+    // ========== ENHANCED CRUXFLARE VISIBILITY ==========
+    logCruxflareMsg(event);
+    // =================================================
     resolveCruxflare(event);
     
     // ========== CHECK FOR MUSIC TRANSITIONS AFTER CRUXFLARE ==========
