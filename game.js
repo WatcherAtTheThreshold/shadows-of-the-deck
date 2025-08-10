@@ -433,6 +433,7 @@ function triggerEncounter() {
 
 // End turn and trigger Cruxflare
 // ========== MODIFIED END TURN FUNCTION ==========
+// ========== MODIFIED END TURN FUNCTION ==========
 function endTurn() {
   // ========== RESET TURN-BASED CRUXFLARE EFFECTS ==========
   buyingBlocked = false; // Reset Shadow Whisper effect
@@ -477,12 +478,11 @@ function endTurn() {
   updateAllUI();
   
   // Wait a moment for Cruxflare message to be read, then show market
-setTimeout(() => {
+  setTimeout(() => {
     logMsg('Browse the market and buy cards with your orbs.');
     showMarketPhase();
   }, 1500); // 1.5 second delay to read Cruxflare effect
 }
-
 // ========== NEW DRAW NEW HAND FUNCTION ==========
 
 // Resolve Cruxflare events
