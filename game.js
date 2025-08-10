@@ -77,6 +77,7 @@ function setupGameData() {
   coins = 3;
 }
 
+// ========== REPLACE YOUR ENTIRE initGame() FUNCTION WITH THIS ==========
 // Initialize the game
 function initGame() {
   setupGameData();
@@ -107,6 +108,32 @@ function initGame() {
       logMsg('Welcome to the game!');
     }
   }, 800);
+}
+
+// ========== ADD THESE TWO NEW FUNCTIONS RIGHT AFTER initGame() ==========
+// ========== NEW PHASE MANAGEMENT FUNCTIONS ==========
+function showActionPhase() {
+  gamePhase = 'action';
+  document.getElementById('market').classList.add('phase-hidden');
+  document.getElementById('player-hand').classList.remove('phase-hidden');
+  document.getElementById('player-hand').classList.add('phase-visible', 'cards-enlarged');
+  
+  // Update button
+  const button = document.getElementById('end-turn-btn');
+  button.textContent = 'End Turn';
+  button.onclick = () => endTurn();
+}
+
+function showMarketPhase() {
+  gamePhase = 'market';
+  document.getElementById('player-hand').classList.add('phase-hidden');
+  document.getElementById('market').classList.remove('phase-hidden');
+  document.getElementById('market').classList.add('phase-visible', 'cards-enlarged');
+  
+  // Update button
+  const button = document.getElementById('end-turn-btn');
+  button.textContent = 'Draw New Hand';
+  button.onclick = () => drawNewHand();
 }
 
 // Draw a card from market deck to market row
