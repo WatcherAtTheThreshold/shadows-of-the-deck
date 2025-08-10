@@ -25,6 +25,19 @@ function updateMusicPhase() {
   window.MusicManager?.setTrackByPhase(phase);
 }
 
+// ========== NEW DRAW NEW HAND FUNCTION ==========
+function drawNewHand() {
+  // Draw new cards to hand
+  drawHand();
+  
+  // Switch back to action phase
+  showActionPhase();
+  
+  // Update UI and log
+  updateAllUI();
+  logMsg('New hand drawn. Play your cards!');
+}
+
 
 // Game state variables
 let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, 
