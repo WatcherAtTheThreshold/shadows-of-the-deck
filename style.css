@@ -1,3 +1,5 @@
+/* Complete style.css with enhanced Cruxflare log styling */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -755,6 +757,44 @@ h2 {
   font-weight: 500;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);  /* Add subtle shadow */
 }
+
+/* ========== ENHANCED CRUXFLARE LOG STYLING ========== */
+#log.cruxflare-log {
+  background: rgba(138, 43, 226, 0.4) !important;
+  border: 3px solid rgba(138, 43, 226, 0.9) !important;
+  box-shadow: 
+    0 0 20px rgba(138, 43, 226, 0.6),
+    0 4px 15px rgba(0, 0, 0, 0.5) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  animation: cruxflare-pulse 2s ease-in-out !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 8px rgba(138, 43, 226, 0.8) !important;
+}
+
+@keyframes cruxflare-pulse {
+  0% { 
+    transform: scale(1);
+    border-color: rgba(138, 43, 226, 0.9);
+    box-shadow: 
+      0 0 20px rgba(138, 43, 226, 0.6),
+      0 4px 15px rgba(0, 0, 0, 0.5);
+  }
+  50% { 
+    transform: scale(1.02);
+    border-color: rgba(160, 60, 255, 1);
+    box-shadow: 
+      0 0 30px rgba(160, 60, 255, 0.8),
+      0 6px 20px rgba(0, 0, 0, 0.6);
+  }
+  100% { 
+    transform: scale(1);
+    border-color: rgba(138, 43, 226, 0.9);
+    box-shadow: 
+      0 0 20px rgba(138, 43, 226, 0.6),
+      0 4px 15px rgba(0, 0, 0, 0.5);
+  }
+}
+/* ================================================== */
 
 #restart-btn, #end-turn-btn { 
   margin: 15px 5px; 
