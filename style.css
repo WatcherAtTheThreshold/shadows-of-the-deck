@@ -1431,7 +1431,9 @@ h2 {
 
 /* Market and Hand container adjustments for larger cards */
 .cards-enlarged {
-  min-height: 260px;         /* Accommodate larger cards */
+  min-height: 240px;         /* Accommodate larger cards */
+  padding: 10px 0;          /* Reduced from 15px */
+  margin: 15px 0;           /* Reduced spacing */
   gap: 12px;                 /* More spacing between larger cards */
 }
 
