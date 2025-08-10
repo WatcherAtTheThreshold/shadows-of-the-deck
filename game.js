@@ -1,7 +1,6 @@
 import IntroTutorial from './intro.js';
 import { CARD_EFFECTS, createMarketDeck, createPlayerDeck, createCruxflareDeck } from './cards.js';
-
-
+// ... rest of your imports
 import { 
   createParticles, renderMarket, renderHand, renderMap, updateHUD, 
   updateMistOverlay, logMsg, logCruxflareMsg, cardPlayFeedback, encounterFeedback,
@@ -32,7 +31,9 @@ let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, player
     fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, 
     encounterPositions, shadowBlocked, lastPlayedCard, fragmentBoostActive,
     // ========== NEW CRUXFLARE STATE VARIABLES ==========
-    nextCardCostBonus, buyingBlocked, dreamTremorActive;
+    nextCardCostBonus, buyingBlocked, dreamTremorActive,
+    // ========== FINAL DARKNESS COUNTDOWN ==========
+    finalDarknessCountdown;
 
 // Initialize game data
 function setupGameData() {
@@ -67,7 +68,9 @@ function setupGameData() {
   nextCardCostBonus = 0;
   buyingBlocked = false;
   dreamTremorActive = false;
-  // ==================================================
+  // ========== INITIALIZE FINAL DARKNESS COUNTDOWN ==========
+  finalDarknessCountdown = null; // null = not active, number = turns remaining
+  // ======================================================
   cruxflareDeck = createCruxflareDeck();
   coins = 3;
 }
@@ -386,6 +389,20 @@ function endTurn() {
   buyingBlocked = false; // Reset Shadow Whisper effect
   // ======================================================
   
+  // ========== HANDLE FINAL DARKNESS COUNTDOWN ==========
+  if (finalDarknessCountdown !== null) {
+    finalDarknessCountdown--;
+    
+    if (finalDarknessCountdown <= 0) {
+      logMsg(`Final darkness consumes the dream! Final score: ${fragmentsCollected}/${totalFragments} fragments.`);
+      endGame();
+      return; // Don't process Cruxflare or continue turn
+    } else {
+      logMsg(`⚫ Final Darkness approaches... ${finalDarknessCountdown} turn${finalDarknessCountdown === 1 ? '' : 's'} remaining! ⚫`);
+    }
+  }
+  // ====================================================
+  
   if (cruxflareDeck.length > 0) {
     let event = cruxflareDeck.shift();
     // ========== ENHANCED CRUXFLARE VISIBILITY ==========
@@ -395,13 +412,16 @@ function endTurn() {
     
     // ========== CHECK FOR MUSIC TRANSITIONS AFTER CRUXFLARE ==========
     // Only check music phase AFTER we've removed a Cruxflare card
-    let musicPhase = 'start';
-    if (cruxflareDeck.length <= 2) {
-      musicPhase = 'danger';
-    } else if (cruxflareDeck.length <= 7) {
-      musicPhase = 'warning';
+    // But skip if Final Darkness is active (already in danger mode)
+    if (finalDarknessCountdown === null) {
+      let musicPhase = 'start';
+      if (cruxflareDeck.length <= 2) {
+        musicPhase = 'danger';
+      } else if (cruxflareDeck.length <= 7) {
+        musicPhase = 'warning';
+      }
+      window.MusicManager?.setTrackByPhase(musicPhase);
     }
-    window.MusicManager?.setTrackByPhase(musicPhase);
     // ================================================================
   } else {
     logMsg(`The dream collapses! You collected ${fragmentsCollected}/${totalFragments} fragments.`);
@@ -441,10 +461,20 @@ function resolveCruxflare(event) {
   }
   
   if (event.includes('Final Darkness')) {
-    setTimeout(() => {
-      logMsg(`Final darkness consumes the dream! Final score: ${fragmentsCollected}/${totalFragments} fragments.`);
-      endGame();
-    }, 3000);
+    // ========== NEW FINAL DARKNESS COUNTDOWN SYSTEM ==========
+    finalDarknessCountdown = 2; // Give player 2 more turns
+    
+    // Force immediate danger mode regardless of cards remaining
+    document.body.classList.add('danger-mode');
+    const hud = document.getElementById('hud');
+    hud.style.borderColor = 'rgba(255, 100, 100, 0.8)';
+    hud.style.animation = 'pulse-danger 1.5s infinite';
+    
+    // Switch to danger music immediately
+    window.MusicManager?.setTrackByPhase('danger');
+    
+    logMsg(`Final Darkness descends! The dream will collapse in ${finalDarknessCountdown} turns!`);
+    // ======================================================
   }
   
   // ========== NEW CRUXFLARE EFFECTS ==========
@@ -553,7 +583,7 @@ function restartGame() {
 
 // Update all UI elements
 function updateAllUI() {
-  updateHUD(coins, fragmentsCollected, cruxflareDeck);
+  updateHUD(coins, fragmentsCollected, cruxflareDeck, finalDarknessCountdown);
   updateMistOverlay(cruxflareDeck);
   renderMarket(marketRow, coins, buyCard);
   renderHand(playerHand, playCard);
