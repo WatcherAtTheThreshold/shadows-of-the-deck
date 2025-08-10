@@ -577,7 +577,9 @@ function restartGame() {
   clearGameAreas(); // ← Move the clear here instead
   clearElement('game-over-container');
   showElement('end-turn-btn');
-  updateMusicPhase();
+  // ========== RESET MUSIC TO START PHASE ==========
+  window.MusicManager?.setTrackByPhase('start');
+  // ==============================================
   initGame();
 }
 
