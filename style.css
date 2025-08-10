@@ -1575,3 +1575,14 @@ h2 {
     gap: 8px;                /* Mobile spacing */
   }
 }
+
+/* ========== FORCE HIDE/SHOW BEHAVIOR ========== */
+#market.phase-hidden,
+#player-hand.phase-hidden {
+  display: none !important;
+}
+
+#market.phase-visible,
+#player-hand.phase-visible {
+  display: flex !important;
+}
