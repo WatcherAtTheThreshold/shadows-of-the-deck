@@ -184,16 +184,7 @@ function drawMarketCard() {
 
 // Draw cards to player hand - NOW WITH RANDOM DRAWING
 function drawNewHand() {
-  // Draw new cards to hand
-  drawHand();
-  
-  // Switch back to action phase
-  showActionPhase();
-  
-  // Update UI and log
-  updateAllUI();
-  logMsg('New hand drawn. Play your cards!');
-}
+  while (playerHand.length < 5 && playerDeck.length > 0) {
     // Draw random card from deck instead of always taking from front
     const randomIndex = Math.floor(Math.random() * playerDeck.length);
     const drawnCard = playerDeck.splice(randomIndex, 1)[0];
