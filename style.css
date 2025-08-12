@@ -931,7 +931,7 @@ h2 {
   flex-wrap: wrap; 
 }
 
-/* ========== FIXED CARD SYSTEM - PROPER BACKS & ANIMATIONS ========== */
+/* ========== BULLETPROOF CARD SYSTEM - NO TEXT BLEED ========== */
 
 /* Enhanced Card flip container with gentle fanning */
 .card-flip {
@@ -1034,7 +1034,6 @@ h2 {
   position: absolute;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -1044,6 +1043,8 @@ h2 {
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
   transition: all 0.3s ease;
   overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* ========== PREMIUM FRONT FACE STYLING ========== */
@@ -1060,6 +1061,8 @@ h2 {
   background-clip: padding-box;
   position: relative;
   color: #f5f5f5;
+  transform: rotateY(0deg); /* Explicitly set front rotation */
+  z-index: 2;
 }
 
 /* Multi-layered border effect */
@@ -1105,7 +1108,7 @@ h2 {
     rgba(222, 184, 135, 0.6) 100%);
 }
 
-/* ========== COMPLETELY FIXED BACK FACE STYLING ========== */
+/* ========== BULLETPROOF BACK FACE STYLING ========== */
 .card-back {
   background: 
     linear-gradient(135deg, 
@@ -1118,21 +1121,28 @@ h2 {
     url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140"><defs><pattern id="cardPattern" patternUnits="userSpaceOnUse" width="15" height="15"><circle cx="7.5" cy="7.5" r="1" fill="%23654321" opacity="0.4"/><path d="M3 3 L12 12 M12 3 L3 12" stroke="%234a2820" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="140" fill="%232a1810"/><rect width="100" height="140" fill="url(%23cardPattern)" opacity="0.6"/></svg>') center/cover;
   border: 2px solid transparent;
   background-clip: padding-box;
-  transform: rotateY(180deg);
-  color: transparent; /* HIDE ANY TEXT CONTENT */
+  transform: rotateY(180deg); /* Explicitly set back rotation */
   position: relative;
+  z-index: 1;
+  
+  /* BULLETPROOF TEXT HIDING */
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
 }
 
-/* ========== HIDE ALL TEXT CONTENT ON CARD BACKS ========== */
-.card-back div {
-  display: none !important; /* Force hide any text content */
-}
-
+/* NUCLEAR OPTION: Hide ALL content in card backs */
 .card-back * {
-  color: transparent !important; /* Make any remaining text invisible */
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  content: '' !important;
 }
 
-/* Multi-layered border for card backs */
+/* Restore ONLY our mystical symbol */
 .card-back::before {
   content: '';
   position: absolute;
@@ -1150,40 +1160,47 @@ h2 {
   -webkit-mask-composite: xor;
   padding: 2px;
   pointer-events: none;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
-/* Enhanced mystical center emblem - ALWAYS VISIBLE */
+/* Enhanced mystical center emblem - FORCE OVERRIDE */
 .card-back::after {
-  content: '✧';
-  position: absolute;
-  font-size: 2.2em;
-  color: rgba(138, 43, 226, 0.8) !important; /* Force color */
+  content: '✧' !important;
+  position: absolute !important;
+  font-size: 2.2em !important;
+  color: rgba(138, 43, 226, 0.8) !important;
   text-shadow: 
     0 0 10px rgba(138, 43, 226, 0.6),
     0 0 20px rgba(138, 43, 226, 0.3),
-    0 0 30px rgba(138, 43, 226, 0.1);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: gentle-glow 3s ease-in-out infinite alternate;
-  z-index: 10; /* Ensure it's on top */
-  pointer-events: none;
-  display: block !important; /* Force display */
+    0 0 30px rgba(138, 43, 226, 0.1) !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  animation: gentle-glow 3s ease-in-out infinite alternate !important;
+  z-index: 100 !important;
+  pointer-events: none !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  line-height: 1 !important;
+  font-family: inherit !important;
 }
 
 @keyframes gentle-glow {
   0% { 
     text-shadow: 
       0 0 10px rgba(138, 43, 226, 0.6),
-      0 0 20px rgba(138, 43, 226, 0.3);
-    transform: translate(-50%, -50%) scale(1);
+      0 0 20px rgba(138, 43, 226, 0.3) !important;
+    transform: translate(-50%, -50%) scale(1) !important;
   }
   100% { 
     text-shadow: 
       0 0 15px rgba(138, 43, 226, 0.9),
       0 0 25px rgba(138, 43, 226, 0.5),
-      0 0 35px rgba(138, 43, 226, 0.2);
-    transform: translate(-50%, -50%) scale(1.08);
+      0 0 35px rgba(138, 43, 226, 0.2) !important;
+    transform: translate(-50%, -50%) scale(1.08) !important;
   }
 }
 
@@ -1227,7 +1244,7 @@ h2 {
 /* ========== FIXED MARKET CARD ANIMATIONS ========== */
 .card-flip.market-bought .card-flip-inner {
   animation: marketBoughtFlip 0.5s ease-in-out forwards;
-  position: relative; /* Ensure proper positioning */
+  position: relative;
   z-index: 1;
 }
 
@@ -1236,7 +1253,7 @@ h2 {
     transform: rotateY(0deg) scale(1); 
   }
   50% { 
-    transform: rotateY(90deg) scale(1.02); /* Reduced scale */
+    transform: rotateY(90deg) scale(1.02);
   }
   100% { 
     transform: rotateY(180deg) scale(1); 
