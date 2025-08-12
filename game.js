@@ -604,11 +604,18 @@ function restartGame() {
   initGame();
 }
 
+// Update all UI elements
 function updateAllUI() {
   updateHUD(coins, fragmentsCollected, cruxflareDeck, finalDarknessCountdown);
   updateMistOverlay(cruxflareDeck);
   renderMarket(marketRow, coins, buyCard);
-  renderHand(playerHand, playCard);
+  
+  // Only re-render hand during specific phases, not during card play
+  if (gamePhase === 'market' || gamePhase === 'newHand') {
+    renderHand(playerHand, playCard);
+  }
+  // Otherwise, hand visual state is managed by the in-place system
+  
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
 }
 
