@@ -931,25 +931,20 @@ h2 {
   flex-wrap: wrap; 
 }
 
-/* ========== BULLETPROOF CARD SYSTEM - NO TEXT BLEED ========== */
+/* ========== SIMPLE WORKING CARD SYSTEM - NO 3D TRANSFORMS ========== */
 
-/* ========== SURGICAL CARD FIX - HIDE TEXT ONLY ========== */
-
-/* Enhanced Card flip container with gentle fanning */
+/* Card container with gentle fanning */
 .card-flip {
   width: 120px;
   height: 170px;
   margin: 4px;
-  perspective: 1000px;
   position: relative;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.4s ease;
   z-index: 1;
 }
 
-/* ========== REFINED CARD FANNING SYSTEM ========== */
-
-/* Hand container setup for fanning */
+/* Hand fanning */
 #player-hand {
   display: flex !important;
   justify-content: center !important; 
@@ -961,19 +956,13 @@ h2 {
   overflow: visible !important;
 }
 
-/* Gentle overlapping card positioning */
 #player-hand .card-flip {
   margin-left: -30px;
   transform-origin: bottom center;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.4s ease;
 }
 
-/* First card doesn't overlap */
-#player-hand .card-flip:first-child {
-  margin-left: 4px;
-}
-
-/* Gentler fan rotation effect */
+#player-hand .card-flip:first-child { margin-left: 4px; }
 #player-hand .card-flip:nth-child(1) { transform: rotate(-8deg); }
 #player-hand .card-flip:nth-child(2) { transform: rotate(-4deg); }
 #player-hand .card-flip:nth-child(3) { transform: rotate(0deg); }
@@ -981,12 +970,7 @@ h2 {
 #player-hand .card-flip:nth-child(5) { transform: rotate(8deg); }
 #player-hand .card-flip:nth-child(6) { transform: rotate(10deg); }
 
-/* Subtle hover effect */
-#player-hand:hover .card-flip {
-  margin-left: -20px;
-  z-index: 2;
-}
-
+#player-hand:hover .card-flip { margin-left: -20px; z-index: 2; }
 #player-hand .card-flip:hover {
   transform: rotate(0deg) translateY(-15px) scale(1.03) !important;
   z-index: 10 !important;
@@ -994,7 +978,6 @@ h2 {
   margin-right: 15px;
 }
 
-/* Played cards maintain position but stay dimmed */
 #player-hand .card-flip.card-played {
   opacity: 0.6;
   filter: grayscale(0.3);
@@ -1002,36 +985,16 @@ h2 {
   z-index: 0;
 }
 
-#player-hand .card-flip.card-played:hover {
-  transform: inherit;
-  margin-left: -30px;
-  margin-right: 0;
-  z-index: 0;
-}
-
-/* ========== ENHANCED CARD STYLING ========== */
-
+/* SIMPLE CARD INNER - NO 3D TRANSFORMS */
 .card-flip-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  text-align: center;
-  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transform-style: preserve-3d;
   border-radius: 12px;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(138, 43, 226, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Smooth flip to back when played */
-.card-flip-inner.played {
-  transform: rotateY(180deg);
-  box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(138, 43, 226, 0.4);
-}
-
+/* SIMPLE FRONT/BACK - JUST OPACITY SWITCHING */
 .card-front, .card-back {
   position: absolute;
   width: 100%;
@@ -1042,244 +1005,105 @@ h2 {
   align-items: center;
   justify-content: center;
   font-size: 1.1em;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-  transition: all 0.3s ease;
-  overflow: hidden;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  transition: opacity 0.3s ease;
 }
 
-/* ========== PREMIUM FRONT FACE STYLING ========== */
+/* Front face styling */
 .card-front {
-  background: 
-    linear-gradient(135deg, 
-      rgba(25, 25, 45, 0.98) 0%, 
-      rgba(15, 15, 35, 0.95) 30%,
-      rgba(20, 20, 40, 0.98) 70%,
-      rgba(10, 10, 30, 0.95) 100%),
-    radial-gradient(circle at 30% 30%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(100, 150, 255, 0.08) 0%, transparent 50%);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  position: relative;
+  background: linear-gradient(135deg, 
+    rgba(25, 25, 45, 0.98) 0%, 
+    rgba(15, 15, 35, 0.95) 30%,
+    rgba(20, 20, 40, 0.98) 70%,
+    rgba(10, 10, 30, 0.95) 100%);
+  border: 2px solid rgba(138, 43, 226, 0.4);
   color: #f5f5f5;
-  transform: rotateY(0deg);
-  z-index: 2;
-}
-
-/* Multi-layered border effect */
-.card-front::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 12px;
-  background: linear-gradient(135deg, 
-    rgba(138, 43, 226, 0.4) 0%, 
-    rgba(100, 150, 255, 0.3) 50%, 
-    rgba(138, 43, 226, 0.4) 100%);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: xor;
-  padding: 2px;
-  pointer-events: none;
-}
-
-/* Enhanced hover effect with glow */
-.card-flip:not(.card-played) .card-front:hover {
-  background: 
-    linear-gradient(135deg, 
-      rgba(35, 35, 55, 0.98) 0%, 
-      rgba(25, 25, 45, 0.95) 30%,
-      rgba(30, 30, 50, 0.98) 70%,
-      rgba(20, 20, 40, 0.95) 100%),
-    radial-gradient(circle at 30% 30%, rgba(222, 184, 135, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(138, 43, 226, 0.12) 0%, transparent 50%);
-  box-shadow: 
-    0 8px 25px rgba(222, 184, 135, 0.4),
-    0 0 20px rgba(222, 184, 135, 0.2),
-    inset 0 0 20px rgba(222, 184, 135, 0.05);
-}
-
-.card-flip:not(.card-played) .card-front:hover::before {
-  background: linear-gradient(135deg, 
-    rgba(222, 184, 135, 0.6) 0%, 
-    rgba(255, 215, 0, 0.4) 50%, 
-    rgba(222, 184, 135, 0.6) 100%);
-}
-
-/* ========== SURGICAL BACK FACE STYLING ========== */
-.card-back {
-  background: 
-    linear-gradient(135deg, 
-      rgba(45, 25, 65, 0.98) 0%, 
-      rgba(35, 15, 55, 0.95) 30%,
-      rgba(40, 20, 60, 0.98) 70%,
-      rgba(30, 10, 50, 0.95) 100%),
-    radial-gradient(circle at 50% 30%, rgba(138, 43, 226, 0.2) 0%, transparent 60%),
-    radial-gradient(circle at 50% 70%, rgba(160, 60, 220, 0.15) 0%, transparent 50%),
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140"><defs><pattern id="cardPattern" patternUnits="userSpaceOnUse" width="15" height="15"><circle cx="7.5" cy="7.5" r="1" fill="%23654321" opacity="0.4"/><path d="M3 3 L12 12 M12 3 L3 12" stroke="%234a2820" stroke-width="0.5" opacity="0.3"/></pattern></defs><rect width="100" height="140" fill="%232a1810"/><rect width="100" height="140" fill="url(%23cardPattern)" opacity="0.6"/></svg>') center/cover;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  transform: rotateY(180deg);
-  position: relative;
-  z-index: 1;
-  
-  /* SURGICAL TEXT HIDING - hide text content only */
-  font-size: 0;
-  line-height: 0;
-  color: transparent;
-}
-
-/* SURGICAL: Hide only text content, preserve everything else */
-.card-back div,
-.card-back span,
-.card-back p {
-  display: none;
-  visibility: hidden;
-  opacity: 0;
-}
-
-/* SURGICAL: Ensure front content doesn't bleed through when flipped */
-.card-flip-inner.played .card-front {
-  opacity: 0;
-  visibility: hidden;
-  z-index: 0;
-}
-
-.card-flip-inner.played .card-back {
   opacity: 1;
-  visibility: visible;
   z-index: 2;
 }
 
-/* Multi-layered border for card backs */
-.card-back::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 12px;
-  background: linear-gradient(135deg, 
-    rgba(138, 43, 226, 0.7) 0%, 
-    rgba(160, 60, 220, 0.5) 50%, 
-    rgba(138, 43, 226, 0.7) 100%);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: xor;
-  padding: 2px;
-  pointer-events: none;
+.card-front:hover {
+  border-color: rgba(222, 184, 135, 0.8);
+  box-shadow: 0 5px 15px rgba(222, 184, 135, 0.3);
 }
 
-/* Enhanced mystical center emblem */
+/* Back face styling */
+.card-back {
+  background: linear-gradient(135deg, 
+    rgba(45, 25, 65, 0.98) 0%, 
+    rgba(35, 15, 55, 0.95) 30%,
+    rgba(40, 20, 60, 0.98) 70%,
+    rgba(30, 10, 50, 0.95) 100%);
+  border: 2px solid rgba(138, 43, 226, 0.6);
+  color: transparent;
+  opacity: 0;
+  z-index: 1;
+  position: relative;
+}
+
+/* Mystical symbol on backs */
 .card-back::after {
   content: '✧';
   position: absolute;
   font-size: 2.2em;
   color: rgba(138, 43, 226, 0.8);
-  text-shadow: 
-    0 0 10px rgba(138, 43, 226, 0.6),
-    0 0 20px rgba(138, 43, 226, 0.3),
-    0 0 30px rgba(138, 43, 226, 0.1);
+  text-shadow: 0 0 15px rgba(138, 43, 226, 0.8);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   animation: gentle-glow 3s ease-in-out infinite alternate;
-  z-index: 10;
-  pointer-events: none;
 }
 
 @keyframes gentle-glow {
-  0% { 
-    text-shadow: 
-      0 0 10px rgba(138, 43, 226, 0.6),
-      0 0 20px rgba(138, 43, 226, 0.3);
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% { 
-    text-shadow: 
-      0 0 15px rgba(138, 43, 226, 0.9),
-      0 0 25px rgba(138, 43, 226, 0.5),
-      0 0 35px rgba(138, 43, 226, 0.2);
-    transform: translate(-50%, -50%) scale(1.08);
-  }
+  0% { text-shadow: 0 0 10px rgba(138, 43, 226, 0.6); }
+  100% { text-shadow: 0 0 20px rgba(138, 43, 226, 1); }
 }
 
-/* ========== ENHANCED COST STYLING ========== */
+/* SIMPLE PLAYED STATE - JUST SWITCH OPACITY */
+.card-flip-inner.played .card-front {
+  opacity: 0;
+  z-index: 1;
+}
+
+.card-flip-inner.played .card-back {
+  opacity: 1;
+  z-index: 2;
+}
+
+/* Cost styling */
 .cost {
   font-size: 0.95em;
   color: rgba(222, 184, 135, 0.95);
   font-weight: bold;
   margin-top: 8px;
   padding: 3px 8px;
-  background: 
-    linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(20, 10, 30, 0.7) 100%);
+  background: rgba(0, 0, 0, 0.5);
   border-radius: 6px;
   border: 1px solid rgba(222, 184, 135, 0.4);
-  text-shadow: 
-    0 0 6px rgba(222, 184, 135, 0.6),
-    0 1px 2px rgba(0, 0, 0, 0.8);
-  box-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.3),
-    inset 0 1px 2px rgba(222, 184, 135, 0.1);
 }
 
-/* ========== PLAYED CARD ENHANCED STATES ========== */
-.card-played {
-  transition: all 0.4s ease !important;
-}
-
-.card-played .card-flip-inner {
-  animation: played-card-gentle-pulse 6s ease-in-out infinite;
-}
-
-@keyframes played-card-gentle-pulse {
-  0%, 100% { 
-    opacity: 0.6; 
-  }
-  50% { 
-    opacity: 0.45; 
-  }
-}
-
-/* ========== FIXED MARKET CARD ANIMATIONS ========== */
+/* SIMPLE MARKET ANIMATIONS - NO WEIRD POSITIONING */
 .card-flip.market-bought .card-flip-inner {
-  animation: marketBoughtFlip 0.5s ease-in-out forwards;
-  position: relative;
-  z-index: 1;
+  animation: simple-market-flip 0.3s ease-in-out forwards;
 }
 
-@keyframes marketBoughtFlip {
-  0% { 
-    transform: rotateY(0deg) scale(1); 
-  }
-  50% { 
-    transform: rotateY(90deg) scale(1.02);
-  }
-  100% { 
-    transform: rotateY(180deg) scale(1); 
-  }
+@keyframes simple-market-flip {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
 }
 
-/* Simplified flip animation for consistency */
-.card-flip.hand-played .card-flip-inner {
-  animation: flipAndStay 0.5s ease-in-out forwards;
+.card-flip.market-bought .card-front {
+  opacity: 0;
 }
 
-@keyframes flipAndStay {
-  0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(180deg); }
+.card-flip.market-bought .card-back {
+  opacity: 1;
 }
 
-/* ========== ENHANCED PHASE SYSTEM SUPPORT ========== */
+/* Phase system support */
 .cards-enlarged .card-flip {
   width: 156px;
   height: 221px;
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .cards-enlarged .card-flip .card-front,
@@ -1287,105 +1111,35 @@ h2 {
   font-size: 1.4em;
 }
 
-.cards-enlarged .card-flip .cost {
-  font-size: 1.2em;
-  padding: 4px 10px;
-}
-
-/* Enhanced fanning for enlarged cards */
 .cards-enlarged#player-hand .card-flip {
   margin-left: -45px;
-}
-
-.cards-enlarged#player-hand .card-flip:first-child {
-  margin-left: 4px;
 }
 
 .cards-enlarged#player-hand:hover .card-flip {
   margin-left: -25px;
 }
 
-.cards-enlarged#player-hand .card-flip:hover {
-  margin-left: 25px;
-  margin-right: 25px;
-}
-
-/* ========== NEW CARD ENTRANCE ANIMATION ========== */
+/* New card animation */
 @keyframes cardAppear {
-  0% {
-    opacity: 0;
-    transform: scale(0.8) translateY(20px) rotate(5deg);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.03) translateY(-3px) rotate(-1deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0) rotate(0deg);
-  }
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 .card-flip.new-card {
-  animation: cardAppear 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: cardAppear 0.6s ease forwards;
 }
 
-/* ========== RESPONSIVE ADJUSTMENTS ========== */
+/* Mobile responsive */
 @media (max-width: 768px) {
-  #player-hand {
-    min-height: 140px;
-  }
-  
-  #player-hand .card-flip {
-    margin-left: -20px;
-  }
-  
-  #player-hand:hover .card-flip {
-    margin-left: -12px;
-  }
-  
+  #player-hand .card-flip { margin-left: -20px; }
+  #player-hand:hover .card-flip { margin-left: -12px; }
   #player-hand .card-flip:hover {
     margin-left: 8px;
     margin-right: 8px;
     transform: rotate(0deg) translateY(-8px) scale(1.02) !important;
   }
-  
-  /* Gentler mobile fanning */
-  #player-hand .card-flip:nth-child(1) { transform: rotate(-6deg); }
-  #player-hand .card-flip:nth-child(2) { transform: rotate(-3deg); }
-  #player-hand .card-flip:nth-child(3) { transform: rotate(0deg); }
-  #player-hand .card-flip:nth-child(4) { transform: rotate(3deg); }
-  #player-hand .card-flip:nth-child(5) { transform: rotate(6deg); }
-  #player-hand .card-flip:nth-child(6) { transform: rotate(8deg); }
-  
-  .card-flip {
-    width: 85px;
-    height: 120px;
-  }
-  
-  .card-front, .card-back {
-    font-size: 0.9em;
-  }
-  
-  .cost {
-    font-size: 0.8em;
-    padding: 2px 6px;
-  }
-  
-  .cards-enlarged .card-flip {
-    width: 85px;
-    height: 120px;
-  }
-  
-  .cards-enlarged .card-flip .card-front,
-  .cards-enlarged .card-flip .card-back {
-    font-size: 0.9em;
-  }
-  
-  .cards-enlarged .card-flip .cost {
-    font-size: 0.8em;
-    padding: 2px 6px;
-  }
+  .card-flip { width: 85px; height: 120px; }
+  .card-front, .card-back { font-size: 0.9em; }
 }
 #map { 
   display: flex; 
