@@ -933,11 +933,13 @@ h2 {
 
 /* ========== PHASE 2: ENHANCED CARD SYSTEM WITH FANNING ========== */
 
-/* Enhanced Card flip container with fanning support */
+/* ========== REFINED CARD SYSTEM - SUBTLE FANNING & FIXED BACKS ========== */
+
+/* Enhanced Card flip container with gentle fanning */
 .card-flip {
   width: 120px;
   height: 170px;
-  margin: 4px; /* Reduced margin for overlap */
+  margin: 4px;
   perspective: 1000px;
   position: relative;
   cursor: pointer;
@@ -945,7 +947,7 @@ h2 {
   z-index: 1;
 }
 
-/* ========== CARD FANNING SYSTEM ========== */
+/* ========== REFINED CARD FANNING SYSTEM ========== */
 
 /* Hand container setup for fanning */
 #player-hand {
@@ -953,15 +955,15 @@ h2 {
   justify-content: center !important; 
   align-items: flex-end !important;
   margin: 25px 0 !important;
-  flex-wrap: nowrap !important; /* No wrapping for fan effect */
+  flex-wrap: nowrap !important;
   position: relative;
-  min-height: 200px; /* Extra height for fan spacing */
+  min-height: 190px; /* Reduced height for subtler effect */
   overflow: visible !important;
 }
 
-/* Overlapping card positioning */
+/* Gentle overlapping card positioning */
 #player-hand .card-flip {
-  margin-left: -40px; /* Cards overlap by 40px */
+  margin-left: -30px; /* Reduced overlap from -40px */
   transform-origin: bottom center;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
@@ -971,25 +973,25 @@ h2 {
   margin-left: 4px;
 }
 
-/* Fan rotation effect */
-#player-hand .card-flip:nth-child(1) { transform: rotate(-12deg); }
-#player-hand .card-flip:nth-child(2) { transform: rotate(-6deg); }
+/* Gentler fan rotation effect */
+#player-hand .card-flip:nth-child(1) { transform: rotate(-8deg); }  /* Reduced from -12deg */
+#player-hand .card-flip:nth-child(2) { transform: rotate(-4deg); }  /* Reduced from -6deg */
 #player-hand .card-flip:nth-child(3) { transform: rotate(0deg); }
-#player-hand .card-flip:nth-child(4) { transform: rotate(6deg); }
-#player-hand .card-flip:nth-child(5) { transform: rotate(12deg); }
-#player-hand .card-flip:nth-child(6) { transform: rotate(18deg); } /* For Essence Tap draws */
+#player-hand .card-flip:nth-child(4) { transform: rotate(4deg); }   /* Reduced from 6deg */
+#player-hand .card-flip:nth-child(5) { transform: rotate(8deg); }   /* Reduced from 12deg */
+#player-hand .card-flip:nth-child(6) { transform: rotate(10deg); }  /* Reduced from 18deg */
 
-/* Hover effect - cards spread out and come forward */
+/* Subtle hover effect - cards spread out gently */
 #player-hand:hover .card-flip {
   margin-left: -20px; /* Less overlap on hover */
   z-index: 2;
 }
 
 #player-hand .card-flip:hover {
-  transform: rotate(0deg) translateY(-20px) scale(1.05) !important;
+  transform: rotate(0deg) translateY(-15px) scale(1.03) !important; /* Reduced from -20px and 1.05 */
   z-index: 10 !important;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 15px;  /* Reduced from 20px */
+  margin-right: 15px; /* Reduced from 20px */
 }
 
 /* Played cards maintain position but stay dimmed */
@@ -997,12 +999,12 @@ h2 {
   opacity: 0.6;
   filter: grayscale(0.3);
   pointer-events: none;
-  z-index: 0; /* Behind other cards */
+  z-index: 0;
 }
 
 #player-hand .card-flip.card-played:hover {
-  transform: inherit; /* Don't change transform on hover */
-  margin-left: -40px; /* Keep original overlap */
+  transform: inherit;
+  margin-left: -30px; /* Match the reduced overlap */
   margin-right: 0;
   z-index: 0;
 }
@@ -1016,10 +1018,10 @@ h2 {
   text-align: center;
   transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   transform-style: preserve-3d;
-  border-radius: 12px; /* More rounded corners */
+  border-radius: 12px;
   box-shadow: 
     0 4px 12px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(138, 43, 226, 0.2); /* Subtle border glow */
+    0 0 0 1px rgba(138, 43, 226, 0.2);
 }
 
 /* Smooth flip to back when played */
@@ -1105,7 +1107,7 @@ h2 {
     rgba(222, 184, 135, 0.6) 100%);
 }
 
-/* ========== PREMIUM BACK FACE STYLING ========== */
+/* ========== FIXED PREMIUM BACK FACE STYLING ========== */
 .card-back {
   background: 
     linear-gradient(135deg, 
@@ -1123,7 +1125,8 @@ h2 {
   position: relative;
 }
 
-/* Multi-layered border for card backs */
+/* ========== ENSURE CARD BACKS ALWAYS SHOW PROPERLY ========== */
+/* Multi-layered border for ALL card backs */
 .card-back::before {
   content: '';
   position: absolute;
@@ -1143,7 +1146,7 @@ h2 {
   pointer-events: none;
 }
 
-/* Enhanced mystical center emblem */
+/* Enhanced mystical center emblem for ALL card backs */
 .card-back::after {
   content: '✧';
   position: absolute;
@@ -1158,6 +1161,7 @@ h2 {
   transform: translate(-50%, -50%);
   animation: gentle-glow 3s ease-in-out infinite alternate;
   z-index: 1;
+  pointer-events: none;
 }
 
 @keyframes gentle-glow {
@@ -1224,7 +1228,6 @@ h2 {
   100% { transform: rotateY(180deg) scale(1); }
 }
 
-/* Both market and hand cards flip and stay visible */
 .card-flip.market-bought .card-flip-inner,
 .card-flip.hand-played .card-flip-inner {
   animation: flipAndStay 0.5s ease-in-out forwards;
@@ -1252,9 +1255,9 @@ h2 {
   padding: 4px 10px;
 }
 
-/* Enhanced fanning for enlarged cards */
+/* Enhanced fanning for enlarged cards - also more subtle */
 .cards-enlarged#player-hand .card-flip {
-  margin-left: -60px; /* More overlap for larger cards */
+  margin-left: -45px; /* Reduced from -60px */
 }
 
 .cards-enlarged#player-hand .card-flip:first-child {
@@ -1262,23 +1265,23 @@ h2 {
 }
 
 .cards-enlarged#player-hand:hover .card-flip {
-  margin-left: -30px;
+  margin-left: -25px; /* Reduced from -30px */
 }
 
 .cards-enlarged#player-hand .card-flip:hover {
-  margin-left: 30px;
-  margin-right: 30px;
+  margin-left: 25px;  /* Reduced from 30px */
+  margin-right: 25px; /* Reduced from 30px */
 }
 
 /* ========== NEW CARD ENTRANCE ANIMATION ========== */
 @keyframes cardAppear {
   0% {
     opacity: 0;
-    transform: scale(0.8) translateY(30px) rotate(10deg);
+    transform: scale(0.8) translateY(20px) rotate(5deg); /* Reduced from 30px and 10deg */
   }
   50% {
     opacity: 0.8;
-    transform: scale(1.05) translateY(-5px) rotate(-2deg);
+    transform: scale(1.03) translateY(-3px) rotate(-1deg); /* Reduced from 1.05, -5px, -2deg */
   }
   100% {
     opacity: 1;
@@ -1286,7 +1289,6 @@ h2 {
   }
 }
 
-/* Apply to newly added cards */
 .card-flip.new-card {
   animation: cardAppear 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
@@ -1294,22 +1296,30 @@ h2 {
 /* ========== RESPONSIVE ADJUSTMENTS ========== */
 @media (max-width: 768px) {
   #player-hand {
-    min-height: 150px;
+    min-height: 140px; /* Reduced */
   }
   
   #player-hand .card-flip {
-    margin-left: -25px; /* Less overlap on mobile */
+    margin-left: -20px; /* Reduced overlap on mobile */
   }
   
   #player-hand:hover .card-flip {
-    margin-left: -15px;
+    margin-left: -12px;
   }
   
   #player-hand .card-flip:hover {
-    margin-left: 10px;
-    margin-right: 10px;
-    transform: rotate(0deg) translateY(-10px) scale(1.02) !important;
+    margin-left: 8px;
+    margin-right: 8px;
+    transform: rotate(0deg) translateY(-8px) scale(1.02) !important;
   }
+  
+  /* Gentler mobile fanning */
+  #player-hand .card-flip:nth-child(1) { transform: rotate(-6deg); }
+  #player-hand .card-flip:nth-child(2) { transform: rotate(-3deg); }
+  #player-hand .card-flip:nth-child(3) { transform: rotate(0deg); }
+  #player-hand .card-flip:nth-child(4) { transform: rotate(3deg); }
+  #player-hand .card-flip:nth-child(5) { transform: rotate(6deg); }
+  #player-hand .card-flip:nth-child(6) { transform: rotate(8deg); }
   
   .card-flip {
     width: 85px;
@@ -1325,7 +1335,6 @@ h2 {
     padding: 2px 6px;
   }
   
-  /* Mobile enlarged cards stay same size */
   .cards-enlarged .card-flip {
     width: 85px;
     height: 120px;
@@ -1341,7 +1350,6 @@ h2 {
     padding: 2px 6px;
   }
 }
-
 #map { 
   display: flex; 
   justify-content: center; 
