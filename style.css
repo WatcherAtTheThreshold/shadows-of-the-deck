@@ -446,19 +446,18 @@ body.danger-mode #hud::after {
   margin: 0;
 }
 
-/* Stable Log Container */
-/* Stable Log Container - Always Single Line */
 #log {
   background: rgba(0, 0, 0, 0.6);
   padding: 20px 30px;
   height: 80px;
-  margin: 15px auto 25px auto; /* Same margins as HUD */
+  margin: 15px; /* Same as HUD margins */
   border-radius: 12px;
   backdrop-filter: blur(15px);
   border: 2px solid rgba(222, 184, 135, 0.4);
   text-align: center;
   font-size: 1.5rem;
-  max-width: calc(100% - 30px); /* Match HUD width minus margins */
+  width: calc(100% - 30px); /* Force width to match HUD */
+  max-width: none; /* Remove any max-width constraints */
   font-weight: 500;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   
