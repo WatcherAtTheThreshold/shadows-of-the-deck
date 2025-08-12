@@ -1019,10 +1019,19 @@ h2 {
   color: #f5f5f5;
   opacity: 1;
   z-index: 2;
-  text-align: center;
+  text-align: center !important;
   padding: 10px 8px; /* Add some padding for text breathing room */
   box-sizing: border-box;
   word-wrap: break-word; /* Better text wrapping */
+}
+.card-front > div:first-child {
+  text-align: center !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 5px !important;
+  box-sizing: border-box !important;
+  line-height: 1.1 !important;
 }
 .card-front div {
   display: flex;
