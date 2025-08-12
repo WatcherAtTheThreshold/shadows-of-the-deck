@@ -157,12 +157,9 @@ function drawMarketCard() {
   }
 }
 
-// ========== NEW DRAW NEW HAND SYSTEM ==========
+// ========== FIXED DRAW NEW HAND SYSTEM ==========
 function drawNewHand() {
-  console.log('🎴 Drawing new hand - clearing played cards');
-  
-  // Clear the played cards from UI tracking
-  clearPlayedCards();
+  console.log('🎴 Drawing new hand - starting fresh');
   
   // Draw new cards to hand
   drawHand();
@@ -170,7 +167,7 @@ function drawNewHand() {
   // Switch back to action phase
   showActionPhase();
   
-  // Update UI and log
+  // Update UI and EXPLICITLY render the new hand
   updateAllUI();
   logMsg('New hand drawn. Play your cards!');
 }
@@ -209,9 +206,9 @@ function buyCard(marketIndex) {
   }
 }
 
-// ========== UPDATED PLAY CARD SYSTEM FOR IN-PLACE FLIPPING ==========
+// ========== SIMPLIFIED PLAY CARD SYSTEM ==========
 function playCard(cardName, originalIndex) {
-  console.log('🎴 Playing card:', cardName, 'original index:', originalIndex);
+  console.log('🎴 Playing card:', cardName);
   
   // Find the card in the current playerHand
   const handIndex = playerHand.indexOf(cardName);
@@ -607,18 +604,12 @@ function restartGame() {
   initGame();
 }
 
-// Update all UI elements
+// ========== FIXED UPDATE ALL UI ==========
 function updateAllUI() {
   updateHUD(coins, fragmentsCollected, cruxflareDeck, finalDarknessCountdown);
   updateMistOverlay(cruxflareDeck);
   renderMarket(marketRow, coins, buyCard);
-  
-  // Only re-render hand during specific phases, not during card play
-  if (gamePhase === 'market' || gamePhase === 'newHand') {
-    renderHand(playerHand, playCard);
-  }
-  // Otherwise, hand visual state is managed by the in-place system
-  
+  renderHand(playerHand, playCard); // Always render hand when called
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
 }
 
