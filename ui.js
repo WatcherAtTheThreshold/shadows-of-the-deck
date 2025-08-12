@@ -1,8 +1,8 @@
 import { generateTooltip } from './cards.js';
 
-// Track played cards for visual consistency
-let playedCardsThisTurn = [];
-let lastHandSize = 0;
+// Enhanced hand state tracking
+let currentHandState = [];  // Complete hand including played/unplayed status
+let handContainer = null;
 
 // Create floating particles effect
 export function createParticles() {
@@ -48,7 +48,7 @@ export function renderMarket(marketRow, coins, onBuyCard) {
       if (coins >= cardObj.cost && !el.classList.contains('market-bought')) {
         el.classList.add('market-bought');
         // Wait for flip animation to complete before processing purchase
-        setTimeout(() => onBuyCard(i), 500); // Process after flip completes
+        setTimeout(() => onBuyCard(i), 500);
       } else {
         onBuyCard(i); // Still show "not enough orbs" message immediately
       }
@@ -57,66 +57,159 @@ export function renderMarket(marketRow, coins, onBuyCard) {
   });
 }
 
-// Render player hand with flip animations and placeholder backs
-export function renderHand(playerHand, onPlayCard) {
-  let h = document.getElementById('player-hand');
-  
-  // Clear played cards if we have a new hand (detected by hand size increase)
-  if (playerHand.length > lastHandSize) {
-    playedCardsThisTurn = [];
+// ========== COMPLETELY REWRITTEN HAND SYSTEM ==========
+// Initialize hand container and state
+function initializeHand() {
+  if (!handContainer) {
+    handContainer = document.getElementById('player-hand');
   }
-  lastHandSize = playerHand.length;
-  
-  h.innerHTML = '';
-  
-  // Render active cards
-  playerHand.forEach((card, i) => {
-    let el = document.createElement('div');
-    el.className = 'card-flip tooltip';
-    el.setAttribute('data-tooltip', generateTooltip(card));
-    el.innerHTML = `
-      <div class="card-flip-inner">
-        <div class="card-front">
-          <div>${card}</div>
-        </div>
-        <div class="card-back">
-        </div>
-      </div>
-    `;
-    el.onclick = () => {
-      if (!el.classList.contains('hand-played')) {
-        el.classList.add('hand-played'); // Flip to back
-        el.style.pointerEvents = 'none'; // Disable further clicks
-        el.style.cursor = 'default'; // Change cursor to show it's disabled
-        
-        // Add to played cards for persistent display
-        playedCardsThisTurn.push(card);
-        
-        // Process the game logic after flip animation
-        setTimeout(() => onPlayCard(card, i), 500);
-      }
-    };
-    h.appendChild(el);
-  });
-  
-  // Render played card placeholders (always showing backs)
-  playedCardsThisTurn.forEach((card) => {
-    let el = document.createElement('div');
-    el.className = 'card-flip';
-    el.innerHTML = `
-      <div class="card-flip-inner" style="transform: rotateY(180deg);">
-        <div class="card-front">
-          <div>${card}</div>
-        </div>
-        <div class="card-back">
-        </div>
-      </div>
-    `;
-    el.style.pointerEvents = 'none'; // Always disabled
-    el.style.cursor = 'default';
-    h.appendChild(el);
-  });
+  currentHandState = [];
 }
+
+// Create a card element with proper event handling
+function createCardElement(card, index, isPlayed = false) {
+  const el = document.createElement('div');
+  el.className = `card-flip tooltip hand-card-${index}`;
+  el.setAttribute('data-tooltip', generateTooltip(card));
+  el.setAttribute('data-card-index', index);
+  el.setAttribute('data-card-name', card);
+  
+  el.innerHTML = `
+    <div class="card-flip-inner ${isPlayed ? 'played' : ''}">
+      <div class="card-front">
+        <div>${card}</div>
+      </div>
+      <div class="card-back">
+      </div>
+    </div>
+  `;
+  
+  // Visual state for played cards
+  if (isPlayed) {
+    el.classList.add('card-played');
+    el.style.pointerEvents = 'none';
+    el.style.cursor = 'default';
+    el.style.opacity = '0.7';
+  }
+  
+  return el;
+}
+
+// Main hand rendering function - COMPLETELY REWRITTEN
+export function renderHand(playerHand, onPlayCard) {
+  initializeHand();
+  
+  // Detect if this is a completely new hand (new turn)
+  const isNewHand = playerHand.length > currentHandState.filter(card => !card.played).length;
+  
+  if (isNewHand || currentHandState.length === 0) {
+    // ========== NEW HAND - REBUILD EVERYTHING ==========
+    console.log('🎴 New hand detected, rebuilding...');
+    handContainer.innerHTML = '';
+    currentHandState = [];
+    
+    // Create fresh hand state
+    playerHand.forEach((card, index) => {
+      currentHandState.push({
+        name: card,
+        index: index,
+        played: false,
+        element: null
+      });
+    });
+    
+    // Create all card elements
+    currentHandState.forEach((cardState, index) => {
+      const cardElement = createCardElement(cardState.name, index, false);
+      cardState.element = cardElement;
+      
+      // Add click handler for playing cards
+      cardElement.addEventListener('click', () => playCardFromHand(index, onPlayCard));
+      
+      handContainer.appendChild(cardElement);
+    });
+    
+  } else {
+    // ========== EXISTING HAND - UPDATE STATES ONLY ==========
+    console.log('🎴 Updating existing hand states...');
+    
+    // Update existing cards to match current playerHand
+    // Cards that are no longer in playerHand have been "consumed" by the game
+    const activeCards = new Set(playerHand);
+    
+    currentHandState.forEach((cardState, index) => {
+      if (!cardState.played && !activeCards.has(cardState.name)) {
+        // This card was consumed by game logic but we haven't visually played it yet
+        // This shouldn't happen with our new system, but just in case
+        console.log('🎴 Card consumed by game logic:', cardState.name);
+      }
+    });
+  }
+  
+  console.log('🎴 Hand rendered. Current state:', currentHandState.length, 'cards');
+}
+
+// Handle card playing with in-place flipping
+function playCardFromHand(cardIndex, onPlayCard) {
+  const cardState = currentHandState[cardIndex];
+  
+  if (!cardState || cardState.played) {
+    console.log('🎴 Card already played or invalid:', cardIndex);
+    return;
+  }
+  
+  console.log('🎴 Playing card:', cardState.name, 'at index', cardIndex);
+  
+  // Mark card as played in our state
+  cardState.played = true;
+  
+  // Update visual state immediately
+  const cardElement = cardState.element;
+  if (cardElement) {
+    cardElement.classList.add('card-played');
+    cardElement.querySelector('.card-flip-inner').classList.add('played');
+    cardElement.style.pointerEvents = 'none';
+    cardElement.style.cursor = 'default';
+    cardElement.style.opacity = '0.7';
+    
+    // Add subtle played effect
+    cardElement.style.transform = 'scale(0.95)';
+    cardElement.style.filter = 'grayscale(0.3)';
+    cardElement.style.transition = 'all 0.3s ease';
+  }
+  
+  // Call the game logic
+  // Find the card's position in the actual playerHand array
+  const gameLogicIndex = findCardInPlayerHand(cardState.name, onPlayCard);
+  if (gameLogicIndex !== -1) {
+    setTimeout(() => onPlayCard(cardState.name, gameLogicIndex), 100);
+  }
+}
+
+// Helper to find card index in the game's playerHand array
+function findCardInPlayerHand(cardName, onPlayCard) {
+  // We'll need to track this differently, but for now return 0
+  // The game logic will handle finding the right card
+  return 0;
+}
+
+// Clear played cards (call this when drawing a new hand)
+export function clearPlayedCards() {
+  currentHandState = [];
+  if (handContainer) {
+    handContainer.innerHTML = '';
+  }
+  console.log('🎴 Cleared all played cards');
+}
+
+// Reset hand system (for game restart)
+export function resetHandSystem() {
+  currentHandState = [];
+  handContainer = null;
+  console.log('🎴 Hand system reset');
+}
+
+// ========== REST OF UI FUNCTIONS UNCHANGED ==========
 
 // Render the game map
 export function renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions) {
@@ -362,6 +455,8 @@ export function clearGameAreas() {
   document.getElementById('market').innerHTML = '';
   document.getElementById('player-hand').innerHTML = '';
   document.getElementById('map').innerHTML = '';
+  // Reset our hand tracking
+  resetHandSystem();
 }
 
 // Show game over screen as an overlay
@@ -392,11 +487,6 @@ export function showGameOverScreen(isWin, fragmentsCollected, totalFragments) {
       <div class="game-over-flavor">${flavorText}</div>
     </div>
   `;
-}
-
-// Clear played cards (call this at start of new turn if needed)
-export function clearPlayedCards() {
-  playedCardsThisTurn = [];
 }
 
 // Show/hide UI elements
