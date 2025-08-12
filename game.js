@@ -1,16 +1,14 @@
 import IntroTutorial from './intro.js';
 import { CARD_EFFECTS, createMarketDeck, createPlayerDeck, createCruxflareDeck } from './cards.js';
-// ... rest of your imports
 import { 
   createParticles, renderMarket, renderHand, renderMap, updateHUD, 
   updateMistOverlay, logMsg, logCruxflareMsg, cardPlayFeedback, encounterFeedback,
   toggleSectionHeaders, clearGameAreas, showGameOverScreen, 
-  showElement, hideElement, clearElement 
+  showElement, hideElement, clearElement, clearPlayedCards, resetHandSystem
 } from './ui.js';
 
 // ---- music phase helpers (game.js) ----
 function pickMusicPhase() {
-  // adjust to your real state
   const cruxLeft = (window.cruxflareDeck?.length ?? 0);
   const isDangerMode = document.body.classList.contains('danger-mode');
 
@@ -21,15 +19,12 @@ function pickMusicPhase() {
 
 function updateMusicPhase() {
   const phase = pickMusicPhase();
-  // call into music.js
   window.MusicManager?.setTrackByPhase(phase);
 }
 
-// ========== NEW DRAW NEW HAND FUNCTION ==========
-// Draw cards to player hand - NOW WITH RANDOM DRAWING
+// ========== ENHANCED DRAW HAND SYSTEM FOR IN-PLACE CARDS ==========
 function drawHand() {
   while (playerHand.length < 5 && playerDeck.length > 0) {
-    // Draw random card from deck instead of always taking from front
     const randomIndex = Math.floor(Math.random() * playerDeck.length);
     const drawnCard = playerDeck.splice(randomIndex, 1)[0];
     playerHand.push(drawnCard);
@@ -51,12 +46,8 @@ function drawHand() {
 let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, playerPos, 
     fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, 
     encounterPositions, shadowBlocked, lastPlayedCard, fragmentBoostActive,
-    // ========== NEW CRUXFLARE STATE VARIABLES ==========
     nextCardCostBonus, buyingBlocked, dreamTremorActive,
-    // ========== FINAL DARKNESS COUNTDOWN ==========
-    finalDarknessCountdown,
-    // ========== HIDE/SHOW CARD SYSTEM ==========
-    gamePhase;
+    finalDarknessCountdown, gamePhase;
 
 // Initialize game data
 function setupGameData() {
@@ -73,38 +64,33 @@ function setupGameData() {
   playerHand = [];
   marketRow = [];
   
-  // ========== UPDATED FOR 18-NODE MAP ==========
-  mapNodes = 18; // CHANGED: Was 12, now 18
+  mapNodes = 18;
   playerPos = 0;
-  // CHANGED: New fragment positions for 18-node map (7 fragments total)
   fragmentPositions = [2, 5, 7, 10, 12, 15, 17];
   fragmentsCollected = 0;
-  totalFragments = fragmentPositions.length; // CHANGED: Now 7 instead of 5
-  // CHANGED: New encounter positions for 18-node map (6 encounters total)
+  totalFragments = fragmentPositions.length;
   encounterPositions = [3, 6, 8, 11, 13, 16];
-  // ============================================
   
   shadowBlocked = false;
   lastPlayedCard = null;
   fragmentBoostActive = null;
-  // ========== INITIALIZE NEW CRUXFLARE STATE ==========
   nextCardCostBonus = 0;
   buyingBlocked = false;
   dreamTremorActive = false;
-  // ========== INITIALIZE FINAL DARKNESS COUNTDOWN ==========
-  finalDarknessCountdown = null; // null = not active, number = turns remaining
-  // ======================================================
+  finalDarknessCountdown = null;
   cruxflareDeck = createCruxflareDeck();
   coins = 3;
 }
 
-// ========== REPLACE YOUR ENTIRE initGame() FUNCTION WITH THIS ==========
 // Initialize the game
 function initGame() {
   setupGameData();
   createParticles();
   document.body.classList.remove('danger-mode');
   hideElement('restart-btn');
+  
+  // Reset the hand system for a fresh start
+  resetHandSystem();
   
   // Set up initial market
   for (let i = 0; i < 5; i++) { 
@@ -115,12 +101,8 @@ function initGame() {
   drawHand();
   updateAllUI();
   
-  // ========== SET INITIAL PHASE ==========
-  gamePhase = 'action'; // Start with hand visible, market hidden
-  showActionPhase(); // Show hand, hide market
-  
-  // Start music system
-  // musicManager.startGame();
+  gamePhase = 'action';
+  showActionPhase();
   
   // Start tutorial for new players
   const tutorial = new IntroTutorial();
@@ -131,24 +113,20 @@ function initGame() {
   }, 800);
 }
 
-// ========== ADD THESE TWO NEW FUNCTIONS RIGHT AFTER initGame() ==========
-// ========== NEW PHASE MANAGEMENT FUNCTIONS ==========
+// Phase management functions
 function showActionPhase() {
   gamePhase = 'action';
   
-  // Clear all phase classes first
   document.getElementById('market').classList.remove('phase-hidden', 'phase-visible', 'cards-enlarged');
   document.getElementById('market-header').classList.remove('phase-hidden', 'phase-visible');
   document.getElementById('player-hand').classList.remove('phase-hidden', 'phase-visible', 'cards-enlarged');
   document.getElementById('hand-header').classList.remove('phase-hidden', 'phase-visible');
   
-  // Show hand, hide market
   document.getElementById('market').classList.add('phase-hidden');
   document.getElementById('market-header').classList.add('phase-hidden');
   document.getElementById('player-hand').classList.add('phase-visible', 'cards-enlarged');
   document.getElementById('hand-header').classList.add('phase-visible');
   
-  // Update button
   const button = document.getElementById('end-turn-btn');
   button.textContent = 'End Turn';
   button.onclick = () => endTurn();
@@ -157,19 +135,16 @@ function showActionPhase() {
 function showMarketPhase() {
   gamePhase = 'market';
   
-  // Clear all phase classes first
   document.getElementById('market').classList.remove('phase-hidden', 'phase-visible', 'cards-enlarged');
   document.getElementById('market-header').classList.remove('phase-hidden', 'phase-visible');
   document.getElementById('player-hand').classList.remove('phase-hidden', 'phase-visible', 'cards-enlarged');
   document.getElementById('hand-header').classList.remove('phase-hidden', 'phase-visible');
   
-  // Show market, hide hand
   document.getElementById('player-hand').classList.add('phase-hidden');
   document.getElementById('hand-header').classList.add('phase-hidden');
   document.getElementById('market').classList.add('phase-visible', 'cards-enlarged');
   document.getElementById('market-header').classList.add('phase-visible');
   
-  // Update button
   const button = document.getElementById('end-turn-btn');
   button.textContent = 'Draw New Hand';
   button.onclick = () => drawNewHand();
@@ -182,9 +157,13 @@ function drawMarketCard() {
   }
 }
 
-// Draw cards to player hand - NOW WITH RANDOM DRAWING
-// ========== NEW DRAW NEW HAND FUNCTION ==========
+// ========== NEW DRAW NEW HAND SYSTEM ==========
 function drawNewHand() {
+  console.log('🎴 Drawing new hand - clearing played cards');
+  
+  // Clear the played cards from UI tracking
+  clearPlayedCards();
+  
   // Draw new cards to hand
   drawHand();
   
@@ -196,32 +175,26 @@ function drawNewHand() {
   logMsg('New hand drawn. Play your cards!');
 }
 
-
 // Handle buying a card from market
 function buyCard(marketIndex) {
   const cardObj = marketRow[marketIndex];
   
-  // ========== CHECK FOR BUYING RESTRICTIONS ==========
   if (buyingBlocked) {
     logMsg(`Cannot buy cards this turn due to Shadow Whisper!`);
     return;
   }
   
-  // Apply cost bonus from Mist Thickens
   const actualCost = cardObj.cost + nextCardCostBonus;
-  // ==================================================
   
   if (coins >= actualCost) {
     coins -= actualCost;
     
-    // ========== HANDLE COST BONUS MESSAGING ==========
     if (nextCardCostBonus > 0) {
       logMsg(`Bought ${cardObj.name} for ${actualCost} orbs (${cardObj.cost} + ${nextCardCostBonus} from mist)`);
-      nextCardCostBonus = 0; // Reset after use
+      nextCardCostBonus = 0;
     } else {
       logMsg(`Bought ${cardObj.name}`);
     }
-    // ==============================================
     
     discardPile.push(cardObj.name);
     marketRow.splice(marketIndex, 1);
@@ -236,10 +209,19 @@ function buyCard(marketIndex) {
   }
 }
 
-// Play a card from hand
-function playCard(card, index) {
-  const effect = CARD_EFFECTS[card];
-  let message = `Played ${card}`;
+// ========== UPDATED PLAY CARD SYSTEM FOR IN-PLACE FLIPPING ==========
+function playCard(cardName, originalIndex) {
+  console.log('🎴 Playing card:', cardName, 'original index:', originalIndex);
+  
+  // Find the card in the current playerHand
+  const handIndex = playerHand.indexOf(cardName);
+  if (handIndex === -1) {
+    console.log('🎴 Card not found in playerHand:', cardName);
+    return;
+  }
+  
+  const effect = CARD_EFFECTS[cardName];
+  let message = `Played ${cardName}`;
   
   if (effect) {
     switch (effect.type) {
@@ -264,19 +246,20 @@ function playCard(card, index) {
     }
   }
   
-  if (card !== 'Dream Echo') {
-    lastPlayedCard = card;
+  if (cardName !== 'Dream Echo') {
+    lastPlayedCard = cardName;
   }
   logMsg(message);
   
-  // Move card to discard
-  discardPile.push(card);
-  playerHand.splice(index, 1);
+  // Move card to discard and remove from hand
+  discardPile.push(cardName);
+  playerHand.splice(handIndex, 1);
   
+  // Update UI but don't re-render hand (visual state is already handled)
   updateAllUI();
 }
 
-// Handle special card effects
+// Handle special card effects (unchanged)
 function handleSpecialEffect(effect) {
   switch (effect.effect) {
     case 'lucky_find':
@@ -310,23 +293,20 @@ function handleSpecialEffect(effect) {
       
     case 'jump_to_fragment':
       if (fragmentPositions.length > 0) {
-        // Find the nearest fragment position ahead of player, or wrap to first
         const nextFragment = fragmentPositions.find(pos => pos > playerPos) || fragmentPositions[0];
-        // Use movePlayer with skipEncounters to teleport safely
         const oldPos = playerPos;
         playerPos = nextFragment;
-        movePlayer(0, true); // This will trigger fragment collection if landing on one
+        movePlayer(0, true);
         return `Leaped from node ${oldPos} to fragment at node ${nextFragment}!`;
       }
       return `No fragments remaining to leap to`;
       
- case 'replay_last':
-  if (lastPlayedCard && CARD_EFFECTS[lastPlayedCard] && lastPlayedCard !== 'Dream Echo') {
-    // Use requestAnimationFrame to ensure proper timing
-    requestAnimationFrame(() => replayLastCard());
-    return `Replaying ${lastPlayedCard}`;
-  }
-  return `No previous card to replay`;
+    case 'replay_last':
+      if (lastPlayedCard && CARD_EFFECTS[lastPlayedCard] && lastPlayedCard !== 'Dream Echo') {
+        requestAnimationFrame(() => replayLastCard());
+        return `Replaying ${lastPlayedCard}`;
+      }
+      return `No previous card to replay`;
       
     case 'move_and_coin':
       movePlayer(effect.move);
@@ -351,7 +331,7 @@ function handleSpecialEffect(effect) {
   }
 }
 
-// Replay the last played card's effect
+// Replay the last played card's effect (unchanged)
 function replayLastCard() {
   const lastEffect = CARD_EFFECTS[lastPlayedCard];
   if (lastEffect.type === 'coins') {
@@ -364,7 +344,6 @@ function replayLastCard() {
     movePlayer(lastEffect.value, true);
     logMsg(`Dream Echo: Moved ${lastEffect.value} more spaces safely`);
   } else if (lastEffect.type === 'special') {
-    // Handle special effects carefully to avoid problematic double-effects
     switch (lastEffect.effect) {
       case 'lucky_find':
         let gain = Math.ceil(Math.random() * 3);
@@ -393,16 +372,14 @@ function replayLastCard() {
   updateAllUI();
 }
 
-// Move player on the map
+// Move player on the map (unchanged)
 function movePlayer(steps, skipEncounters = false) {
   playerPos = Math.min(playerPos + steps, mapNodes - 1);
   
-  // Check for fragment collection
   if (fragmentPositions.includes(playerPos)) {
     collectFragment();
   }
   
-  // Check for encounters
   if (encounterPositions.includes(playerPos) && !skipEncounters) {
     triggerEncounter();
   }
@@ -410,7 +387,7 @@ function movePlayer(steps, skipEncounters = false) {
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
 }
 
-// Collect a fragment
+// Collect a fragment (unchanged)
 function collectFragment() {
   let fragmentValue = 1;
   
@@ -434,7 +411,7 @@ function collectFragment() {
   }
 }
 
-// Trigger random encounter
+// Trigger random encounter (unchanged)
 function triggerEncounter() {
   let roll = Math.random();
   if (roll < 0.6) {
@@ -450,33 +427,27 @@ function triggerEncounter() {
   encounterFeedback(playerPos);
 }
 
-// End turn and trigger Cruxflare
-// ========== MODIFIED END TURN FUNCTION ==========
-// ========== MODIFIED END TURN FUNCTION ==========
+// End turn and trigger Cruxflare (unchanged)
 function endTurn() {
-  // ========== RESET TURN-BASED CRUXFLARE EFFECTS ==========
-  buyingBlocked = false; // Reset Shadow Whisper effect
+  buyingBlocked = false;
   
-  // ========== HANDLE FINAL DARKNESS COUNTDOWN ==========
   if (finalDarknessCountdown !== null) {
     finalDarknessCountdown--;
     
     if (finalDarknessCountdown <= 0) {
       logMsg(`Final darkness consumes the dream! Final score: ${fragmentsCollected}/${totalFragments} fragments.`);
       endGame();
-      return; // Don't continue to market phase
+      return;
     } else {
       logMsg(`⚫ Final Darkness approaches... ${finalDarknessCountdown} turn${finalDarknessCountdown === 1 ? '' : 's'} remaining! ⚫`);
     }
   }
   
-  // ========== CRUXFLARE RESOLUTION ==========
   if (cruxflareDeck.length > 0) {
     let event = cruxflareDeck.shift();
     logCruxflareMsg(event);
     resolveCruxflare(event);
     
-    // Check for music transitions after Cruxflare
     if (finalDarknessCountdown === null) {
       let musicPhase = 'start';
       if (cruxflareDeck.length <= 2) {
@@ -489,22 +460,18 @@ function endTurn() {
   } else {
     logMsg(`The dream collapses! You collected ${fragmentsCollected}/${totalFragments} fragments.`);
     endGame();
-    return; // Don't continue to market phase
+    return;
   }
   
-  // ========== TRANSITION TO MARKET PHASE ==========
-  // Instead of immediately drawing new hand, switch to market phase
   updateAllUI();
   
-  // Wait a moment for Cruxflare message to be read, then show market
   setTimeout(() => {
     logMsg('Browse the market and buy cards with your orbs.');
     showMarketPhase();
-  }, 1500); // 1.5 second delay to read Cruxflare effect
+  }, 1500);
 }
-// ========== NEW DRAW NEW HAND FUNCTION ==========
 
-// Resolve Cruxflare events
+// Resolve Cruxflare events (unchanged - keeping existing logic)
 function resolveCruxflare(event) {
   if (shadowBlocked) {
     shadowBlocked = false;
@@ -512,7 +479,6 @@ function resolveCruxflare(event) {
     return;
   }
   
-  // ========== ORIGINAL CRUXFLARE EFFECTS ==========
   if (event.includes('dead card')) {
     discardPile.push("Shadow (dead)");
   }
@@ -534,30 +500,24 @@ function resolveCruxflare(event) {
   }
   
   if (event.includes('Final Darkness')) {
-    // ========== NEW FINAL DARKNESS COUNTDOWN SYSTEM ==========
-    finalDarknessCountdown = 2; // Give player 2 more turns
+    finalDarknessCountdown = 2;
     
-    // Force immediate danger mode regardless of cards remaining
     document.body.classList.add('danger-mode');
     const hud = document.getElementById('hud');
     hud.style.borderColor = 'rgba(255, 100, 100, 0.8)';
     hud.style.animation = 'pulse-danger 1.5s infinite';
     
-    // Switch to danger music immediately
     window.MusicManager?.setTrackByPhase('danger');
     
     logMsg(`Final Darkness descends! The dream will collapse in ${finalDarknessCountdown} turns!`);
-    // ======================================================
   }
   
-  // ========== NEW CRUXFLARE EFFECTS ==========
   if (event.includes('Mist Thickens')) {
     nextCardCostBonus = 1;
     logMsg(`The mist thickens around the market. Next card purchase costs +1 orb.`);
   }
   
   if (event.includes('Dream Tremor') && playerDeck.length > 0) {
-    // Remove a random card from deck permanently
     const randomIndex = Math.floor(Math.random() * playerDeck.length);
     const lostCard = playerDeck.splice(randomIndex, 1)[0];
     logMsg(`Dream tremor causes ${lostCard} to fade from existence permanently.`);
@@ -575,20 +535,17 @@ function resolveCruxflare(event) {
   }
   
   if (event.includes('Reality Warp') && playerHand.length > 0) {
-    // Shuffle all hand cards back into deck
     playerDeck.push(...playerHand);
     playerHand = [];
-    // Shuffle the deck
     for (let i = playerDeck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
     }
     logMsg(`Reality warps! Your hand cards dissolve back into the deck.`);
   }
-  // ============================================
 }
 
-// Remove cheapest card from market
+// Rest of the functions remain unchanged...
 function removeChepestMarketCard() {
   if (marketRow.length > 0) {
     marketRow.sort((a, b) => a.cost - b.cost);
@@ -598,16 +555,13 @@ function removeChepestMarketCard() {
   }
 }
 
-// Shrink the map by removing a node
 function shrinkMap() {
   mapNodes -= 1;
   if (playerPos >= mapNodes) playerPos = mapNodes - 1;
   
-  // Preserve fragments when nodes are destroyed
   const lostFragments = fragmentPositions.filter(pos => pos >= mapNodes);
   fragmentPositions = fragmentPositions.filter(pos => pos < mapNodes);
   
-  // Move lost fragments to random safe positions
   lostFragments.forEach(() => {
     const safePositions = [];
     for (let i = 1; i < mapNodes; i++) {
@@ -625,7 +579,6 @@ function shrinkMap() {
   encounterPositions = encounterPositions.filter(pos => pos < mapNodes);
 }
 
-// Discard a random card from hand
 function discardRandomCard() {
   let rand = Math.floor(Math.random() * playerHand.length);
   let discarded = playerHand.splice(rand, 1)[0];
@@ -633,10 +586,8 @@ function discardRandomCard() {
   logMsg(`Lost ${discarded} from hand.`);
 }
 
-// End the game
 function endGame() {
   toggleSectionHeaders(false);
-  // clearGameAreas(); // ← Remove this line to keep cards visible
   hideElement('end-turn-btn');
   
   const isWin = fragmentsCollected >= totalFragments;
@@ -644,40 +595,27 @@ function endGame() {
   showElement('restart-btn');
 }
 
-// Restart the game
 function restartGame() {
   toggleSectionHeaders(true);
-  clearGameAreas(); // ← Move the clear here instead
+  clearGameAreas();
   clearElement('game-over-container');
   showElement('end-turn-btn');
-  // ========== RESET MUSIC TO START PHASE ==========
   window.MusicManager?.setTrackByPhase('start');
-  // ==============================================
   initGame();
 }
 
-// Update all UI elements
 function updateAllUI() {
   updateHUD(coins, fragmentsCollected, cruxflareDeck, finalDarknessCountdown);
   updateMistOverlay(cruxflareDeck);
   renderMarket(marketRow, coins, buyCard);
   renderHand(playerHand, playCard);
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
-  
-  // ========== MUSIC ONLY CHANGES AT THRESHOLDS ==========
-  // Music system handles its own phase tracking - no need to call every turn
-  // Only call when we actually need to check for transitions
-  // This prevents constant restarts and overlapping audio instances
-  // =====================================================
 }
-// Make functions globally available for HTML onclick
+
+// Make functions globally available
 window.endTurn = endTurn;
 window.restartGame = restartGame;
+window.drawNewHand = drawNewHand;
 
 // Initialize game when page loads
 document.addEventListener('DOMContentLoaded', initGame);
-
-// Make functions globally available for HTML onclick
-window.endTurn = endTurn;
-window.drawNewHand = drawNewHand;  // ADD THIS LINE
-window.restartGame = restartGame;
