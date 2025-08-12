@@ -451,18 +451,18 @@ body.danger-mode #hud::after {
 #log {
   background: rgba(0, 0, 0, 0.6);
   padding: 20px 30px;
-  height: 80px;               /* Fixed height - never changes */
-  margin: 15px auto 25px auto;
+  height: 80px;
+  margin: 15px auto 25px auto; /* Same margins as HUD */
   border-radius: 12px;
   backdrop-filter: blur(15px);
   border: 2px solid rgba(222, 184, 135, 0.4);
   text-align: center;
   font-size: 1.5rem;
-  max-width: 98%;             /* Much wider to fit more text */
+  max-width: calc(100% - 30px); /* Match HUD width minus margins */
   font-weight: 500;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   
-  /* Always single line - no exceptions */
+  /* Keep single line behavior */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
