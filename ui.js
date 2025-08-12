@@ -1,8 +1,7 @@
 import { generateTooltip } from './cards.js';
 
-// Simple hand state tracking - much simpler approach
+// Simple hand state tracking
 let handContainer = null;
-let currentHandCards = []; // Just track what's currently displayed
 
 // Create floating particles effect
 export function createParticles() {
@@ -57,28 +56,17 @@ export function renderMarket(marketRow, coins, onBuyCard) {
   });
 }
 
-// ========== ENHANCED HAND SYSTEM WITH CARD DRAWING SUPPORT ==========
-// Main hand rendering function - PRESERVES PLAYED STATES
-export function renderHand(playerHand, onPlayCard, preservePlayedStates = false) {
+// ========== SIMPLE HAND SYSTEM ==========
+// Main hand rendering function - SIMPLE AND RELIABLE
+export function renderHand(playerHand, onPlayCard) {
   if (!handContainer) {
     handContainer = document.getElementById('player-hand');
   }
   
-  console.log('🎴 Rendering hand with', playerHand.length, 'cards, preserve states:', preservePlayedStates);
+  console.log('🎴 Rendering hand with', playerHand.length, 'cards');
   
-  // Store current played states if preserving
-  let playedStates = [];
-  if (preservePlayedStates) {
-    playedStates = Array.from(handContainer.children).map(el => ({
-      name: el.getAttribute('data-card-name'),
-      played: el.classList.contains('card-played')
-    }));
-    console.log('🎴 Preserving played states:', playedStates);
-  }
-  
-  // Rebuild hand completely
+  // Always rebuild hand completely - simple and reliable
   handContainer.innerHTML = '';
-  currentHandCards = [];
   
   // Create card elements
   playerHand.forEach((card, index) => {
@@ -98,34 +86,21 @@ export function renderHand(playerHand, onPlayCard, preservePlayedStates = false)
       </div>
     `;
     
-    // Check if this card was previously played
-    const wasPlayed = preservePlayedStates && playedStates.some(state => state.name === card && state.played);
-    
-    if (wasPlayed) {
-      // Restore played state
-      el.classList.add('card-played');
-      el.querySelector('.card-flip-inner').classList.add('played');
-      el.style.pointerEvents = 'none';
-      el.style.cursor = 'default';
-      console.log('🎴 Restored played state for:', card);
-    } else {
-      // Add click handler for unplayed cards
-      el.addEventListener('click', () => {
-        if (!el.classList.contains('card-played')) {
-          // Mark as played visually immediately
-          el.classList.add('card-played');
-          el.querySelector('.card-flip-inner').classList.add('played');
-          el.style.pointerEvents = 'none';
-          el.style.cursor = 'default';
-          
-          // Call game logic
-          setTimeout(() => onPlayCard(card, index), 100);
-        }
-      });
-    }
+    // Add click handler for playing cards
+    el.addEventListener('click', () => {
+      if (!el.classList.contains('card-played')) {
+        // Mark as played visually immediately
+        el.classList.add('card-played');
+        el.querySelector('.card-flip-inner').classList.add('played');
+        el.style.pointerEvents = 'none';
+        el.style.cursor = 'default';
+        
+        // Call game logic
+        setTimeout(() => onPlayCard(card, index), 100);
+      }
+    });
     
     handContainer.appendChild(el);
-    currentHandCards.push({ element: el, name: card, played: wasPlayed });
   });
   
   console.log('🎴 Hand rendered successfully');
@@ -139,7 +114,6 @@ export function clearPlayedCards() {
 
 // Reset hand system (for game restart)
 export function resetHandSystem() {
-  currentHandCards = [];
   handContainer = null;
   console.log('🎴 Hand system reset');
 }
