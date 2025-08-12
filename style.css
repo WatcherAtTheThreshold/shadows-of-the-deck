@@ -1394,241 +1394,30 @@ h2 {
   transition: opacity 0.5s ease;
 }
 
-/* ========== REPLACE THE EXISTING CARD SECTIONS WITH THESE ENHANCED VERSIONS ========== */
+/* ========== HIDE/SHOW CARD SYSTEM STYLES ========== */
 
-/* Enhanced Card flip container */
-.card-flip {
-  width: 120px;
-  height: 170px;
-  margin: 8px;
-  perspective: 1000px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.card-flip-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease;
-  transform-style: preserve-3d;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* Smooth flip to back when played */
-.card-flip-inner.played {
-  transform: rotateY(180deg);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-}
-
-.card-front, .card-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1em; /* Increased from 0.95em */
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-  transition: all 0.3s ease;
-}
-
-/* Enhanced front face - clean, no background image */
-.card-front {
-  background: 
-    linear-gradient(135deg, rgba(20, 20, 40, 0.95) 0%, rgba(10, 10, 30, 0.9) 100%),
-    radial-gradient(circle at 30% 30%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
-  border: 2px solid rgba(138, 43, 226, 0.4);
-  backdrop-filter: blur(10px);
-  color: #f2f2f2;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Sci-fi corner accents on card fronts */
-.card-front::before,
-.card-front::after {
-  content: '';
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border: 1px solid rgba(138, 43, 226, 0.6);
+/* Phase visibility controls */
+.phase-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.5s ease;
   pointer-events: none;
-  transition: all 0.3s ease;
 }
 
-.card-front::before {
-  top: 4px;
-  left: 4px;
-  border-right: none;
-  border-bottom: none;
-  border-top-left-radius: 4px;
+.phase-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: all 0.5s ease;
+  pointer-events: auto;
 }
 
-.card-front::after {
-  bottom: 4px;
-  right: 4px;
-  border-left: none;
-  border-top: none;
-  border-bottom-right-radius: 4px;
-}
-
-/* Enhanced hover effect for playable cards */
-.card-flip:not(.card-played) .card-front:hover {
-  border-color: rgba(222, 184, 135, 0.8);
-  background: 
-    linear-gradient(135deg, rgba(30, 30, 50, 0.98) 0%, rgba(20, 20, 40, 0.95) 100%),
-    radial-gradient(circle at 30% 30%, rgba(222, 184, 135, 0.1) 0%, transparent 50%);
-  box-shadow: 0 5px 15px rgba(222, 184, 135, 0.3);
-}
-
-.card-flip:not(.card-played) .card-front:hover::before,
-.card-flip:not(.card-played) .card-front:hover::after {
-  border-color: rgba(222, 184, 135, 0.8);
-}
-
-.card-flip:not(.card-played):hover {
-  transform: translateY(-3px) scale(1.02);
-}
-
-/* Back face - card-back.webp layered over brown SVG pattern */
-.card-back {
-  background: 
-    linear-gradient(135deg, rgba(40, 20, 60, 0.95) 0%, rgba(30, 10, 50, 0.9) 100%),
-    radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.2) 0%, transparent 60%),
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140"><defs><pattern id="backPattern" patternUnits="userSpaceOnUse" width="20" height="20"><circle cx="10" cy="10" r="1" fill="%23654321" opacity="0.3"/><path d="M5 5 L15 15 M15 5 L5 15" stroke="%234a2820" stroke-width="0.5" opacity="0.2"/></pattern></defs><rect width="100" height="140" fill="%232a1810"/><rect width="100" height="140" fill="url(%23backPattern)"/></svg>') center/cover;
-  border: 2px solid rgba(138, 43, 226, 0.6);
-  backdrop-filter: blur(15px);
-  transform: rotateY(180deg);
-  color: rgba(222, 184, 135, 0.9);
-  position: relative;
-}
-
-/* Mystical center emblem on card backs */
-.card-back::before {
-  content: '✧';
-  position: absolute;
-  font-size: 2em;
-  color: rgba(138, 43, 226, 0.7);
-  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: gentle-glow 3s ease-in-out infinite alternate;
-}
-
-@keyframes gentle-glow {
-  0% { 
-    text-shadow: 0 0 10px rgba(138, 43, 226, 0.5); 
-    transform: translate(-50%, -50%) scale(1);
-  }
-  100% { 
-    text-shadow: 0 0 15px rgba(138, 43, 226, 0.8); 
-    transform: translate(-50%, -50%) scale(1.05);
-  }
-}
-
-.cost {
-  font-size: 0.9em; /* Increased from 0.8em */
-  color: rgba(222, 184, 135, 0.9);
-  font-weight: bold;
-  margin-top: 5px;
-  padding: 2px 6px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-  border: 1px solid rgba(222, 184, 135, 0.3);
-  text-shadow: 0 0 4px rgba(222, 184, 135, 0.5);
-  transition: all 0.3s ease;
-}
-
-/* ========== NEW: IN-PLACE CARD PLAYING SYSTEM ========== */
-
-/* Visual state for played cards */
-.card-played {
-  opacity: 0.7 !important;
-  transform: scale(0.95) !important;
-  filter: grayscale(0.3) brightness(0.8) !important;
-  cursor: default !important;
-  pointer-events: none !important;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
-}
-
-/* Subtle pulsing effect for played cards */
-.card-played .card-flip-inner {
-  animation: played-card-pulse 4s ease-in-out infinite;
-}
-
-@keyframes played-card-pulse {
-  0%, 100% { 
-    opacity: 0.7; 
-  }
-  50% { 
-    opacity: 0.5; 
-  }
-}
-
-/* Card selection glow effect */
-.card-flip:not(.card-played):active .card-front {
-  border-color: rgba(222, 184, 135, 1) !important;
-  box-shadow: 
-    0 0 20px rgba(222, 184, 135, 0.6),
-    inset 0 0 10px rgba(222, 184, 135, 0.2) !important;
-  transform: scale(0.98) !important;
-}
-
-/* ========== MARKET CARD ANIMATIONS (KEEP EXISTING) ========== */
-
-/* Both market and hand cards flip and stay visible */
-.card-flip.market-bought .card-flip-inner,
-.card-flip.hand-played .card-flip-inner {
-  animation: flipAndStay 0.5s ease-in-out forwards;
-}
-
-@keyframes flipAndStay {
-  0% { transform: rotateY(0deg); }
-  100% { transform: rotateY(180deg); }
-}
-
-/* Market bought animation */
-.card-flip.market-bought .card-flip-inner {
-  animation: marketBoughtFlip 0.5s ease-in-out forwards;
-}
-
-@keyframes marketBoughtFlip {
-  0% { transform: rotateY(0deg) scale(1); }
-  50% { transform: rotateY(90deg) scale(1.05); }
-  100% { transform: rotateY(180deg) scale(1); }
-}
-
-/* ========== PREMIUM VISUAL ENHANCEMENTS ========== */
-
-/* Subtle floating animation for unplayed cards */
-.card-flip:not(.card-played) {
-  animation: subtle-float 6s ease-in-out infinite;
-  animation-delay: calc(var(--card-index, 0) * 0.2s);
-}
-
-@keyframes subtle-float {
-  0%, 100% { 
-    transform: translateY(0px); 
-  }
-  50% { 
-    transform: translateY(-2px); 
-  }
-}
-
-/* Enhanced phase system support - KEEP EXISTING ENLARGED STYLES */
+/* Enhanced card sizing for desktop */
 .cards-enlarged .card-flip {
   width: 156px;              /* 30% larger than 120px */
   height: 221px;             /* 30% larger than 170px */
-  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  margin: 10px;
+  transition: all 0.5s ease;
 }
 
 .cards-enlarged .card-flip .card-front,
@@ -1638,31 +1427,24 @@ h2 {
 
 .cards-enlarged .card-flip .cost {
   font-size: 1.2em;          /* 30% larger than 0.9em */
-  padding: 3px 8px;
 }
 
-/* ========== KEEP ALL EXISTING RESPONSIVE STYLES ========== */
+/* Market and Hand container adjustments for larger cards */
+.cards-enlarged {
+  min-height: 240px;         /* Accommodate larger cards */
+  padding: 10px 0;          /* Reduced from 15px */
+  margin: 15px 0;           /* Reduced spacing */
+  gap: 12px;                 /* More spacing between larger cards */
+}
+
+/* Smooth transitions for container size changes */
+
+
+/* Mobile: Keep current card sizes regardless of phase */
 @media (max-width: 768px) {
-  .card-flip { 
-    width: 85px; 
-    height: 120px; 
-    font-size: 0.9em; 
-    margin: 6px;
-  }
-  
-  .card-front, .card-back {
-    font-size: 0.9em;
-  }
-  
-  .cost {
-    font-size: 0.8em;
-    padding: 1px 4px;
-  }
-  
   .cards-enlarged .card-flip {
     width: 85px;             /* Keep mobile size */
     height: 120px;           /* Keep mobile size */
-    margin: 6px;
   }
   
   .cards-enlarged .card-flip .card-front,
@@ -1672,8 +1454,135 @@ h2 {
   
   .cards-enlarged .card-flip .cost {
     font-size: 0.8em;        /* Keep mobile size */
-    padding: 1px 4px;
+  }
+  
+  .cards-enlarged {
+    min-height: 160px;       /* Mobile container height */
+    gap: 8px;                /* Mobile spacing */
   }
 }
 
-/* ========== END OF CARD ENHANCEMENTS ========== */
+/* Enhanced button styling for phase transitions */
+
+
+/* Visual feedback during phase transitions */
+.phase-transition {
+  position: relative;
+}
+
+.phase-transition::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.1), transparent);
+  animation: phase-sweep 0.5s ease-out;
+  pointer-events: none;
+}
+
+@keyframes phase-sweep {
+  0% { 
+    transform: translateX(-100%); 
+    opacity: 0; 
+  }
+  50% { 
+    opacity: 1; 
+  }
+  100% { 
+    transform: translateX(100%); 
+    opacity: 0; 
+  }
+}
+
+/* Enhanced spacing for enlarged cards */
+.cards-enlarged {
+  padding: 15px 0;          /* More vertical padding */
+  justify-content: center;   /* Keep cards centered */
+  align-items: flex-start;   /* Align to top */
+}
+
+/* Ensure game sections don't interfere with transitions */
+.game-section {
+  position: relative;
+  overflow: visible;         /* Allow transition effects */
+}
+
+/* ========== HIDE/SHOW CARD SYSTEM STYLES ========== */
+
+/* Phase visibility controls */
+.phase-hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.phase-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: all 0.5s ease;
+  pointer-events: auto;
+}
+
+/* Enhanced card sizing for desktop */
+.cards-enlarged .card-flip {
+  width: 156px;              /* 30% larger than 120px */
+  height: 221px;             /* 30% larger than 170px */
+  transition: all 0.5s ease;
+}
+
+.cards-enlarged .card-flip .card-front,
+.cards-enlarged .card-flip .card-back {
+  font-size: 1.4em;          /* 30% larger than 1.1em */
+}
+
+.cards-enlarged .card-flip .cost {
+  font-size: 1.2em;          /* 30% larger than 0.9em */
+}
+
+/* Market and Hand container adjustments for larger cards */
+.cards-enlarged {
+  min-height: 240px;         /* Accommodate larger cards */
+  padding: 15px 0;          /* More vertical padding */
+  margin: 15px 0;           /* Reduced spacing */
+  gap: 12px;                 /* More spacing between larger cards */
+  justify-content: center;   /* Keep cards centered */
+  align-items: flex-start;   /* Align to top */
+}
+
+/* Mobile: Keep current card sizes regardless of phase */
+@media (max-width: 768px) {
+  .cards-enlarged .card-flip {
+    width: 85px;             /* Keep mobile size */
+    height: 120px;           /* Keep mobile size */
+  }
+  
+  .cards-enlarged .card-flip .card-front,
+  .cards-enlarged .card-flip .card-back {
+    font-size: 0.9em;        /* Keep mobile size */
+  }
+  
+  .cards-enlarged .card-flip .cost {
+    font-size: 0.8em;        /* Keep mobile size */
+  }
+  
+  .cards-enlarged {
+    min-height: 160px;       /* Mobile container height */
+    gap: 8px;                /* Mobile spacing */
+  }
+}
+
+/* ========== FORCE HIDE/SHOW BEHAVIOR ========== */
+#market.phase-hidden,
+#player-hand.phase-hidden {
+  display: none !important;
+}
+
+#market.phase-visible,
+#player-hand.phase-visible {
+  display: flex !important;
+}
