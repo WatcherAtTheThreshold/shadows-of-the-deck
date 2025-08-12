@@ -255,8 +255,11 @@ function playCard(cardName, originalIndex) {
   discardPile.push(cardName);
   playerHand.splice(handIndex, 1);
   
-  // Update UI but don't re-render hand (visual state is already handled)
-  updateAllUI();
+  // Update only specific UI elements, NOT the hand (visual state already handled)
+  updateHUD(coins, fragmentsCollected, cruxflareDeck, finalDarknessCountdown);
+  updateMistOverlay(cruxflareDeck);
+  renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
+  // Note: renderHand() is NOT called here - visual state handled by in-place system
 }
 
 // Handle special card effects (unchanged)
