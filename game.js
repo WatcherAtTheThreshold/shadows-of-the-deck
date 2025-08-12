@@ -1,5 +1,5 @@
 import IntroTutorial from './intro.js';
-import { CARD_EFFECTS, createMarketDeck, createPlayerDeck, createCruxflareDeck } from './cards.js';
+import { CARD_EFFECTS, createMarketDeck, createPlayerDeck, createCruxflareDeck, generateTooltip } from './cards.js';
 import { 
   createParticles, renderMarket, renderHand, renderMap, updateHUD, 
   updateMistOverlay, logMsg, logCruxflareMsg, cardPlayFeedback, encounterFeedback,
@@ -206,7 +206,57 @@ function buyCard(marketIndex) {
   }
 }
 
-// ========== ENHANCED PLAY CARD SYSTEM WITH CARD DRAWING SUPPORT ==========
+// Add a single new card to the existing hand display
+function addNewCardToHand(cardName) {
+  const handContainer = document.getElementById('player-hand');
+  const currentCardCount = handContainer.children.length;
+  
+  const el = document.createElement('div');
+  el.className = 'card-flip tooltip';
+  el.setAttribute('data-tooltip', generateTooltip(cardName));
+  el.setAttribute('data-card-index', currentCardCount);
+  el.setAttribute('data-card-name', cardName);
+  
+  el.innerHTML = `
+    <div class="card-flip-inner">
+      <div class="card-front">
+        <div>${cardName}</div>
+      </div>
+      <div class="card-back">
+      </div>
+    </div>
+  `;
+  
+  // Add click handler for the new card
+  el.addEventListener('click', () => {
+    if (!el.classList.contains('card-played')) {
+      // Mark as played visually immediately
+      el.classList.add('card-played');
+      el.querySelector('.card-flip-inner').classList.add('played');
+      el.style.pointerEvents = 'none';
+      el.style.cursor = 'default';
+      
+      // Call game logic
+      setTimeout(() => playCard(cardName, currentCardCount), 100);
+    }
+  });
+  
+  // Add a subtle "new card" animation
+  el.style.opacity = '0';
+  el.style.transform = 'scale(0.8)';
+  handContainer.appendChild(el);
+  
+  // Animate in
+  setTimeout(() => {
+    el.style.transition = 'all 0.3s ease';
+    el.style.opacity = '1';
+    el.style.transform = 'scale(1)';
+  }, 50);
+  
+  console.log('🎴 Added new card to hand:', cardName);
+}
+
+// ========== SIMPLIFIED PLAY CARD SYSTEM WITH CARD DRAWING ==========
 function playCard(cardName, originalIndex) {
   console.log('🎴 Playing card:', cardName);
   
@@ -264,10 +314,10 @@ function playCard(cardName, originalIndex) {
   updateMistOverlay(cruxflareDeck);
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
   
-  // If a card was drawn, re-render hand but preserve played states
+  // If a card was drawn, just add the new card element instead of rebuilding everything
   if (cardWasDrawn) {
-    console.log('🎴 Card was drawn, updating hand display with preserved states');
-    renderHand(playerHand, playCard, true); // true = preserve played states
+    console.log('🎴 Card was drawn, adding new card element');
+    addNewCardToHand(playerHand[playerHand.length - 1]); // Add the last card (newly drawn)
   }
   // Note: If no card was drawn, visual state is handled by in-place system
 }
@@ -617,12 +667,12 @@ function restartGame() {
   initGame();
 }
 
-// ========== FIXED UPDATE ALL UI ==========
+// ========== SIMPLIFIED UPDATE ALL UI ==========
 function updateAllUI() {
   updateHUD(coins, fragmentsCollected, cruxflareDeck, finalDarknessCountdown);
   updateMistOverlay(cruxflareDeck);
   renderMarket(marketRow, coins, buyCard);
-  renderHand(playerHand, playCard, false); // false = don't preserve states (fresh render)
+  renderHand(playerHand, playCard); // Simple render, no state preservation needed
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
 }
 
