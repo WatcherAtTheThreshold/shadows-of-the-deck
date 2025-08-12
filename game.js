@@ -206,13 +206,13 @@ function buyCard(marketIndex) {
   }
 }
 
-// Add a single new card to the existing hand display
+// Add a single new card to the existing hand display WITH ENTRANCE ANIMATION
 function addNewCardToHand(cardName) {
   const handContainer = document.getElementById('player-hand');
   const currentCardCount = handContainer.children.length;
   
   const el = document.createElement('div');
-  el.className = 'card-flip tooltip';
+  el.className = 'card-flip tooltip new-card'; // Added 'new-card' class for animation
   el.setAttribute('data-tooltip', generateTooltip(cardName));
   el.setAttribute('data-card-index', currentCardCount);
   el.setAttribute('data-card-name', cardName);
@@ -241,19 +241,14 @@ function addNewCardToHand(cardName) {
     }
   });
   
-  // Add a subtle "new card" animation
-  el.style.opacity = '0';
-  el.style.transform = 'scale(0.8)';
   handContainer.appendChild(el);
   
-  // Animate in
+  // Remove the new-card class after animation completes
   setTimeout(() => {
-    el.style.transition = 'all 0.3s ease';
-    el.style.opacity = '1';
-    el.style.transform = 'scale(1)';
-  }, 50);
+    el.classList.remove('new-card');
+  }, 600);
   
-  console.log('🎴 Added new card to hand:', cardName);
+  console.log('🎴✨ Added new card with entrance animation:', cardName);
 }
 
 // ========== SIMPLIFIED PLAY CARD SYSTEM WITH CARD DRAWING ==========
