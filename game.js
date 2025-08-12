@@ -206,7 +206,7 @@ function buyCard(marketIndex) {
   }
 }
 
-// ========== SIMPLIFIED PLAY CARD SYSTEM ==========
+// ========== ENHANCED PLAY CARD SYSTEM WITH CARD DRAWING SUPPORT ==========
 function playCard(cardName, originalIndex) {
   console.log('🎴 Playing card:', cardName);
   
@@ -216,6 +216,9 @@ function playCard(cardName, originalIndex) {
     console.log('🎴 Card not found in playerHand:', cardName);
     return;
   }
+  
+  // Track hand size before playing the card
+  const handSizeBefore = playerHand.length;
   
   const effect = CARD_EFFECTS[cardName];
   let message = `Played ${cardName}`;
@@ -252,11 +255,21 @@ function playCard(cardName, originalIndex) {
   discardPile.push(cardName);
   playerHand.splice(handIndex, 1);
   
-  // Update only specific UI elements, NOT the hand (visual state already handled)
+  // Check if hand size increased (card was drawn)
+  const handSizeAfter = playerHand.length;
+  const cardWasDrawn = handSizeAfter > handSizeBefore - 1; // -1 because we removed the played card
+  
+  // Update UI elements
   updateHUD(coins, fragmentsCollected, cruxflareDeck, finalDarknessCountdown);
   updateMistOverlay(cruxflareDeck);
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
-  // Note: renderHand() is NOT called here - visual state handled by in-place system
+  
+  // If a card was drawn, re-render hand but preserve played states
+  if (cardWasDrawn) {
+    console.log('🎴 Card was drawn, updating hand display with preserved states');
+    renderHand(playerHand, playCard, true); // true = preserve played states
+  }
+  // Note: If no card was drawn, visual state is handled by in-place system
 }
 
 // Handle special card effects (unchanged)
@@ -609,7 +622,7 @@ function updateAllUI() {
   updateHUD(coins, fragmentsCollected, cruxflareDeck, finalDarknessCountdown);
   updateMistOverlay(cruxflareDeck);
   renderMarket(marketRow, coins, buyCard);
-  renderHand(playerHand, playCard); // Always render hand when called
+  renderHand(playerHand, playCard, false); // false = don't preserve states (fresh render)
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
 }
 
