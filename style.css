@@ -1312,17 +1312,28 @@ h2 {
 
 #log {
   background: rgba(0, 0, 0, 0.6);
-  padding: 20px;
-  min-height: 80px;
-  margin: 15px auto 25px auto;  /* Reduced top margin, added bottom margin */
+  padding: 20px 30px;
+  height: 80px;
+  margin: 15px; /* Same as HUD margins */
   border-radius: 12px;
   backdrop-filter: blur(15px);
   border: 2px solid rgba(222, 184, 135, 0.4);
   text-align: center;
-  font-size: 1.5rem;  /* Increased from 1.3rem to 1.5rem */
-  max-width: 700px;   /* Slightly wider */
+  font-size: 1.5rem;
+  width: calc(100% - 30px); /* Force width to match HUD */
+  max-width: none; /* Remove any max-width constraints */
   font-weight: 500;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);  /* Add subtle shadow */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  
+  /* Keep single line behavior */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
 }
 
 /* ========== ENHANCED CRUXFLARE LOG STYLING ========== */
