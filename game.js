@@ -532,6 +532,7 @@ function endTurn() {
 
 // Resolve Cruxflare events (unchanged - keeping existing logic)
 function resolveCruxflare(event) {
+    showCruxflareOverlay(event);
   if (shadowBlocked) {
     shadowBlocked = false;
     logMsg(`Shadow Blocker activated! Cruxflare effect blocked.`);
