@@ -155,6 +155,11 @@ h2 {
   transition: all var(--hud-hover-speed) ease;
 }
 
+.resource-icon.cruxflare-icon { 
+  color: #8A2BE2; 
+  font-size: 1.2rem; /* Smaller than the default 1.4rem */
+}
+
 .resource-icon.orb-icon { color: #FFD700; }
 .resource-icon.fragment-icon { color: #00FFFF; }
 .resource-icon.cruxflare-icon { color: #8A2BE2; }
