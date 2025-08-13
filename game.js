@@ -4,7 +4,8 @@ import {
   createParticles, renderMarket, renderHand, renderMap, updateHUD, 
   updateMistOverlay, logMsg, logCruxflareMsg, cardPlayFeedback, encounterFeedback,
   toggleSectionHeaders, clearGameAreas, showGameOverScreen, 
-  showElement, hideElement, clearElement, clearPlayedCards, resetHandSystem
+  showElement, hideElement, clearElement, clearPlayedCards, resetHandSystem,
+  showCruxflareOverlay  // ADD THIS LINE
 } from './ui.js';
 
 // ---- music phase helpers (game.js) ----
