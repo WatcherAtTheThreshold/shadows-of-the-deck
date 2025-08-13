@@ -164,6 +164,15 @@ h2 {
 .resource-icon.fragment-icon { color: #00FFFF; }
 .resource-icon.cruxflare-icon { color: #8A2BE2; }
 
+.resource-item.cruxflare-display {
+  min-height: 40px; /* Match other containers */
+  max-height: 40px;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .resource-value {
   font-size: 1.2rem;
   font-weight: 700;
