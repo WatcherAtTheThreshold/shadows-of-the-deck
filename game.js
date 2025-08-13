@@ -390,7 +390,7 @@ function handleSpecialEffect(effect) {
   }
 }
 
-// Replay the last played card's effect (unchanged)
+// Replay the last played card's effect
 function replayLastCard() {
   const lastEffect = CARD_EFFECTS[lastPlayedCard];
   if (lastEffect.type === 'coins') {
@@ -415,22 +415,21 @@ function replayLastCard() {
         logMsg(`Dream Echo: Moved ${lastEffect.move} more, gained ${lastEffect.coins} more orb`);
         break;
       case 'coin_and_draw':
-  coins += lastEffect.coins;
-  if (playerDeck.length > 0) {
-    const drawnCard = playerDeck.shift();
-    playerHand.push(drawnCard);
-    // Let the calling playCard function handle the visual update
-    logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, drew 1 more card`);
-  } else {
-    logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, deck empty`);
-  }
-  break;
+        coins += lastEffect.coins;
+        if (playerDeck.length > 0) {
+          const drawnCard = playerDeck.shift();
+          playerHand.push(drawnCard);
+          // Add the visual card element directly
+          addNewCardToHand(drawnCard);
+          logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, drew 1 more card`);
+        } else {
+          logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, deck empty`);
+        }
+        break;
       default:
         logMsg(`Dream Echo: Cannot replay ${lastPlayedCard} (special effect not repeatable)`);
     }
   }
-  
-
 }
 
 // Move player on the map (unchanged)
