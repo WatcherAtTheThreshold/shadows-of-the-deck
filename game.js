@@ -415,14 +415,16 @@ function replayLastCard() {
         logMsg(`Dream Echo: Moved ${lastEffect.move} more, gained ${lastEffect.coins} more orb`);
         break;
       case 'coin_and_draw':
-        coins += lastEffect.coins;
-        if (playerDeck.length > 0) {
-          playerHand.push(playerDeck.shift());
-          logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, drew 1 more card`);
-        } else {
-          logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, deck empty`);
-        }
-        break;
+  coins += lastEffect.coins;
+  if (playerDeck.length > 0) {
+    const drawnCard = playerDeck.shift();
+    playerHand.push(drawnCard);
+    // Let the calling playCard function handle the visual update
+    logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, drew 1 more card`);
+  } else {
+    logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, deck empty`);
+  }
+  break;
       default:
         logMsg(`Dream Echo: Cannot replay ${lastPlayedCard} (special effect not repeatable)`);
     }
