@@ -161,3 +161,48 @@ function shuffleArray(array) {
   }
   return shuffled;
 }
+
+// ========== CRUXFLARE EVENT MAPPING ==========
+
+// Map Cruxflare event names to icons from iconCardList.md
+const CRUXFLARE_ICONS = {
+  'Shadow Surge': '☠️',
+  'Corruption Pulse': '💥', 
+  'Dream Collapse': '🌪️',
+  'Sudden Eclipse': '🗑️',
+  'Void Whisper': '💸',
+  'Time Fracture': '⏳',
+  'Memory Drain': '🔄',
+  'Reality Shift': '🌀',
+  'Final Darkness': '⚫',
+  'Mist Thickens': '🌫️',
+  'Dream Tremor': '💔',
+  'Shadow Whisper': '🚫',
+  'Void Echo': '⬅️',
+  'Reality Warp': '🔀'
+};
+
+// Extract event name and description from Cruxflare event string
+export function parseCruxflareEvent(eventString) {
+  // Event format: "Shadow Surge: Add a dead card to discard."
+  const parts = eventString.split(':');
+  
+  if (parts.length >= 2) {
+    const eventName = parts[0].trim();
+    const eventDescription = parts[1].trim();
+    const icon = CRUXFLARE_ICONS[eventName] || '⚡'; // Default lightning bolt
+    
+    return {
+      name: eventName,
+      description: eventDescription,
+      icon: icon
+    };
+  }
+  
+  // Fallback for unexpected formats
+  return {
+    name: 'Unknown Event',
+    description: eventString,
+    icon: '⚡'
+  };
+}
