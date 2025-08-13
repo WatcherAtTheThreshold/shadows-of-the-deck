@@ -428,7 +428,7 @@ function replayLastCard() {
     }
   }
   
-  updateAllUI();
+
 }
 
 // Move player on the map (unchanged)
