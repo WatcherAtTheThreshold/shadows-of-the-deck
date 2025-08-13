@@ -118,11 +118,10 @@ export function createPlayerDeck() {
   ];
 }
 
-// ========== EXPANDED CRUXFLARE DECK FOR 18-NODE MAP ==========
-// Cruxflare events deck - NOW WITH 19 CARDS (was 14)
+// Cruxflare events deck - Final Darkness relegated to end game
 export function createCruxflareDeck() {
-  const events = [
-    // Original 14 cards
+  // All events EXCEPT Final Darkness
+  const regularEvents = [
     "Shadow Surge: Add a dead card to discard.",
     "Corruption Pulse: Remove cheapest market card.",
     "Dream Collapse: Lose a node on the map.",
@@ -136,30 +135,23 @@ export function createCruxflareDeck() {
     "Memory Drain: Shuffle a card from hand into deck.",
     "Reality Shift: Rearrange fragment positions.",
     "Shadow Surge: Add a dead card to discard.",
-    "Final Darkness: Game ends in 2 turns.",
-    
-    // ========== 5 NEW CRUXFLARE EVENTS ==========
+    // New expansion events
     "Mist Thickens: Next card costs +1 orb.",
     "Dream Tremor: Lose 1 card from deck permanently.",
     "Shadow Whisper: Cannot buy cards this turn.",
     "Void Echo: Move back 1 space if possible.",
     "Reality Warp: Shuffle hand into deck."
-    // ============================================
   ];
   
-  // ========== SHUFFLE THE CRUXFLARE DECK FOR RANDOMNESS ==========
-  return shuffleArray(events);
-  // =============================================================
-}
-
-// Utility function to shuffle arrays
-function shuffleArray(array) {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
+  // Shuffle the regular events (18 cards)
+  const shuffledRegular = shuffleArray(regularEvents);
+  
+  // Add Final Darkness to one of the last 3 positions randomly
+  const finalDarknessPosition = Math.floor(Math.random() * 3); // 0, 1, or 2
+  const finalDeck = [...shuffledRegular];
+  finalDeck.splice(16 + finalDarknessPosition, 0, "Final Darkness: Game ends in 2 turns.");
+  
+  return finalDeck;
 }
 
 // ========== CRUXFLARE EVENT MAPPING ==========
