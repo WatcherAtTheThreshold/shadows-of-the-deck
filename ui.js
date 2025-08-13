@@ -369,6 +369,63 @@ export function clearGameAreas() {
   resetHandSystem();
 }
 
+// ========== CRUXFLARE OVERLAY SYSTEM ==========
+
+// Show Cruxflare event as a card overlay
+export function showCruxflareOverlay(eventString) {
+  // Parse the event to get name, description, and icon
+  const eventData = parseCruxflareEvent(eventString);
+  
+  // Create the overlay HTML
+  const overlayHTML = `
+    <div class="cruxflare-overlay-backdrop" id="cruxflare-backdrop"></div>
+    <div class="cruxflare-overlay" id="cruxflare-overlay">
+      <div class="cruxflare-card">
+        <div class="cruxflare-header">Cruxflare Event</div>
+        <div class="cruxflare-title">${eventData.name}</div>
+        <div class="cruxflare-icon">${eventData.icon}</div>
+        <div class="cruxflare-effect">${eventData.description}</div>
+      </div>
+    </div>
+  `;
+  
+  // Add to the page
+  document.body.insertAdjacentHTML('beforeend', overlayHTML);
+  
+  // Get the elements
+  const backdrop = document.getElementById('cruxflare-backdrop');
+  const overlay = document.getElementById('cruxflare-overlay');
+  
+  // Show with animation
+  requestAnimationFrame(() => {
+    backdrop.classList.add('show');
+    overlay.classList.add('show');
+  });
+  
+  // Auto-dismiss after 3 seconds
+  setTimeout(() => {
+    hideCruxflareOverlay();
+  }, 3000);
+}
+
+// Hide and remove the Cruxflare overlay
+function hideCruxflareOverlay() {
+  const backdrop = document.getElementById('cruxflare-backdrop');
+  const overlay = document.getElementById('cruxflare-overlay');
+  
+  if (backdrop && overlay) {
+    // Fade out
+    backdrop.classList.remove('show');
+    overlay.classList.remove('show');
+    
+    // Remove from DOM after animation completes
+    setTimeout(() => {
+      backdrop.remove();
+      overlay.remove();
+    }, 300);
+  }
+}
+
 // Show game over screen as an overlay
 export function showGameOverScreen(isWin, fragmentsCollected, totalFragments) {
   let flavorText;
