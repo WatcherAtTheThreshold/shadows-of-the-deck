@@ -1128,43 +1128,47 @@ h2 {
   z-index: 999 !important;
 }
 
+/* Updated Dream Map icons with emojis */
 .player { 
-  width: 16px; 
-  height: 16px; 
-  border-radius: 50%; 
-  background: cyan; 
   position: absolute; 
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 15px cyan;
   z-index: 3;
+  font-size: 18px;
+  filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.8));
+}
+
+.player::after {
+  content: '👤';
 }
 
 .fragment { 
-  width: 12px; 
-  height: 12px; 
-  border-radius: 50%; 
-  background: rgba(222, 184, 135, 0.9);
   position: absolute; 
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px rgba(222, 184, 135, 0.8);
   z-index: 1;
+  font-size: 14px;
+  filter: drop-shadow(0 0 6px rgba(222, 184, 135, 0.8));
+}
+
+.fragment::after {
+  content: '💎';
 }
 
 .encounter { 
-  width: 12px; 
-  height: 12px; 
-  border-radius: 50%; 
-  background: rgba(138, 43, 226, 0.9);
   position: absolute; 
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 8px rgba(138, 43, 226, 0.7);
   z-index: 1;
+  font-size: 14px;
+  filter: drop-shadow(0 0 6px rgba(138, 43, 226, 0.7));
+}
+
+.encounter::after {
+  content: '💫';
 }
 
 /* ==========================================
