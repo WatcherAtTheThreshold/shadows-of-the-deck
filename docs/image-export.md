@@ -81,19 +81,9 @@ Example: `card-move1-150.png`, `card-etherealLeap-512.png`
 ## **4. Example Folder Structure**
 
 ---
-/assets
-/source
-icon-orb-master.psd
-card-move1-master.psd
-/export
-/icons
-icon-orb-32.png
-icon-orb-48.png
-icon-orb-64.png
-/cards
-card-move1-150.png
-card-move1-250.png
-card-move1-512.png
+images/ in root
+   icons/ in images
+   cards/ in images
 ---
 
 ## **5. Quick Reference Table**
