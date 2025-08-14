@@ -93,9 +93,11 @@ Example: `crux-card-512.png`, `move-card-512.png`
 
 ---
 
-## **6. **Image List**  
-   - crux-icon-128.png, encounter-icon-128.png, focus-icon-128.png, fragment-icon-128.png, move-icon-128.png, player-icon-128.png
-   - crux-card-128.png, focus-card-128.png, fragment-card-128.png, move-card-128.png
+## **6. Image List**
+
+crux-icon-128.png, encounter-icon-128.png, focus-icon-128.png, fragment-icon-128.png, move-icon-128.png, player-icon-128.png
+
+crux-card-512.png, focus-card-512.png, fragment-card-512.png, move-card-512.png
 
 ---
 
