@@ -282,12 +282,12 @@ export function encounterFeedback(playerPos) {
     }
     logArea.style.transition = 'all 0.3s ease';
     
-    // Reset after 2 seconds
-    setTimeout(() => {
-      logArea.style.background = originalLogBg;
-      logArea.style.border = originalLogBorder;
-      logArea.style.boxShadow = originalLogBoxShadow;
-    }, 2000);
+   // Reset after 2 seconds to KNOWN default values
+setTimeout(() => {
+  logArea.style.background = 'rgba(0, 0, 0, 0.6)'; // Default from CSS
+  logArea.style.border = '2px solid rgba(222, 184, 135, 0.4)'; // Default from CSS  
+  logArea.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.3)'; // Default from CSS
+}, 2000);
     
     // Fixed node animation - address the overflow issue
     const mapContainer = document.getElementById('map');
