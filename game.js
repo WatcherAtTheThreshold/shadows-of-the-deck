@@ -163,13 +163,18 @@ function drawMarketCard() {
 function drawNewHand() {
   console.log('🎴 Drawing new hand - starting fresh');
   
-  // Draw new cards to hand
+  // Check if we should skip drawing due to Time Fracture
+  if (skipNextDraw) {
+    skipNextDraw = false; // Reset the flag
+    logMsg('Time fracture effect: No new cards drawn this turn!');
+    showActionPhase();
+    updateAllUI();
+    return;
+  }
+  
+  // Normal draw logic
   drawHand();
-  
-  // Switch back to action phase
   showActionPhase();
-  
-  // Update UI and EXPLICITLY render the new hand
   updateAllUI();
   logMsg('New hand drawn. Play your cards!');
 }
