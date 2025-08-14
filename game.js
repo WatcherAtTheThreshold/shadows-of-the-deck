@@ -595,6 +595,11 @@ function resolveCruxflare(event) {
     logMsg(`Void echoes pull you backward 1 space.`);
     renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
   }
+
+  if (event.includes('Time Fracture')) {
+  skipNextDraw = true;
+  logMsg(`Time fracture disrupts the dream flow. Next hand draw skipped.`);
+}
   
   if (event.includes('Reality Warp') && playerHand.length > 0) {
     playerDeck.push(...playerHand);
