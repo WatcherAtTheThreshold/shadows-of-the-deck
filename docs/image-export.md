@@ -1,0 +1,96 @@
+# 🎨 Shadows of the Deck – Icon & Card Export Guide
+
+This guide ensures **consistent sizes, naming, and export formats** for all HUD icons, card art, and other in-game graphics.
+
+---
+
+## **1. Icon Assets**
+Icons are small, single-symbol graphics used in:
+- HUD
+- Card symbols
+- Map markers
+- Buttons
+
+### **Design Size**
+- **Master File:** `128×128 px` (at 72+ DPI)
+- **Purpose:** Gives enough detail for glow effects, shading, and crisp scaling.
+
+### **Export Sizes**
+| Use Case | Size | File Naming Example |
+|----------|------|---------------------|
+| HUD / UI | 32×32 px | `icon-orb-32.png` |
+| Buttons / Map | 48×48 px | `icon-fragment-48.png` |
+| High-DPI HUD | 64×64 px | `icon-cruxflare-64.png` |
+
+**Format:** PNG-24 (transparent background)  
+**Color Profile:** sRGB
+
+**Naming Convention:**  
+`icon-[name]-[size].png`  
+Example: `icon-orb-32.png`, `icon-fragment-48.png`, `icon-cruxflare-64.png`
+
+---
+
+## **2. Card Art**
+Cards are rectangular, full-graphic assets with or without text overlays.
+
+### **Aspect Ratio**
+- **Standard:** 2:3 ratio (portrait orientation)
+- **Design Size:** `512×768 px` (double resolution for Retina/4K scaling)
+
+### **Export Sizes**
+| Use Case | Size | File Naming Example |
+|----------|------|---------------------|
+| Table View | 150×225 px | `card-focus1-150.png` |
+| Hand View | 250×375 px | `card-move2-250.png` |
+| Full View (zoom) | 512×768 px | `card-etherealLeap-512.png` |
+
+**Format:**  
+- PNG for detailed painterly art (supports transparency if needed)
+- WebP for final builds to reduce file size (no transparency)
+
+**Naming Convention:**  
+`card-[name]-[size].png`  
+Example: `card-move1-150.png`, `card-etherealLeap-512.png`
+
+---
+
+## **3. Batch Export Workflow**
+1. **Create Master File**  
+   - Vector or high-res raster file at **master size** (128×128 for icons, 512×768 for cards).
+   - Save in source format (e.g., `.PSD`, `.AI`, `.Krita`, `.XCF`) in `/assets/source/`.
+
+2. **Export Multiple Sizes**  
+   - Use your design program’s export presets for:
+     - Icons: 32, 48, 64 px
+     - Cards: 150, 250, 512 px
+   - Save to `/assets/export/icons/` and `/assets/export/cards/`.
+
+3. **Naming & Version Control**  
+   - Always include name and size in filename.
+   - Use lowercase and dashes, no spaces.
+   - If updating art, append version:  
+     Example: `card-move1-150-v2.png`
+
+4. **Optimize for Web**  
+   - Use [ImageOptim](https://imageoptim.com/) or [Squoosh](https://squoosh.app/) for final compression.
+   - For builds, replace PNG with WebP (except assets needing alpha channel).
+
+---
+
+## **4. Example Folder Structure**
+
+
+
+---
+
+## **5. Quick Reference Table**
+
+| Asset Type | Master Size | Display Sizes | Format |
+|------------|-------------|---------------|--------|
+| Icon | 128×128 px | 32 / 48 / 64 px | PNG |
+| Card | 512×768 px | 150 / 250 / 512 px | PNG / WebP |
+
+---
+
+*Version 1.0 – Standardized export process for all icons & cards*
