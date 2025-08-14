@@ -18,9 +18,8 @@ Icons are small, single-symbol graphics used in:
 ### **Export Sizes**
 | Use Case | Size | File Naming Example |
 |----------|------|---------------------|
-| HUD / UI | 32×32 px | `icon-orb-32.png` |
-| Buttons / Map | 48×48 px | `icon-fragment-48.png` |
-| High-DPI HUD | 64×64 px | `icon-cruxflare-64.png` |
+| Buttons / Map / HUD / UI | 48×48 px | `fragment-icon-48.png` |
+
 
 **Format:** PNG-24 (transparent background)  
 **Color Profile:** sRGB
@@ -43,9 +42,7 @@ Cards are rectangular, full-graphic assets with or without text overlays.
 ### **Export Sizes**
 | Use Case | Size | File Naming Example |
 |----------|------|---------------------|
-| Table View | 150×225 px | `card-focus1-150.png` |
-| Hand View | 250×375 px | `card-move2-250.png` |
-| Full View (zoom) | 512×768 px | `card-etherealLeap-512.png` |
+| High-DPI HUD / Cards | 512x768 px | `crux-card-512.png` |
 
 **Format:**  
 - PNG for detailed painterly art (supports transparency if needed)
@@ -53,7 +50,7 @@ Cards are rectangular, full-graphic assets with or without text overlays.
 
 **Naming Convention:**  
 `card-[name]-[size].png`  
-Example: `card-move1-150.png`, `card-etherealLeap-512.png`
+Example: `crux-card-512.png`, `move-card-512.png`
 
 ---
 
@@ -64,7 +61,7 @@ Example: `card-move1-150.png`, `card-etherealLeap-512.png`
 
 2. **Export Multiple Sizes**  
    - Use your design program’s export presets for:
-     - Icons: 32, 48, 64 px
+     - Icons: 32, 48, 64, 128px
      - Cards: 150, 250, 512 px
    - Save to `/iamges/icons/` and `/images/cards/`.
 
@@ -91,7 +88,7 @@ Example: `card-move1-150.png`, `card-etherealLeap-512.png`
 
 | Asset Type | Master Size | Display Sizes | Format |
 |------------|-------------|---------------|--------|
-| Icon | 128×128 px | 32 / 48 / 64 px | PNG |
+| Icon | 128×128 px | 32 / 48 / 64 / 128 px | PNG |
 | Card | 512×768 px | 150 / 250 / 512 px | PNG / WebP |
 
 ---
