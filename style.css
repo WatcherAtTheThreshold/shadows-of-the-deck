@@ -165,17 +165,17 @@ h2 {
 
 /* Replace emoji icons with custom images */
 .resource-icon.orb-icon { 
-  background-image: url('./images/icons/focus-icon-48.png');
+  background-image: url('images/icons/focus-icon-48.png');
   color: transparent; /* Hide any fallback emoji */
 }
 
 .resource-icon.fragment-icon { 
-  background-image: url('./images/icons/fragment-icon-48.png');
+  background-image: url('images/icons/fragment-icon-48.png');
   color: transparent;
 }
 
 .resource-icon.cruxflare-icon { 
-  background-image: url('./images/icons/crux-icon-48.png');
+  background-image: url('images/icons/crux-icon-48.png');
   color: transparent;
   font-size: 1.4rem; /* Keep same size */
 }
@@ -1194,7 +1194,7 @@ body.danger-mode #hud::after {
   /* Custom image setup */
   width: 18px;
   height: 18px;
-  background-image: url('./images/icons/player-icon-48.png');
+  background-image: url('images/icons/player-icon-48.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -1211,7 +1211,7 @@ body.danger-mode #hud::after {
   /* Custom image setup */
   width: 14px;
   height: 14px;
-  background-image: url('./images/icons/fragment-icon-48.png');
+  background-image: url('images/icons/fragment-icon-48.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -1228,7 +1228,7 @@ body.danger-mode #hud::after {
   /* Custom image setup */
   width: 14px;
   height: 14px;
-  background-image: url('./images/icons/encounter-icon-48.png');
+  background-image: url('images/icons/encounter-icon-48.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
