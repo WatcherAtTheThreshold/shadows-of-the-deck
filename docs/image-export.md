@@ -26,8 +26,10 @@ Icons are small, single-symbol graphics used in:
 **Color Profile:** sRGB
 
 **Naming Convention:**  
-`icon-[name]-[size].png`  
-Example: `icon-orb-32.png`, `icon-fragment-48.png`, `icon-cruxflare-64.png`
+`[name]-icon-[size].png`
+`[name]-card-[size].png`
+Example: `move-card-512.png`, `move-icon-128.png`, `fragment-card-512.png`, `fragment-icon-128.png`
+
 
 ---
 
@@ -64,7 +66,7 @@ Example: `card-move1-150.png`, `card-etherealLeap-512.png`
    - Use your design program’s export presets for:
      - Icons: 32, 48, 64 px
      - Cards: 150, 250, 512 px
-   - Save to `/assets/export/icons/` and `/assets/export/cards/`.
+   - Save to `/iamges/icons/` and `/images/cards/`.
 
 3. **Naming & Version Control**  
    - Always include name and size in filename.
@@ -80,8 +82,9 @@ Example: `card-move1-150.png`, `card-etherealLeap-512.png`
 
 ## **4. Example Folder Structure**
 
-
-
+|images/ in root|
+   |-icons/ in images|
+   |-cards/ in images|
 ---
 
 ## **5. Quick Reference Table**
@@ -90,6 +93,12 @@ Example: `card-move1-150.png`, `card-etherealLeap-512.png`
 |------------|-------------|---------------|--------|
 | Icon | 128×128 px | 32 / 48 / 64 px | PNG |
 | Card | 512×768 px | 150 / 250 / 512 px | PNG / WebP |
+
+---
+
+## **6. **Image List**  
+   - crux-icon-128.png, encounter-icon-128.png, focus-icon-128.png, fragment-icon-128.png, move-icon-128.png, player-icon-128.png
+   - crux-card-128.png, focus-card-128.png, fragment-card-128.png, move-card-128.png
 
 ---
 
