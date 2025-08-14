@@ -54,6 +54,7 @@ let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, player
 function setupGameData() {
   marketDeck = createMarketDeck();
   playerDeck = createPlayerDeck();
+  skipNextDraw = false;
   
   // Randomize starting deck
   for (let i = playerDeck.length - 1; i > 0; i--) {
