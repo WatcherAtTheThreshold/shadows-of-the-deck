@@ -402,17 +402,32 @@ h2 {
   margin: 20px 0 10px 0;
 }
 
-#market, #player-hand {
+/* ========== UPDATED LAYOUT FOR BOTH HAND AND MARKET ========== */
+#player-hand {
+  position: relative;
+  top: 0;
+  left: 0;
+  min-height: 190px;
+  display: flex !important;
+  justify-content: center !important; 
+  align-items: flex-end !important;
+  margin: 25px 0 !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+  transition: all 0.5s ease;
+}
+
+#market {
   position: relative;
   top: 0;
   left: 0;
   min-height: 240px;
-  display: flex; 
-  justify-content: center; 
-  align-items: flex-start;
-  margin: 25px 0; 
-  flex-wrap: wrap;
-  padding: 10px 0;
+  display: flex !important;
+  justify-content: center !important; 
+  align-items: flex-start !important;
+  margin: 25px 0 !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
   transition: all 0.5s ease;
 }
 
@@ -794,29 +809,6 @@ body.danger-mode #hud::after {
   box-sizing: border-box;
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
-  .cruxflare-card {
-    width: 180px;
-    height: 260px;
-    padding: 15px;
-  }
-  
-  .cruxflare-title {
-    font-size: 1.5rem;
-  }
-  
-  .cruxflare-icon {
-    font-size: 2.8rem;
-    margin: 15px 0;
-  }
-  
-  .cruxflare-effect {
-    font-size: 0.9rem;
-    padding: 10px 12px;
-  }
-}
-
 /* ========== SECTION HEADERS ========== */
 .section-header {
   display: none;
@@ -828,24 +820,6 @@ body.danger-mode #hud::after {
 
 .section-header.hidden {
   display: none;
-}
-
-#game { 
-  max-width: 1000px; 
-  margin: auto; 
-  position: relative; 
-  z-index: 2;
-  backdrop-filter: blur(1px);
-  padding: 20px;
-}
-
-h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.8rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.9);
-  text-align: center;
-  margin: 20px 0 10px 0;
 }
 
 /* ==========================================
@@ -863,18 +837,7 @@ h2 {
   z-index: 1;
 }
 
-/* Hand fanning */
-#player-hand {
-  display: flex !important;
-  justify-content: center !important; 
-  align-items: flex-end !important;
-  margin: 25px 0 !important;
-  flex-wrap: nowrap !important;
-  position: relative;
-  min-height: 190px;
-  overflow: visible !important;
-}
-
+/* ========== HAND CARD SYSTEM (UNCHANGED) ========== */
 #player-hand .card-flip {
   margin-left: -30px;
   transform-origin: bottom center;
@@ -904,6 +867,55 @@ h2 {
   z-index: 0;
 }
 
+/* ========== NEW MARKET CARD OVERLAPPING SYSTEM ========== */
+#market .card-flip {
+  margin-left: -25px;
+  transform-origin: center center;
+  transition: all 0.4s ease;
+  z-index: 1;
+}
+
+#market .card-flip:first-child { 
+  margin-left: 4px; 
+}
+
+/* No rotation for market cards - keep them horizontal */
+#market .card-flip:nth-child(1) { transform: rotate(0deg); }
+#market .card-flip:nth-child(2) { transform: rotate(0deg); }
+#market .card-flip:nth-child(3) { transform: rotate(0deg); }
+#market .card-flip:nth-child(4) { transform: rotate(0deg); }
+#market .card-flip:nth-child(5) { transform: rotate(0deg); }
+
+/* Container hover - cards spread out */
+#market:hover .card-flip { 
+  margin-left: -15px; 
+  z-index: 2; 
+}
+
+/* Individual card hover - lift and scale without rotation */
+#market .card-flip:hover {
+  transform: rotate(0deg) translateY(-12px) scale(1.05) !important;
+  z-index: 10 !important;
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+/* Purchased cards stay in place but dimmed */
+#market .card-flip.market-bought {
+  opacity: 0.7;
+  filter: grayscale(0.2);
+  z-index: 0;
+}
+
+/* Enhanced market card hover glow */
+#market .card-flip:hover .card-front {
+  border-color: rgba(222, 184, 135, 0.8);
+  box-shadow: 
+    0 5px 15px rgba(222, 184, 135, 0.3),
+    0 0 20px rgba(222, 184, 135, 0.2);
+}
+
+/* ========== CARD VISUAL STYLES (SHARED) ========== */
 .card-flip-inner {
   position: relative;
   width: 100%;
@@ -1028,7 +1040,7 @@ h2 {
   animation: cardAppear 0.6s ease forwards;
 }
 
-/* Phase system support */
+/* ========== PHASE SYSTEM ENLARGED CARDS ========== */
 .cards-enlarged .card-flip {
   width: 156px;
   height: 221px;
@@ -1039,12 +1051,28 @@ h2 {
   font-size: 1.4em;
 }
 
+/* Enlarged hand cards */
 .cards-enlarged#player-hand .card-flip {
   margin-left: -45px;
 }
 
 .cards-enlarged#player-hand:hover .card-flip {
   margin-left: -25px;
+}
+
+/* Enlarged market cards */
+.cards-enlarged#market .card-flip {
+  margin-left: -35px;
+}
+
+.cards-enlarged#market:hover .card-flip {
+  margin-left: -20px;
+}
+
+.cards-enlarged#market .card-flip:hover {
+  margin-left: 15px;
+  margin-right: 15px;
+  transform: rotate(0deg) translateY(-15px) scale(1.05) !important;
 }
 
 .cards-enlarged {
@@ -1140,7 +1168,7 @@ h2 {
 }
 
 .player::after {
-  content: '👤';
+  content: '💤';
 }
 
 .fragment { 
@@ -1378,6 +1406,26 @@ h2 {
 
 /* ========== MOBILE RESPONSIVE ========== */
 @media (max-width: 768px) {
+  .cruxflare-card {
+    width: 180px;
+    height: 260px;
+    padding: 15px;
+  }
+  
+  .cruxflare-title {
+    font-size: 1.5rem;
+  }
+  
+  .cruxflare-icon {
+    font-size: 2.8rem;
+    margin: 15px 0;
+  }
+  
+  .cruxflare-effect {
+    font-size: 0.9rem;
+    padding: 10px 12px;
+  }
+
   #hud {
     flex-direction: column;
     gap: 15px;
@@ -1427,6 +1475,7 @@ h2 {
     height: 70px;
   }
 
+  /* Hand cards mobile */
   #player-hand .card-flip { margin-left: -20px; }
   #player-hand:hover .card-flip { margin-left: -12px; }
   #player-hand .card-flip:hover {
@@ -1434,6 +1483,22 @@ h2 {
     margin-right: 8px;
     transform: rotate(0deg) translateY(-8px) scale(1.02) !important;
   }
+
+  /* Market cards mobile */
+  #market .card-flip { 
+    margin-left: -30px; /* Tighter overlap on mobile */
+  }
+  
+  #market:hover .card-flip { 
+    margin-left: -20px; 
+  }
+  
+  #market .card-flip:hover {
+    margin-left: 8px;
+    margin-right: 8px;
+    transform: rotate(0deg) translateY(-8px) scale(1.03) !important;
+  }
+
   .card-flip { width: 85px; height: 120px; }
   .card-front, .card-back { font-size: 0.9em; }
   
@@ -1458,6 +1523,14 @@ h2 {
   .cards-enlarged {
     min-height: 160px;
     gap: 8px;
+  }
+
+  .cards-enlarged#market .card-flip {
+    margin-left: -35px;
+  }
+  
+  .cards-enlarged#market:hover .card-flip {
+    margin-left: -25px;
   }
 }
 
