@@ -48,7 +48,7 @@ let marketDeck, playerDeck, discardPile, playerHand, marketRow, mapNodes, player
     fragmentPositions, fragmentsCollected, totalFragments, cruxflareDeck, coins, 
     encounterPositions, shadowBlocked, lastPlayedCard, fragmentBoostActive,
     nextCardCostBonus, buyingBlocked, dreamTremorActive,
-    finalDarknessCountdown, gamePhase;
+    finalDarknessCountdown, gamePhase, skipNextDraw;
 
 // Initialize game data
 function setupGameData() {
