@@ -80,8 +80,8 @@ Example: `card-move1-150.png`, `card-etherealLeap-512.png`
 
 ## **4. Example Folder Structure**
 
----
 |images/ in root|
+|------------|-------------|---------------|--------|
    |-icons/ in images|
    |-cards/ in images|
 ---
