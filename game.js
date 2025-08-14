@@ -107,12 +107,9 @@ function initGame() {
   showActionPhase();
   
   // Start tutorial for new players
-  const tutorial = new IntroTutorial();
-  setTimeout(() => {
-    if (!tutorial.start()) {
+
       logMsg('Welcome to the game!');
-    }
-  }, 800);
+    
 }
 
 // Phase management functions
