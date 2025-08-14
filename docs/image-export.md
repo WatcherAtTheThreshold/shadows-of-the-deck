@@ -49,7 +49,7 @@ Cards are rectangular, full-graphic assets with or without text overlays.
 - WebP for final builds to reduce file size (no transparency)
 
 **Naming Convention:**  
-`card-[name]-[size].png`  
+`[name]-card-[size].png`  
 Example: `crux-card-512.png`, `move-card-512.png`
 
 ---
