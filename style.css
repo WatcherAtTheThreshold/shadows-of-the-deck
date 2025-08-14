@@ -1498,12 +1498,12 @@ body.danger-mode #hud::after {
     word-break: break-word;
   }
 
-  /* ========== COMPACT MAP CONTAINER ========== */
+  /* ========== COMPACT MAP CONTAINER WITH BREATHING ROOM ========== */
   .map-container {
     min-height: 120px; /* Reduced from 150px */
     max-height: 120px;
-    padding: 4px; /* Reduced from 5px */
-    margin: 12px auto; /* Reduced from 20px auto */
+    padding: 8px; /* Increased for better spacing */
+    margin: 20px auto; /* Increased for separation from HUD and log */
   }
 
   /* ========== COMPACT SECTION HEADERS ========== */
