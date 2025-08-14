@@ -153,16 +153,32 @@ h2 {
   font-size: 1.4rem;
   filter: drop-shadow(0 0 4px currentColor);
   transition: all var(--hud-hover-speed) ease;
+  
+  /* NEW: Setup for background images */
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+}
+
+/* Replace emoji icons with custom images */
+.resource-icon.orb-icon { 
+  background-image: url('images/icons/focus-icon-48.png');
+  color: transparent; /* Hide any fallback emoji */
+}
+
+.resource-icon.fragment-icon { 
+  background-image: url('images/icons/fragment-icon-48.png');
+  color: transparent;
 }
 
 .resource-icon.cruxflare-icon { 
-  color: #8A2BE2; 
-  font-size: 1.4rem; /* Smaller than the default 1.4rem */
+  background-image: url('images/icons/crux-icon-48.png');
+  color: transparent;
+  font-size: 1.4rem; /* Keep same size */
 }
-
-.resource-icon.orb-icon { color: #FFD700; }
-.resource-icon.fragment-icon { color: #00FFFF; }
-.resource-icon.cruxflare-icon { color: #8A2BE2; }
 
 .resource-item.cruxflare-display {
   min-height: 40px; /* Match other containers */
@@ -1167,19 +1183,22 @@ body.danger-mode #hud::after {
   z-index: 999 !important;
 }
 
-/* Updated Dream Map icons with emojis */
+/* Updated Dream Map icons with custom images */
 .player { 
   position: absolute; 
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 3;
-  font-size: 18px;
+  
+  /* Custom image setup */
+  width: 18px;
+  height: 18px;
+  background-image: url('images/icons/player-icon-48.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   filter: drop-shadow(0 0 8px rgba(0, 255, 255, 0.8));
-}
-
-.player::after {
-  content: '💤';
 }
 
 .fragment { 
@@ -1188,12 +1207,15 @@ body.danger-mode #hud::after {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
-  font-size: 14px;
+  
+  /* Custom image setup */
+  width: 14px;
+  height: 14px;
+  background-image: url('images/icons/fragment-icon-48.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   filter: drop-shadow(0 0 6px rgba(222, 184, 135, 0.8));
-}
-
-.fragment::after {
-  content: '💎';
 }
 
 .encounter { 
@@ -1202,12 +1224,15 @@ body.danger-mode #hud::after {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
-  font-size: 14px;
+  
+  /* Custom image setup */
+  width: 14px;
+  height: 14px;
+  background-image: url('images/icons/encounter-icon-48.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   filter: drop-shadow(0 0 6px rgba(138, 43, 226, 0.7));
-}
-
-.encounter::after {
-  content: '💫';
 }
 
 /* ==========================================
@@ -1452,6 +1477,19 @@ body.danger-mode #hud::after {
   
   .resource-icon {
     font-size: 1.1rem; /* Reduced from 1.4rem */
+    width: 20px; /* Custom icon sizing for mobile */
+    height: 20px;
+  }
+
+  /* Mobile map icon sizing */
+  .player {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .fragment, .encounter {
+    width: 12px;
+    height: 12px;
   }
   
   .resource-value {
