@@ -446,7 +446,7 @@ h2 {
     radial-gradient(circle at 90% 10%, rgba(255,255,255,0.02) 0%, transparent 25%),
     radial-gradient(circle at 30% 70%, rgba(255,255,255,0.03) 0%, transparent 25%);
   animation: mistDrift1 45s ease-in-out infinite;
-  opacity: 0.6;
+  opacity: 0.9;
 }
 
 .mist-layer::after {
@@ -462,7 +462,7 @@ h2 {
     radial-gradient(circle at 60% 90%, rgba(255,255,255,0.02) 0%, transparent 30%),
     radial-gradient(circle at 90% 50%, rgba(255,255,255,0.025) 0%, transparent 30%);
   animation: mistDrift2 60s ease-in-out infinite reverse;
-  opacity: 0.4;
+  opacity: 0.7;
 }
 
 .mist-tendrils {
@@ -478,7 +478,7 @@ h2 {
     linear-gradient(-45deg, transparent 60%, rgba(255,255,255,0.015) 65%, transparent 70%),
     linear-gradient(90deg, transparent 20%, rgba(255,255,255,0.008) 25%, transparent 30%);
   animation: tendrilFlow 35s linear infinite;
-  opacity: 0.7;
+  opacity: 1.0;
 }
 
 /* Warning mode - purple mist */
@@ -490,7 +490,7 @@ body.warning-mode .mist-layer::before {
     radial-gradient(circle at 90% 10%, rgba(100,20,150,0.05) 0%, transparent 25%),
     radial-gradient(circle at 30% 70%, rgba(140,50,200,0.07) 0%, transparent 25%);
   animation-duration: 30s;
-  opacity: 0.7;
+  opacity: 0.9;
 }
 
 body.warning-mode .mist-layer::after {
@@ -500,7 +500,7 @@ body.warning-mode .mist-layer::after {
     radial-gradient(circle at 60% 90%, rgba(100,15,140,0.04) 0%, transparent 30%),
     radial-gradient(circle at 90% 50%, rgba(150,50,210,0.06) 0%, transparent 30%);
   animation-duration: 40s;
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 body.warning-mode .mist-tendrils {
@@ -520,7 +520,7 @@ body.danger-mode .mist-layer::before {
     radial-gradient(circle at 90% 10%, rgba(180,40,40,0.05) 0%, transparent 25%),
     radial-gradient(circle at 30% 70%, rgba(255,60,60,0.08) 0%, transparent 25%);
   animation-duration: 15s;
-  opacity: 0.9;
+  opacity: 1;
 }
 
 body.danger-mode .mist-layer::after {
@@ -530,7 +530,7 @@ body.danger-mode .mist-layer::after {
     radial-gradient(circle at 60% 90%, rgba(180,20,20,0.05) 0%, transparent 30%),
     radial-gradient(circle at 90% 50%, rgba(255,50,50,0.07) 0%, transparent 30%);
   animation-duration: 20s;
-  opacity: 0.7;
+  opacity: 0.9;
 }
 
 body.danger-mode .mist-tendrils {
