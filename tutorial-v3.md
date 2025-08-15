@@ -154,19 +154,19 @@ td:first-child { font-size:1.1em; } /* optional: make icon column pop */
   </thead>
   <tbody>
     <tr>
-      <td>Focus +1 🎯</td>
+      <td>Focus +1 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"></td>
       <td>+1 orb</td>
       <td>Starting card</td>
       <td>Your basic economy</td>
     </tr>
     <tr>
-      <td>Focus +2 🎯</td>
+      <td>Focus +2 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"></td>
       <td>+2 orbs</td>
       <td>3 orbs</td>
       <td>Early upgrade priority</td>
     </tr>
     <tr>
-      <td>Focus +3 🎯</td>
+      <td>Focus +3 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"></td>
       <td>+3 orbs</td>
       <td>5 orbs</td>
       <td>Mid-game economy</td>
