@@ -16,9 +16,9 @@ Your deck represents your abilities in the dream world. Better cards = more opti
 
 ## Quick Start (TL;DR)
 
-1. **Play Focus cards** 🎯 → get orbs (money)
+1. **Play Focus cards** ![Focus Icon](images/icons/focus-icon-48.png) → get orbs (money)
 2. **Buy better cards** from the market → stronger deck
-3. **Play Move cards** 👣 → travel to collect fragments 💎
+3. **Play Move cards** ![Move Icon](images/icons/move-icon-48.png) → travel to collect fragments ![Fragment Icon](images/icons/fragment-icon-48.png)
 4. **Avoid the countdown** ⚡ → game ends when Cruxflare deck runs out
 5. **Win:** Get all 7 fragments before time runs out
 
