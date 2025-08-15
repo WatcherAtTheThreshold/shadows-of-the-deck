@@ -128,7 +128,47 @@ The purple counter in your HUD shows how many "bad events" are left. Each turn, 
 
 ---
 
-## Card Types Reference
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-family: sans-serif;
+    font-size: 14px;
+    background-color: #1e1e1e; /* Dark theme background */
+    color: #f0f0f0;           /* Light text */
+  }
+
+  thead {
+    background-color: #2b2b2b; /* Slightly lighter header */
+  }
+
+  th, td {
+    border: 1px solid #444;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  th {
+    font-weight: bold;
+    color: #ffd700; /* Golden headers for your theme */
+  }
+
+  tr:nth-child(even) {
+    background-color: #252525; /* Subtle striping */
+  }
+
+  tr:hover {
+    background-color: #333; /* Highlight row on hover */
+  }
+
+  /* Optional: make emoji/icons slightly bigger */
+  td:first-child {
+    font-size: 1.1em;
+  }
+</style>
+
 
 <h2>Card Types Reference</h2>
 
