@@ -1240,8 +1240,8 @@ body.danger-mode #hud::after {
   z-index: 3;
   
   /* Custom image setup */
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   background-image: url('images/icons/player-icon-48.png');
   background-size: contain;
   background-repeat: no-repeat;
@@ -1257,8 +1257,8 @@ body.danger-mode #hud::after {
   z-index: 1;
   
   /* Custom image setup */
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   background-image: url('images/icons/fragment-icon-48.png');
   background-size: contain;
   background-repeat: no-repeat;
@@ -1274,8 +1274,8 @@ body.danger-mode #hud::after {
   z-index: 1;
   
   /* Custom image setup */
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   background-image: url('images/icons/encounter-icon-48.png');
   background-size: contain;
   background-repeat: no-repeat;
