@@ -19,7 +19,7 @@ Your deck represents your abilities in the dream world. Better cards = more opti
 1. **Play Focus cards** <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"> → get orbs (money)
 2. **Buy better cards** from the market → stronger deck
 3. **Play Move cards** <img src="images/icons/move-icon-48.png" width="24" height="24" alt="Focus Icon"> → travel to collect fragments <img src="images/icons/fragment-icon-48.png" width="18" height="18" alt="Focus Icon">
-4. **Avoid the countdown** <img src="images/icons/crux-icon-48.png" width="18" height="18" alt="Crux Countdown"> → game ends when Cruxflare deck runs out <img src="images/crux-countdown.png" width="190" height="45" alt="Crux Countdown"> 
+4. **Avoid the countdown** <img src="images/icons/crux-icon-48.png" width="18" height="18" alt="Crux Countdown"> → game ends when Cruxflare deck runs out <img src="images/crux-countdown.png" width="95" height="22" alt="Crux Countdown"> 
 5. **Win:** Get all 7 fragments before time runs out
 
 ---
@@ -128,24 +128,107 @@ The purple counter in your HUD shows how many "bad events" are left. Each turn, 
 
 ---
 
-## Card Types Reference
+<style>
+/* Dark theme styling */
+table { background: transparent; margin:1em 0; font-family:sans-serif; font-size:14px; }
+thead th { background:#2b2b2b; color:#ffd700; }
+td, th { background:#1e1e1e; color:#f0f0f0; border:1px solid #444; padding:8px 10px; text-align:left; vertical-align:middle; }
+tbody tr:nth-child(even) td { background:#252525; }
+tbody tr:hover td { background:#333; }
+td:first-child { font-size:1.1em; } /* optional: make icon column pop */
 
-### Basic Cards
-| Card | Effect | Cost | Strategy |
-|------|--------|------|----------|
-| Focus +1 ![Focus Icon](images/icons/focus-icon-48.png) | +1 orb | Starting card | Your basic economy |
-| Focus +2 ![Focus Icon](images/icons/focus-icon-48.png) | +2 orbs | 3 orbs | Early upgrade priority |
-| Focus +3 ![Focus Icon](images/icons/focus-icon-48.png) | +3 orbs | 5 orbs | Mid-game economy |
-| Move +1 ![Focus Icon](images/icons/move-icon-48.png)   | Move 1 space | 2 orbs | Basic movement |
-| Move +2  ![Focus Icon](images/icons/move-icon-48.png) | Move 2 spaces | 4 orbs | Efficient travel |
+</style>
 
-### Special Cards
-| Card | Effect | Cost | When to Buy |
-|------|--------|------|-------------|
-| Swift Step 🌀 | Move 1 safely | 3 orbs | When encounters are risky |
-| Shadow Blocker 🛡️ | Block next Cruxflare | 4 orbs | When countdown is low |
-| Dream Sight 🔮 | Preview next Cruxflare | 4 orbs | For planning ahead |
-| Fragment 2pts 💎 | Next fragment = 2 points | 5 orbs | Late game efficiency |
+
+<h2>Card Types Reference</h2>
+
+<h3>Basic Cards</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Card</th>
+      <th>Effect</th>
+      <th>Cost</th>
+      <th>Strategy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Focus +1 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"></td>
+      <td>+1 orb</td>
+      <td>Starting card</td>
+      <td>Your basic economy</td>
+    </tr>
+    <tr>
+      <td>Focus +2 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"></td>
+      <td>+2 orbs</td>
+      <td>3 orbs</td>
+      <td>Early upgrade priority</td>
+    </tr>
+    <tr>
+      <td>Focus +3 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"></td>
+      <td>+3 orbs</td>
+      <td>5 orbs</td>
+      <td>Mid-game economy</td>
+    </tr>
+    <tr>
+      <td>Move +1 👣</td>
+      <td>Move 1 space</td>
+      <td>2 orbs</td>
+      <td>Basic movement</td>
+    </tr>
+    <tr>
+      <td>Move +2 👣</td>
+      <td>Move 2 spaces</td>
+      <td>4 orbs</td>
+      <td>Efficient travel</td>
+    </tr>
+    <tr>
+      <td>Move +3 👣</td>
+      <td>Move 3 spaces</td>
+      <td>6 orbs</td>
+      <td>Efficient travel</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Special Cards</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Card</th>
+      <th>Effect</th>
+      <th>Cost</th>
+      <th>When to Buy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Swift Step 🌀</td>
+      <td>Move 1 safely</td>
+      <td>3 orbs</td>
+      <td>When encounters are risky</td>
+    </tr>
+    <tr>
+      <td>Shadow Blocker 🛡️</td>
+      <td>Block next Cruxflare</td>
+      <td>4 orbs</td>
+      <td>When countdown is low</td>
+    </tr>
+    <tr>
+      <td>Dream Sight 🔮</td>
+      <td>Preview next Cruxflare</td>
+      <td>4 orbs</td>
+      <td>For planning ahead</td>
+    </tr>
+    <tr>
+      <td>Fragment 2pts 💎</td>
+      <td>Next fragment = 2 points</td>
+      <td>5 orbs</td>
+      <td>Late game efficiency</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
