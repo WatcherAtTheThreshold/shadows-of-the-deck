@@ -133,11 +133,12 @@ The purple counter in your HUD shows how many "bad events" are left. Each turn, 
 ### Basic Cards
 | Card | Effect | Cost | Strategy |
 |------|--------|------|----------|
-| Focus +1 ![Focus Icon](images/icons/focus-icon-48.png) | +1 orb | Starting card | Your basic economy |
-| Focus +2 ![Focus Icon](images/icons/focus-icon-48.png) | +2 orbs | 3 orbs | Early upgrade priority |
-| Focus +3 ![Focus Icon](images/icons/focus-icon-48.png) | +3 orbs | 5 orbs | Mid-game economy |
-| Move +1 ![Focus Icon](images/icons/move-icon-48.png)   | Move 1 space | 2 orbs | Basic movement |
-| Move +2  ![Focus Icon](images/icons/move-icon-48.png) | Move 2 spaces | 4 orbs | Efficient travel |
+| Focus +1<img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"> | +1 orb | Starting card | Your basic economy |
+| Focus +2 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"> | +2 orbs | 3 orbs | Early upgrade priority |
+| Focus +3 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"> | +3 orbs | 5 orbs | Mid-game economy |
+| Move +1 <img src="images/icons/move-icon-48.png" width="18" height="18" alt="move Icon">   | Move 1 space | 2 orbs | Basic movement |
+| Move +2  <img src="images/icons/move-icon-48.png" width="18" height="18" alt="moves Icon"> | Move 2 spaces | 4 orbs | Efficient travel |
+| Move +3  <img src="images/icons/move-icon-48.png" width="18" height="18" alt="move Icon"> | Move 2 spaces | 6 orbs | Efficient travel |
 
 ### Special Cards
 | Card | Effect | Cost | When to Buy |
