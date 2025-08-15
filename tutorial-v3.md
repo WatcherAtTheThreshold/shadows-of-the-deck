@@ -130,23 +130,95 @@ The purple counter in your HUD shows how many "bad events" are left. Each turn, 
 
 ## Card Types Reference
 
-### Basic Cards
-| Card | Effect | Cost | Strategy |
-|------|--------|------|----------|
-| Focus +1 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"> | +1 orb | Starting card | Your basic economy |
-| Focus +2 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"> | +2 orbs | 3 orbs | Early upgrade priority |
-| Focus +3 <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"> | +3 orbs | 5 orbs | Mid-game economy |
-| Move +1 <img src="images/icons/move-icon-48.png" width="18" height="18" alt="move Icon">   | Move 1 space | 2 orbs | Basic movement |
-| Move +2  <img src="images/icons/move-icon-48.png" width="18" height="18" alt="moves Icon"> | Move 2 spaces | 4 orbs | Efficient travel |
-| Move +3  <img src="images/icons/move-icon-48.png" width="18" height="18" alt="move Icon"> | Move 2 spaces | 6 orbs | Efficient travel |
+<h2>Card Types Reference</h2>
 
-### Special Cards
-| Card | Effect | Cost | When to Buy |
-|------|--------|------|-------------|
-| Swift Step 🌀 | Move 1 safely | 3 orbs | When encounters are risky |
-| Shadow Blocker 🛡️ | Block next Cruxflare | 4 orbs | When countdown is low |
-| Dream Sight 🔮 | Preview next Cruxflare | 4 orbs | For planning ahead |
-| Fragment 2pts 💎 | Next fragment = 2 points | 5 orbs | Late game efficiency |
+<h3>Basic Cards</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Card</th>
+      <th>Effect</th>
+      <th>Cost</th>
+      <th>Strategy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Focus +1 🎯</td>
+      <td>+1 orb</td>
+      <td>Starting card</td>
+      <td>Your basic economy</td>
+    </tr>
+    <tr>
+      <td>Focus +2 🎯</td>
+      <td>+2 orbs</td>
+      <td>3 orbs</td>
+      <td>Early upgrade priority</td>
+    </tr>
+    <tr>
+      <td>Focus +3 🎯</td>
+      <td>+3 orbs</td>
+      <td>5 orbs</td>
+      <td>Mid-game economy</td>
+    </tr>
+    <tr>
+      <td>Move +1 👣</td>
+      <td>Move 1 space</td>
+      <td>2 orbs</td>
+      <td>Basic movement</td>
+    </tr>
+    <tr>
+      <td>Move +2 👣</td>
+      <td>Move 2 spaces</td>
+      <td>4 orbs</td>
+      <td>Efficient travel</td>
+    </tr>
+    <tr>
+      <td>Move +3 👣</td>
+      <td>Move 3 spaces</td>
+      <td>6 orbs</td>
+      <td>Efficient travel</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Special Cards</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Card</th>
+      <th>Effect</th>
+      <th>Cost</th>
+      <th>When to Buy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Swift Step 🌀</td>
+      <td>Move 1 safely</td>
+      <td>3 orbs</td>
+      <td>When encounters are risky</td>
+    </tr>
+    <tr>
+      <td>Shadow Blocker 🛡️</td>
+      <td>Block next Cruxflare</td>
+      <td>4 orbs</td>
+      <td>When countdown is low</td>
+    </tr>
+    <tr>
+      <td>Dream Sight 🔮</td>
+      <td>Preview next Cruxflare</td>
+      <td>4 orbs</td>
+      <td>For planning ahead</td>
+    </tr>
+    <tr>
+      <td>Fragment 2pts 💎</td>
+      <td>Next fragment = 2 points</td>
+      <td>5 orbs</td>
+      <td>Late game efficiency</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 
