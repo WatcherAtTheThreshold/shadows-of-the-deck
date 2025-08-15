@@ -16,10 +16,10 @@ Your deck represents your abilities in the dream world. Better cards = more opti
 
 ## Quick Start (TL;DR)
 
-1. **Play Focus cards** <img src="images/icons/focus-icon-48.png" width="20" height="20" alt="Focus Icon"> → get orbs (money)
+1. **Play Focus cards** <img src="images/icons/focus-icon-48.png" width="18" height="18" alt="Focus Icon"> → get orbs (money)
 2. **Buy better cards** from the market → stronger deck
-3. **Play Move cards** <img src="images/icons/move-icon-48.png" width="20" height="20" alt="Focus Icon"> → travel to collect fragments <img src="images/icons/fragment-icon-48.png" width="20" height="20" alt="Focus Icon">
-4. **Avoid the countdown** <img src="images/icons/crux-icon-48.png" width="20" height="20" alt="Focus Icon"> → game ends when Cruxflare deck runs out
+3. **Play Move cards** <img src="images/icons/move-icon-48.png" width="18" height="18" alt="Focus Icon"> → travel to collect fragments <img src="images/icons/fragment-icon-48.png" width="18" height="18" alt="Focus Icon">
+4. **Avoid the countdown** <img src="images/icons/crux-icon-48.png" width="18" height="18" alt="Focus Icon"> → game ends when Cruxflare deck runs out
 5. **Win:** Get all 7 fragments before time runs out
 
 ---
