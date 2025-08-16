@@ -1,4 +1,3 @@
-import IntroTutorial from './intro.js';
 import { CARD_EFFECTS, createMarketDeck, createPlayerDeck, createCruxflareDeck, generateTooltip } from './cards.js';
 import { 
   createParticles, renderMarket, renderHand, renderMap, updateHUD, 
@@ -98,7 +97,16 @@ function initGame() {
   
   // Set up initial market
   for (let i = 0; i < 5; i++) { 
-    drawMarketCard(); 
+    drawMarketCard();
+    
+ showActionPhase();
+  logMsg('Welcome to the game!'); 
+
+     import('./intro.js').then(module => {
+    const IntroTutorial = module.default;
+    const tutorial = new IntroTutorial();
+  });
+    
   }
   
   // Initial draws and renders
