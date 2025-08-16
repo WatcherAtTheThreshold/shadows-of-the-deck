@@ -57,8 +57,6 @@ function setupGameData() {
   marketDeck = createMarketDeck();
   playerDeck = createPlayerDeck();
   skipNextDraw = false;
-  const tutorial = new IntroTutorial();
-  tutorial.setupPopupHandlers();
   
   // Randomize starting deck
   for (let i = playerDeck.length - 1; i > 0; i--) {
