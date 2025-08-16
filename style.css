@@ -977,6 +977,302 @@ body.danger-mode #hud::after {
   background: linear-gradient(135deg, rgba(138, 43, 226, 0.5) 0%, rgba(100, 30, 180, 0.4) 100%);
 }
 
+/* ========== ENHANCED WIN/LOSE POPUP STYLES ==========
+   Add these styles to your style.css file (replace existing game-over styles) */
+
+/* ========== VICTORY SCREEN (WIN) ========== */
+.victory-screen {
+  pointer-events: auto;
+  background: linear-gradient(135deg, 
+    rgba(222, 184, 135, 0.15) 0%, 
+    rgba(138, 43, 226, 0.1) 30%,
+    rgba(100, 150, 255, 0.08) 70%,
+    rgba(222, 184, 135, 0.12) 100%);
+  backdrop-filter: blur(15px);
+  padding: 40px;
+  border-radius: 16px;
+  border: 3px solid rgba(222, 184, 135, 0.9);
+  text-align: center;
+  box-shadow: 
+    0 0 30px rgba(222, 184, 135, 0.5),
+    inset 0 0 30px rgba(222, 184, 135, 0.1),
+    0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: victory-appear 0.8s ease-out;
+  position: relative;
+  z-index: 10001;
+  overflow: visible;
+}
+
+.victory-screen .game-over-title {
+  color: rgba(222, 184, 135, 0.95);
+  text-shadow: 
+    0 0 10px rgba(222, 184, 135, 0.6),
+    0 0 20px rgba(222, 184, 135, 0.3);
+  animation: victory-glow 2s ease-in-out infinite alternate;
+}
+
+.victory-screen .game-over-score {
+  color: rgba(222, 184, 135, 0.9);
+}
+
+.victory-screen .game-over-flavor {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ========== DEFEAT SCREEN (LOSE) ========== */
+.defeat-screen {
+  pointer-events: auto;
+  background: linear-gradient(135deg, 
+    rgba(25, 15, 45, 0.95) 0%, 
+    rgba(60, 20, 80, 0.9) 30%,
+    rgba(80, 30, 100, 0.85) 70%,
+    rgba(15, 10, 35, 0.98) 100%);
+  backdrop-filter: blur(20px);
+  padding: 40px;
+  border-radius: 16px;
+  border: 3px solid rgba(138, 43, 226, 0.7);
+  text-align: center;
+  box-shadow: 
+    0 0 25px rgba(138, 43, 226, 0.4),
+    inset 0 0 40px rgba(0, 0, 0, 0.4),
+    0 20px 40px rgba(0, 0, 0, 0.8);
+  animation: defeat-appear 0.8s ease-out;
+  position: relative;
+  z-index: 10001;
+  overflow: visible;
+}
+
+.defeat-screen .game-over-title {
+  color: rgba(138, 43, 226, 0.9);
+  text-shadow: 
+    0 0 8px rgba(138, 43, 226, 0.5),
+    0 0 16px rgba(138, 43, 226, 0.2);
+  animation: defeat-pulse 3s ease-in-out infinite;
+}
+
+.defeat-screen .game-over-score {
+  color: rgba(200, 150, 255, 0.8);
+}
+
+.defeat-screen .game-over-flavor {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ========== PARTICLE CONTAINER ========== */
+.particle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10000;
+  overflow: hidden;
+}
+
+/* ========== WIN PARTICLES (EXPANDING STARBURST) ========== */
+.win-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, 
+    rgba(222, 184, 135, 1) 0%, 
+    rgba(222, 184, 135, 0.8) 50%, 
+    transparent 100%);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: win-expand 2s ease-out var(--delay, 0s) infinite;
+  box-shadow: 
+    0 0 6px rgba(222, 184, 135, 0.8),
+    0 0 12px rgba(222, 184, 135, 0.4);
+}
+
+.win-particle:nth-child(3n) {
+  background: radial-gradient(circle, 
+    rgba(255, 255, 255, 1) 0%, 
+    rgba(255, 255, 255, 0.6) 50%, 
+    transparent 100%);
+  box-shadow: 
+    0 0 8px rgba(255, 255, 255, 0.8),
+    0 0 16px rgba(255, 255, 255, 0.3);
+}
+
+.win-particle:nth-child(5n) {
+  background: radial-gradient(circle, 
+    rgba(100, 150, 255, 1) 0%, 
+    rgba(100, 150, 255, 0.8) 50%, 
+    transparent 100%);
+  box-shadow: 
+    0 0 6px rgba(100, 150, 255, 0.8),
+    0 0 12px rgba(100, 150, 255, 0.4);
+}
+
+/* ========== LOSE PARTICLES (CONTRACTING VACUUM) ========== */
+.lose-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: radial-gradient(circle, 
+    rgba(138, 43, 226, 1) 0%, 
+    rgba(138, 43, 226, 0.6) 50%, 
+    transparent 100%);
+  border-radius: 50%;
+  top: var(--start-y, 50%);
+  left: var(--start-x, 50%);
+  animation: lose-contract 2.5s ease-in var(--delay, 0s) infinite;
+  box-shadow: 
+    0 0 4px rgba(138, 43, 226, 0.7),
+    0 0 8px rgba(138, 43, 226, 0.3);
+}
+
+.lose-particle:nth-child(3n) {
+  background: radial-gradient(circle, 
+    rgba(80, 20, 120, 1) 0%, 
+    rgba(80, 20, 120, 0.8) 50%, 
+    transparent 100%);
+  box-shadow: 
+    0 0 4px rgba(80, 20, 120, 0.8),
+    0 0 8px rgba(80, 20, 120, 0.4);
+}
+
+.lose-particle:nth-child(4n) {
+  background: radial-gradient(circle, 
+    rgba(60, 60, 60, 1) 0%, 
+    rgba(60, 60, 60, 0.6) 50%, 
+    transparent 100%);
+  box-shadow: 
+    0 0 3px rgba(60, 60, 60, 0.6),
+    0 0 6px rgba(60, 60, 60, 0.2);
+}
+
+/* ========== PARTICLE ANIMATIONS ========== */
+@keyframes win-expand {
+  0% { 
+    transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) translateX(0px) scale(0);
+    opacity: 0;
+  }
+  10% { 
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) translateX(20px) scale(0.5);
+  }
+  50% { 
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) translateX(calc(var(--distance, 400px) * 0.7)) scale(1);
+  }
+  100% { 
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--angle, 0deg)) translateX(var(--distance, 400px)) scale(0.2);
+  }
+}
+
+@keyframes lose-contract {
+  0% { 
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  20% { 
+    opacity: 1;
+  }
+  80% { 
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  100% { 
+    transform: scale(0) translate(calc(50vw - var(--start-x, 50%)), calc(50vh - var(--start-y, 50%)));
+    opacity: 0;
+  }
+}
+
+/* ========== SCREEN APPEARANCE ANIMATIONS ========== */
+@keyframes victory-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(30px);
+    box-shadow: 0 0 0 rgba(222, 184, 135, 0);
+  }
+  50% {
+    transform: scale(1.05) translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    box-shadow: 
+      0 0 30px rgba(222, 184, 135, 0.5),
+      inset 0 0 30px rgba(222, 184, 135, 0.1),
+      0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@keyframes defeat-appear {
+  0% {
+    opacity: 0;
+    transform: scale(1.2) translateY(-20px);
+    box-shadow: 0 0 0 rgba(138, 43, 226, 0);
+  }
+  50% {
+    transform: scale(0.95) translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    box-shadow: 
+      0 0 25px rgba(138, 43, 226, 0.4),
+      inset 0 0 40px rgba(0, 0, 0, 0.4),
+      0 20px 40px rgba(0, 0, 0, 0.8);
+  }
+}
+
+@keyframes victory-glow {
+  0% {
+    text-shadow: 
+      0 0 10px rgba(222, 184, 135, 0.6),
+      0 0 20px rgba(222, 184, 135, 0.3);
+  }
+  100% {
+    text-shadow: 
+      0 0 15px rgba(222, 184, 135, 0.9),
+      0 0 30px rgba(222, 184, 135, 0.5),
+      0 0 45px rgba(222, 184, 135, 0.2);
+  }
+}
+
+@keyframes defeat-pulse {
+  0%, 100% {
+    text-shadow: 
+      0 0 8px rgba(138, 43, 226, 0.5),
+      0 0 16px rgba(138, 43, 226, 0.2);
+  }
+  50% {
+    text-shadow: 
+      0 0 12px rgba(138, 43, 226, 0.7),
+      0 0 24px rgba(138, 43, 226, 0.4),
+      0 0 36px rgba(138, 43, 226, 0.1);
+  }
+}
+
+/* ========== MOBILE RESPONSIVENESS ========== */
+@media (max-width: 768px) {
+  .victory-screen, .defeat-screen {
+    padding: 30px 20px;
+    margin: 20px;
+  }
+  
+  .win-particle, .lose-particle {
+    width: 3px;
+    height: 3px;
+  }
+  
+  .particle-container.win-particles .win-particle {
+    animation-duration: 1.5s;
+  }
+  
+  .particle-container.lose-particles .lose-particle {
+    animation-duration: 2s;
+  }
+}
+
 /* ========== SECTION HEADERS ========== */
 .section-header {
   display: none;
