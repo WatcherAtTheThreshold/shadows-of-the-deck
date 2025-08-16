@@ -67,15 +67,11 @@ class IntroTutorial {
     return true; // Tutorial started
   }
 
-  // Manual start for tutorial button (ignores localStorage)
-  startManual() {
-    this.isActive = true;
-    this.currentStep = 0;
-    this.showLegend();
-    this.createTutorialOverlay();
-    this.showStep(0);
-    return true;
-  }
+// Replace the startManual() function in intro.js with this:
+startManual() {
+  showTutorialPopup();
+  return true;
+}
 
   showLegend() {
     const legend = document.getElementById('legend');
