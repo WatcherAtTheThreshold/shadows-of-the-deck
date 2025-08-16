@@ -129,5 +129,41 @@
   <!-- Game Logic -->
   <script src="music.js"></script>
   <script type="module" src="game.js"></script>
+
+<!-- Tutorial Popup -->
+<div class="tutorial-popup-overlay" id="tutorial-popup" style="display: none;">
+  <div class="tutorial-popup-content">
+    <div class="tutorial-popup-title">How to Play</div>
+    
+    <div class="tutorial-goal">
+      <strong>Goal:</strong> Collect all 7 fragments before the dream collapses
+    </div>
+    
+    <div class="tutorial-steps">
+      <div class="tutorial-step">
+        <div class="tutorial-step-number">1</div>
+        Play Focus cards → get orbs (currency)
+      </div>
+      <div class="tutorial-step">
+        <div class="tutorial-step-number">2</div>
+        Buy better cards from market → stronger deck
+      </div>
+      <div class="tutorial-step">
+        <div class="tutorial-step-number">3</div>
+        Play Move cards → travel to collect fragments
+      </div>
+      <div class="tutorial-step">
+        <div class="tutorial-step-number">4</div>
+        Watch the countdown! Game ends when it hits 0
+      </div>
+    </div>
+    
+    <div class="tutorial-buttons">
+      <button class="tutorial-btn tutorial-primary" onclick="closeTutorialPopup()">Got It!</button>
+      <a href="manual.html" target="_blank" class="tutorial-btn">Full Manual</a>
+    </div>
+  </div>
+</div>
+  
 </body>
 </html>
