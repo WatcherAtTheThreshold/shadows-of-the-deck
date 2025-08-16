@@ -23,7 +23,7 @@ function updateMusicPhase() {
   window.MusicManager?.setTrackByPhase(phase);
 }
 
-// Add these functions to intro.js or game.js:
+// Tutorial Popup:
 function showTutorialPopup() {
   document.getElementById('tutorial-popup').style.display = 'flex';
 }
@@ -31,6 +31,13 @@ function showTutorialPopup() {
 function closeTutorialPopup() {
   document.getElementById('tutorial-popup').style.display = 'none';
 }
+
+// Close on background click
+document.addEventListener('click', function(e) {
+  if (e.target.id === 'tutorial-popup') {
+    closeTutorialPopup();
+  }
+});
 
 
 // ========== ENHANCED DRAW HAND SYSTEM FOR IN-PLACE CARDS ==========
