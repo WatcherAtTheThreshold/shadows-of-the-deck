@@ -53,6 +53,7 @@ class IntroTutorial {
       });
     }
   this.setupPopupHandlers();
+ }
 }
   
 
