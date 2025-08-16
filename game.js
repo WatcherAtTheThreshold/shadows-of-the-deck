@@ -23,13 +23,24 @@ function updateMusicPhase() {
   window.MusicManager?.setTrackByPhase(phase);
 }
 
-// Tutorial Popup:
+// Add these near the top of game.js, after the music functions
 function showTutorialPopup() {
-  document.getElementById('tutorial-popup').style.display = 'flex';
+  console.log('showTutorialPopup called'); // Debug line
+  const popup = document.getElementById('tutorial-popup');
+  if (popup) {
+    popup.style.display = 'flex';
+    console.log('Popup should be visible now'); // Debug line
+  } else {
+    console.log('Popup element not found!'); // Debug line
+  }
 }
 
 function closeTutorialPopup() {
-  document.getElementById('tutorial-popup').style.display = 'none';
+  console.log('closeTutorialPopup called'); // Debug line
+  const popup = document.getElementById('tutorial-popup');
+  if (popup) {
+    popup.style.display = 'none';
+  }
 }
 
 // Close on background click
