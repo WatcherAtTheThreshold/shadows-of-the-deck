@@ -52,6 +52,8 @@ class IntroTutorial {
         this.startManual();
       });
     }
+  this.setupPopupHandlers();
+}
   }
 
   start() {
