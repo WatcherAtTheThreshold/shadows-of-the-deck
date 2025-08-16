@@ -170,9 +170,9 @@ function drawMarketCard() {
 function drawNewHand() {
   console.log('🎴 Drawing new hand - starting fresh');
   
-  // Check if we should skip drawing due to Time Fracture
+ // Check if we should skip drawing due to Time Fracture
   if (skipNextDraw) {
-    skipNextDraw = false; // Reset the flag
+    skipNextDraw = false;
     logMsg('Time fracture effect: No new cards drawn this turn!');
     showActionPhase();
     updateAllUI();
@@ -184,8 +184,21 @@ function drawNewHand() {
   showActionPhase();
   updateAllUI();
   logMsg('New hand drawn. Play your cards!');
+  
+  // LOCK THE END TURN BUTTON FOR 2 SECONDS
+  const endTurnBtn = document.getElementById('end-turn-btn');
+  if (endTurnBtn) {
+    endTurnBtn.disabled = true;
+    endTurnBtn.style.opacity = '0.5';
+    endTurnBtn.style.cursor = 'not-allowed';
+    
+    setTimeout(() => {
+      endTurnBtn.disabled = false;
+      endTurnBtn.style.opacity = '';
+      endTurnBtn.style.cursor = '';
+    }, 2000); // 2 second lock
+  }
 }
-
 // Handle buying a card from market
 function buyCard(marketIndex) {
   const cardObj = marketRow[marketIndex];
