@@ -13,7 +13,7 @@ function pickMusicPhase() {
   const cruxLeft = (window.cruxflareDeck?.length ?? 0);
   const isDangerMode = document.body.classList.contains('danger-mode');
 
-  if (cruxLeft <= 2) return 'danger';
+  if (cruxLeft <= 3) return 'danger';
   if (isDangerMode) return 'warning';
   return 'start';
 }
@@ -515,9 +515,9 @@ function endTurn() {
     
     if (finalDarknessCountdown === null) {
       let musicPhase = 'start';
-      if (cruxflareDeck.length <= 2) {
+      if (cruxflareDeck.length <= 3) {
         musicPhase = 'danger';
-      } else if (cruxflareDeck.length <= 7) {
+      } else if (cruxflareDeck.length <= 9) {
         musicPhase = 'warning';
       }
       window.MusicManager?.setTrackByPhase(musicPhase);
