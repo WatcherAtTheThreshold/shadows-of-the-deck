@@ -427,33 +427,81 @@ function hideCruxflareOverlay() {
 }
 
 // Show game over screen as an overlay
+// ========== ENHANCED WIN/LOSE POPUP SYSTEM ==========
+// Replace the showGameOverScreen function in ui.js with this:
+
 export function showGameOverScreen(isWin, fragmentsCollected, totalFragments) {
   let flavorText;
+  let particleClass = isWin ? 'win-particles' : 'lose-particles';
+  
   if (isWin) {
     const flavorTexts = [
       "The dream fragments coalesce into crystalline truth. You have mastered the shifting realm.",
       "Through shadow and mist, you have gathered the scattered pieces of the dreaming mind.",
-      "The Cruxflare fades as your collection of fragments forms a complete vision of the dreamscape."
+      "The Cruxflare fades as your collection of fragments forms a complete vision of the dreamscape.",
+      "Starlight breaks through the darkness. The dream realm bows to your mastery.",
+      "Victory shimmers like aurora through the cosmic void. The fragments sing in harmony."
     ];
     flavorText = flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
   } else {
     const flavorTexts = [
       "The dream collapses, fragments scattered to the void. The shadows claim what remains.",
       "Cruxflare consumes the last vestiges of the dream. The fragments slip through ethereal fingers.",
-      "The mist thickens, obscuring the path. Some fragments were never meant to be found."
+      "The mist thickens, obscuring the path. Some fragments were never meant to be found.",
+      "Darkness pulls everything inward. The dream realm reclaims its scattered essence.",
+      "The void hungers, drawing all light into its endless depths. Another dreamer falls to shadow."
     ];
     flavorText = flavorTexts[Math.floor(Math.random() * flavorTexts.length)];
   }
   
   const gameOverContainer = document.getElementById('game-over-container');
+  
+  // Create the particle container
+  const particleContainer = document.createElement('div');
+  particleContainer.className = `particle-container ${particleClass}`;
+  
+  // Generate particles
+  for (let i = 0; i < (isWin ? 60 : 40); i++) {
+    const particle = document.createElement('div');
+    particle.className = `game-over-particle ${isWin ? 'win-particle' : 'lose-particle'}`;
+    
+    // Random starting positions and directions
+    if (isWin) {
+      // Win particles: start from center, expand outward
+      particle.style.setProperty('--angle', Math.random() * 360 + 'deg');
+      particle.style.setProperty('--distance', (Math.random() * 800 + 400) + 'px');
+      particle.style.setProperty('--delay', Math.random() * 0.5 + 's');
+    } else {
+      // Lose particles: start from edges, contract inward
+      const edge = Math.floor(Math.random() * 4); // 0=top, 1=right, 2=bottom, 3=left
+      let startX, startY;
+      
+      switch(edge) {
+        case 0: startX = Math.random() * 100 + '%'; startY = '0%'; break;    // top
+        case 1: startX = '100%'; startY = Math.random() * 100 + '%'; break; // right
+        case 2: startX = Math.random() * 100 + '%'; startY = '100%'; break; // bottom
+        case 3: startX = '0%'; startY = Math.random() * 100 + '%'; break;   // left
+      }
+      
+      particle.style.setProperty('--start-x', startX);
+      particle.style.setProperty('--start-y', startY);
+      particle.style.setProperty('--delay', Math.random() * 0.8 + 's');
+    }
+    
+    particleContainer.appendChild(particle);
+  }
+  
   gameOverContainer.innerHTML = `
     <div class="game-over-backdrop"></div>
-    <div class="game-over-screen">
+    <div class="game-over-screen ${isWin ? 'victory-screen' : 'defeat-screen'}">
       <div class="game-over-title">${isWin ? '✧ Victory ✧' : '◯ Dream Lost ◯'}</div>
       <div class="game-over-score">Fragments Collected: ${fragmentsCollected} / ${totalFragments}</div>
       <div class="game-over-flavor">${flavorText}</div>
     </div>
   `;
+  
+  // Add particles to the container
+  gameOverContainer.appendChild(particleContainer);
 }
 
 // Show/hide UI elements
