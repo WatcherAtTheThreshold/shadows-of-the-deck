@@ -67,11 +67,7 @@ class IntroTutorial {
     return true; // Tutorial started
   }
 
-// Replace the startManual() function in intro.js with this:
-startManual() {
-  showTutorialPopup();
-  return true;
-}
+
 
   showLegend() {
     const legend = document.getElementById('legend');
@@ -202,6 +198,39 @@ startManual() {
   reset() {
     localStorage.removeItem('shadows-tutorial-complete');
   }
+
+ startManual() {
+    this.showTutorialPopup();
+    return true;
+  }
+
+  showTutorialPopup() {
+    console.log('showTutorialPopup called');
+    const popup = document.getElementById('tutorial-popup');
+    if (popup) {
+      popup.style.display = 'flex';
+    } else {
+      console.log('Popup element not found!');
+    }
+  }
+
+  closeTutorialPopup() {
+    const popup = document.getElementById('tutorial-popup');
+    if (popup) {
+      popup.style.display = 'none';
+    }
+  }
+
+  setupPopupHandlers() {
+    window.closeTutorialPopup = () => this.closeTutorialPopup();
+    
+    document.addEventListener('click', (e) => {
+      if (e.target.id === 'tutorial-popup') {
+        this.closeTutorialPopup();
+      }
+    });
+  }
+  
 }
 
 // Export the tutorial class
