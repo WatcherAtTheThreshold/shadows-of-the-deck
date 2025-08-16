@@ -196,7 +196,7 @@ function drawNewHand() {
       endTurnBtn.disabled = false;
       endTurnBtn.style.opacity = '';
       endTurnBtn.style.cursor = '';
-    }, 1500); // 1.5 second lock
+    }, 1000); // 1 second lock
   }
 }
 // Handle buying a card from market
