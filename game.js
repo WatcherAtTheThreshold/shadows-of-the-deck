@@ -23,6 +23,16 @@ function updateMusicPhase() {
   window.MusicManager?.setTrackByPhase(phase);
 }
 
+// Add these functions to intro.js or game.js:
+function showTutorialPopup() {
+  document.getElementById('tutorial-popup').style.display = 'flex';
+}
+
+function closeTutorialPopup() {
+  document.getElementById('tutorial-popup').style.display = 'none';
+}
+
+
 // ========== ENHANCED DRAW HAND SYSTEM FOR IN-PLACE CARDS ==========
 function drawHand() {
   while (playerHand.length < 5 && playerDeck.length > 0) {
