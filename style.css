@@ -1027,19 +1027,6 @@ body.danger-mode #hud::after {
   z-index: 9999;
 }
 
-/*.game-over-screen {
-  pointer-events: auto;
-  background: rgba(0, 0, 0, 0.95);
-  padding: 40px;
-  border-radius: 16px;
-  border: 3px solid rgba(222, 184, 135, 0.8);
-  text-align: center;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
-  animation: game-over-appear 0.5s ease-out;
-  position: relative;
-  z-index: 10001;
-}*/
-
 .game-over-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: 2.5rem;
