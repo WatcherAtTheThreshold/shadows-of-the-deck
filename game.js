@@ -23,32 +23,6 @@ function updateMusicPhase() {
   window.MusicManager?.setTrackByPhase(phase);
 }
 
-// Add these near the top of game.js, after the music functions
-function showTutorialPopup() {
-  console.log('showTutorialPopup called'); // Debug line
-  const popup = document.getElementById('tutorial-popup');
-  if (popup) {
-    popup.style.display = 'flex';
-    console.log('Popup should be visible now'); // Debug line
-  } else {
-    console.log('Popup element not found!'); // Debug line
-  }
-}
-
-function closeTutorialPopup() {
-  console.log('closeTutorialPopup called'); // Debug line
-  const popup = document.getElementById('tutorial-popup');
-  if (popup) {
-    popup.style.display = 'none';
-  }
-}
-
-// Close on background click
-document.addEventListener('click', function(e) {
-  if (e.target.id === 'tutorial-popup') {
-    closeTutorialPopup();
-  }
-});
 
 
 // ========== ENHANCED DRAW HAND SYSTEM FOR IN-PLACE CARDS ==========
@@ -83,6 +57,8 @@ function setupGameData() {
   marketDeck = createMarketDeck();
   playerDeck = createPlayerDeck();
   skipNextDraw = false;
+  const tutorial = new IntroTutorial();
+  tutorial.setupPopupHandlers();
   
   // Randomize starting deck
   for (let i = playerDeck.length - 1; i > 0; i--) {
