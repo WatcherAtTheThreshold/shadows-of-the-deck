@@ -54,7 +54,7 @@ class IntroTutorial {
     }
   this.setupPopupHandlers();
 }
-  }
+  
 
   start() {
     if (localStorage.getItem('shadows-tutorial-complete')) {
