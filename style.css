@@ -654,7 +654,7 @@ body.danger-mode #hud::after {
 }
 
 /* ========== GAME OVER SCREENS ========== */
-/*#game-over-container {
+#game-over-container {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -675,7 +675,7 @@ body.danger-mode #hud::after {
   z-index: 9999;
 }
 
-.game-over-screen {
+/*.game-over-screen {
   pointer-events: auto;
   background: rgba(0, 0, 0, 0.95);
   padding: 40px;
