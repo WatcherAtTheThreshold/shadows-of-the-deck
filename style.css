@@ -1006,7 +1006,7 @@ body.danger-mode #hud::after {
 }
 
 /* ========== GAME OVER SCREENS ========== */
-#game-over-container {
+/*#game-over-container {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -1027,7 +1027,7 @@ body.danger-mode #hud::after {
   z-index: 9999;
 }
 
-/*.game-over-screen {
+.game-over-screen {
   pointer-events: auto;
   background: rgba(0, 0, 0, 0.95);
   padding: 40px;
@@ -1038,27 +1038,24 @@ body.danger-mode #hud::after {
   animation: game-over-appear 0.5s ease-out;
   position: relative;
   z-index: 10001;
-}
+}*/
 
 .game-over-title {
   font-family: 'Cormorant Garamond', serif;
   font-size: 2.5rem;
   margin-bottom: 15px;
-  color: rgba(222, 184, 135, 0.9);
 }
 
 .game-over-score {
   font-size: 1.3rem;
   margin-bottom: 10px;
-  color: rgba(255, 255, 255, 0.9);
 }
 
 .game-over-flavor {
   font-style: italic;
-  color: rgba(255, 255, 255, 0.7);
   margin-bottom: 20px;
   line-height: 1.4;
-}*/
+}
 
 /* ========== PARTICLE CONTAINER ========== */
 .particle-container {
