@@ -3,17 +3,17 @@
    Complete style.css - CLEANED & SECTIONED
    
    TABLE OF CONTENTS:
-   1. Base Styles & Reset
-   2. HUD & Resource Display
-   3. Layout Containers & Log System
-   4. Atmospheric Effects & Mist
-   5. Overlays & Game Screens
-   6. Card System & Animations
-   7. Map System & Game Elements
-   8. Buttons, Legend & Tooltips
-   9. Tutorial & Interactive Elements
-   10. Mobile Responsive
-   11. Keyframe Animations
+   1. Base Styles & Reset - Line 20
+   2. HUD & Resource Display - Line 58
+   3. Layout Containers & Log System - Line 329
+   4. Atmospheric Effects & Mist - Line 462
+   5. Overlays & Game Screens - Line 619
+   6. Card System & Animations - Line 1290
+   7. Map System & Game Elements - Line 1627
+   8. Buttons, Legend & Tooltips - Line 1724
+   9. Tutorial & Interactive Elements - Line 1835
+   10. Mobile Responsive - Line 1925
+   11. Keyframe Animations - Line 2142
    ========================================== */
 
 /* ==========================================
@@ -654,7 +654,7 @@ body.danger-mode #hud::after {
 }
 
 /* ========== GAME OVER SCREENS ========== */
-#game-over-container {
+/*#game-over-container {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -706,7 +706,7 @@ body.danger-mode #hud::after {
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 20px;
   line-height: 1.4;
-}
+}*/
 
 /* ========== CRUXFLARE OVERLAY SYSTEM ========== */
 
