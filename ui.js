@@ -178,13 +178,13 @@ export function updateMistOverlay(cruxflareDeck) {
   // Remove existing classes
   document.body.classList.remove('warning-mode', 'danger-mode');
   
-  if (cardsLeft <= 2) {
+  if (cardsLeft <= 3) {
     // Final panic - red
     document.body.classList.add('danger-mode');
     const hud = document.getElementById('hud');
     hud.style.borderColor = 'rgba(255, 100, 100, 0.8)';
     hud.style.animation = 'pulse-danger 1.5s infinite';
-  } else if (cardsLeft <= 7) {
+  } else if (cardsLeft <= 9) {
     // Warning stage - purple
     document.body.classList.add('warning-mode');
     const hud = document.getElementById('hud');
