@@ -56,27 +56,28 @@ body, html {
 }
 
 /* Scale up progressively for larger screens */
+/* Much more conservative scaling */
 @media (min-width: 1200px) {
   #game { 
-    transform: scale(1.1); /* 10% bigger on medium-large screens */
+    transform: scale(1.05); /* Just 5% bigger */
   }
 }
 
 @media (min-width: 1400px) {
   #game { 
-    transform: scale(1.25); /* 25% bigger on large screens */
+    transform: scale(1.1); /* 10% bigger */
   }
 }
 
 @media (min-width: 1600px) {
   #game { 
-    transform: scale(1.4); /* 40% bigger on very large screens */
+    transform: scale(1.15); /* 15% bigger */
   }
 }
 
 @media (min-width: 1920px) {
   #game { 
-    transform: scale(1.6); /* 60% bigger on huge screens */
+    transform: scale(1.25); /* 25% bigger on huge screens */
   }
 }
 
