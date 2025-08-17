@@ -36,14 +36,58 @@ body, html {
   overflow-x: hidden;
 }
 
-#game { 
+/* ==========================================
+   RESPONSIVE SCALING SYSTEM
+   Add this to your existing CSS
+   ========================================== */
+
+#game {
+  /* Your existing styles stay the same */
   max-width: 1000px; 
   margin: auto; 
   position: relative; 
   z-index: 2;
   backdrop-filter: blur(1px);
   padding: 20px;
+  
+  /* NEW: Scaling setup */
+  transform-origin: top center; /* Scale from top-center point */
+  transition: transform 0.3s ease; /* Smooth scaling when resizing */
 }
+
+/* Scale up progressively for larger screens */
+@media (min-width: 1200px) {
+  #game { 
+    transform: scale(1.1); /* 10% bigger on medium-large screens */
+  }
+}
+
+@media (min-width: 1400px) {
+  #game { 
+    transform: scale(1.25); /* 25% bigger on large screens */
+  }
+}
+
+@media (min-width: 1600px) {
+  #game { 
+    transform: scale(1.4); /* 40% bigger on very large screens */
+  }
+}
+
+@media (min-width: 1920px) {
+  #game { 
+    transform: scale(1.6); /* 60% bigger on huge screens */
+  }
+}
+
+/* 
+Optional: Manual size controls for testing 
+#game.size-small { transform: scale(0.9); }
+#game.size-normal { transform: scale(1.0); }
+#game.size-large { transform: scale(1.3); }
+#game.size-huge { transform: scale(1.7); }
+*/
+
 
 h2 {
   font-family: 'Cormorant Garamond', serif;
