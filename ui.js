@@ -27,6 +27,8 @@ export function createParticles() {
 }
 
 // Render market cards with flip animations
+// In ui.js, find the renderMarket function and update it like this:
+
 export function renderMarket(marketRow, coins, onBuyCard) {
   let m = document.getElementById('market');
   m.innerHTML = '';
@@ -34,6 +36,7 @@ export function renderMarket(marketRow, coins, onBuyCard) {
     let el = document.createElement('div');
     el.className = 'card-flip tooltip';
     el.setAttribute('data-tooltip', cardObj.tooltip);
+    el.setAttribute('data-card-name', cardObj.name); // ADD THIS LINE
     el.innerHTML = `
       <div class="card-flip-inner">
         <div class="card-front">
@@ -47,10 +50,9 @@ export function renderMarket(marketRow, coins, onBuyCard) {
     el.onclick = () => {
       if (coins >= cardObj.cost && !el.classList.contains('market-bought')) {
         el.classList.add('market-bought');
-        // Wait for flip animation to complete before processing purchase
         setTimeout(() => onBuyCard(i), 500);
       } else {
-        onBuyCard(i); // Still show "not enough orbs" message immediately
+        onBuyCard(i);
       }
     };
     m.appendChild(el);
