@@ -1464,7 +1464,7 @@ body.danger-mode #hud::after {
     url('images/cards/focus-card-120.png');
 }
 
-/* Move Cards - Character Background */
+/* Move Cards - Footprints Background */
 .card-front:has(div:contains("Move")) {
   background-image: 
     linear-gradient(135deg, 
@@ -1520,6 +1520,268 @@ body.danger-mode #hud::after {
   border-color: rgba(222, 184, 135, 0.8);
   box-shadow: 0 5px 15px rgba(222, 184, 135, 0.3);
 }
+
+/* ==========================================
+   SPECIAL MARKET CARDS - FULL BACKGROUND SYSTEM
+   Add this to your style.css after the existing Focus/Move rules
+   ========================================== */
+
+/* ========== DEFENSIVE CARDS ========== */
+/* Shadow Blocker - Protective barrier theme */
+.card-front:has(div:contains("Shadow Blocker")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/shadow-blocker-card-120.png');
+}
+
+/* Spirit Guide - Mystical protection theme */
+.card-front:has(div:contains("Spirit Guide")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/spirit-guide-card-120.png');
+}
+
+/* ========== MYSTICAL/VISION CARDS ========== */
+/* Dream Sight - Foresight/crystal ball theme */
+.card-front:has(div:contains("Dream Sight")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/dream-sight-card-120.png');
+}
+
+/* Dream Echo - Time manipulation/replay theme */
+.card-front:has(div:contains("Dream Echo")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/dream-echo-card-120.png');
+}
+
+/* Ethereal Leap - Teleportation/void travel theme */
+.card-front:has(div:contains("Ethereal Leap")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/ethereal-leap-card-120.png');
+}
+
+/* ========== SAFE MOVEMENT CARDS ========== */
+/* Swift Step - Quick evasion theme */
+.card-front:has(div:contains("Swift Step")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/swift-step-card-120.png');
+}
+
+/* Void Step - Void walking theme */
+.card-front:has(div:contains("Void Step")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/void-step-card-120.png');
+}
+
+/* Shadow Walk - Shadow manipulation theme */
+.card-front:has(div:contains("Shadow Walk")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/shadow-walk-card-120.png');
+}
+
+/* ========== RESOURCE/TREASURE CARDS ========== */
+/* Lucky Find - Treasure hunting theme */
+.card-front:has(div:contains("Lucky Find")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/lucky-find-card-120.png');
+}
+
+/* Essence Tap - Energy siphoning theme */
+.card-front:has(div:contains("Essence Tap")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/essence-tap-card-120.png');
+}
+
+/* ========== SPECIAL CARDS ========== */
+/* Fragment 2pts - Enhanced fragment theme */
+.card-front:has(div:contains("Fragment 2pts")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/fragment-2pts-card-120.png');
+}
+
+/* Mist Walker - Mystical travel theme */
+.card-front:has(div:contains("Mist Walker")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/mist-walker-card-120.png');
+}
+
+/* ========== ADVANCED MOVEMENT CARDS ========== */
+/* Astral Drift - Cosmic travel theme */
+.card-front:has(div:contains("Astral Drift")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/astral-drift-card-120.png');
+}
+
+/* Phantom Step - Ghostly movement theme */
+.card-front:has(div:contains("Phantom Step")) {
+  background-image: 
+    linear-gradient(135deg, 
+      rgba(25, 25, 45, 0.85) 0%, 
+      rgba(15, 15, 35, 0.80) 30%,
+      rgba(20, 20, 40, 0.85) 70%,
+      rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/phantom-step-card-120.png');
+}
+
+/* ==========================================
+   FALLBACK SYSTEM FOR OLDER BROWSERS
+   (For browsers that don't support :has())
+   ========================================== */
+
+/* Defensive Cards */
+[data-card-name*="Shadow Blocker"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/shadow-blocker-card-120.png');
+}
+
+[data-card-name*="Spirit Guide"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/spirit-guide-card-120.png');
+}
+
+/* Mystical Cards */
+[data-card-name*="Dream Sight"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/dream-sight-card-120.png');
+}
+
+[data-card-name*="Dream Echo"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/dream-echo-card-120.png');
+}
+
+[data-card-name*="Ethereal Leap"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/ethereal-leap-card-120.png');
+}
+
+/* Safe Movement Cards */
+[data-card-name*="Swift Step"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/swift-step-card-120.png');
+}
+
+[data-card-name*="Void Step"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/void-step-card-120.png');
+}
+
+[data-card-name*="Shadow Walk"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/shadow-walk-card-120.png');
+}
+
+/* Resource Cards */
+[data-card-name*="Lucky Find"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/lucky-find-card-120.png');
+}
+
+[data-card-name*="Essence Tap"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/essence-tap-card-120.png');
+}
+
+/* Special Cards */
+[data-card-name*="Fragment 2pts"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/fragment-2pts-card-120.png');
+}
+
+[data-card-name*="Mist Walker"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/mist-walker-card-120.png');
+}
+
+/* Advanced Movement Cards */
+[data-card-name*="Astral Drift"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/astral-drift-card-120.png');
+}
+
+[data-card-name*="Phantom Step"] .card-front {
+  background-image: 
+    linear-gradient(135deg, rgba(25, 25, 45, 0.85) 0%, rgba(15, 15, 35, 0.80) 30%, rgba(20, 20, 40, 0.85) 70%, rgba(10, 10, 30, 0.80) 100%),
+    url('images/cards/phantom-step-card-120.png');
+}
+
+
 
 .card-back {
   background: linear-gradient(135deg, 
