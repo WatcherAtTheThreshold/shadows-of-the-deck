@@ -1629,7 +1629,7 @@ body.danger-mode #hud::after {
     url('images/cards/lucky-find-card-120.png');
 }
 
-/* Coin Burst - Gain 1-3 Focus */
+/* Coin Burst - Energy explosion theme */
 .card-front:has(div:contains("Coin Burst")) {
   background-image: 
     linear-gradient(135deg, 
