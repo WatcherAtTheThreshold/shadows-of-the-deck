@@ -158,20 +158,20 @@ export function createCruxflareDeck() {
 
 // Map Cruxflare event names to icons from iconCardList.md
 const CRUXFLARE_ICONS = {
-  'Shadow Surge': '☠️',
-  'Corruption Pulse': '💥', 
-  'Dream Collapse': '🌪️',
-  'Sudden Eclipse': '🗑️',
-  'Void Whisper': '💸',
-  'Time Fracture': '⏳',
-  'Memory Drain': '🔄',
-  'Reality Shift': '🌀',
-  'Final Darkness': '⚫',
-  'Mist Thickens': '🌫️',
-  'Dream Tremor': '💔',
-  'Shadow Whisper': '🚫',
-  'Void Echo': '⬅️',
-  'Reality Warp': '🔀'
+  'Shadow Surge': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Corruption Pulse': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Dream Collapse': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Sudden Eclipse': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Void Whisper': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Time Fracture': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Memory Drain': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Reality Shift': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Final Darkness': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Mist Thickens': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Dream Tremor': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Shadow Whisper': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Void Echo': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">',
+  'Reality Warp': '<img src="images/icons/crux-icon-48.png" width="48" height="48" alt="Crux">'
 };
 
 // Extract event name and description from Cruxflare event string
