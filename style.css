@@ -1640,12 +1640,6 @@ body.danger-mode #hud::after {
     url('images/cards/coin-burst-card-120.png');
 }
 
-/* TEMPORARY TEST - targets ALL card fronts with Coin Burst text */
-.card-front:contains("Coin Burst") {
-  background: red !important; /* Should make background red if it works */
-}
-
-
 /* Essence Tap - Energy siphoning theme */
 .card-front:has(div:contains("Essence Tap")) {
   background-image: 
