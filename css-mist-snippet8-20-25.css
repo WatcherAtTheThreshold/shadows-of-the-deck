@@ -1,0 +1,238 @@
+/* ==========================================
+   4. ATMOSPHERIC EFFECTS & MIST
+   ========================================== */
+
+/* ========== ATMOSPHERIC EFFECTS ========== */
+.mist-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.mist-layer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.02) 0%, transparent 25%),
+    radial-gradient(circle at 40% 40%, rgba(255,255,255,0.04) 0%, transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(255,255,255,0.02) 0%, transparent 25%),
+    radial-gradient(circle at 30% 70%, rgba(255,255,255,0.03) 0%, transparent 25%);
+  animation: mistDrift1 45s ease-in-out infinite;
+  opacity: 0.9;
+}
+
+.mist-layer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(255,255,255,0.02) 0%, transparent 30%),
+    radial-gradient(circle at 20% 60%, rgba(255,255,255,0.03) 0%, transparent 30%),
+    radial-gradient(circle at 60% 90%, rgba(255,255,255,0.02) 0%, transparent 30%),
+    radial-gradient(circle at 90% 50%, rgba(255,255,255,0.025) 0%, transparent 30%);
+  animation: mistDrift2 60s ease-in-out infinite reverse;
+  opacity: 0.7;
+}
+
+.mist-tendrils {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.01) 35%, transparent 40%),
+    linear-gradient(-45deg, transparent 60%, rgba(255,255,255,0.015) 65%, transparent 70%),
+    linear-gradient(90deg, transparent 20%, rgba(255,255,255,0.008) 25%, transparent 30%);
+  animation: tendrilFlow 35s linear infinite;
+  opacity: 1.0;
+}
+
+/* Warning mode - purple mist */
+body.warning-mode .mist-layer::before {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(138,43,226,0.08) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(120,30,180,0.06) 0%, transparent 25%),
+    radial-gradient(circle at 40% 40%, rgba(160,60,220,0.10) 0%, transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(100,20,150,0.05) 0%, transparent 25%),
+    radial-gradient(circle at 30% 70%, rgba(140,50,200,0.07) 0%, transparent 25%);
+  animation-duration: 30s;
+  opacity: 0.9;
+}
+
+body.warning-mode .mist-layer::after {
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(120,20,170,0.05) 0%, transparent 30%),
+    radial-gradient(circle at 20% 60%, rgba(140,40,190,0.07) 0%, transparent 30%),
+    radial-gradient(circle at 60% 90%, rgba(100,15,140,0.04) 0%, transparent 30%),
+    radial-gradient(circle at 90% 50%, rgba(150,50,210,0.06) 0%, transparent 30%);
+  animation-duration: 40s;
+  opacity: 0.7;
+}
+
+body.warning-mode .mist-tendrils {
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(138,43,226,0.025) 35%, transparent 40%),
+    linear-gradient(-45deg, transparent 60%, rgba(120,30,180,0.03) 65%, transparent 70%),
+    linear-gradient(90deg, transparent 20%, rgba(140,40,200,0.02) 25%, transparent 30%);
+  animation-duration: 25s;
+}
+
+/* Danger mode - red mist */
+body.danger-mode .mist-layer::before {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255,100,100,0.08) 0%, transparent 25%),
+    radial-gradient(circle at 80% 80%, rgba(200,50,50,0.06) 0%, transparent 25%),
+    radial-gradient(circle at 40% 40%, rgba(255,80,80,0.10) 0%, transparent 25%),
+    radial-gradient(circle at 90% 10%, rgba(180,40,40,0.05) 0%, transparent 25%),
+    radial-gradient(circle at 30% 70%, rgba(255,60,60,0.08) 0%, transparent 25%);
+  animation-duration: 15s;
+  opacity: 1;
+}
+
+body.danger-mode .mist-layer::after {
+  background: 
+    radial-gradient(circle at 70% 30%, rgba(200,30,30,0.06) 0%, transparent 30%),
+    radial-gradient(circle at 20% 60%, rgba(255,40,40,0.08) 0%, transparent 30%),
+    radial-gradient(circle at 60% 90%, rgba(180,20,20,0.05) 0%, transparent 30%),
+    radial-gradient(circle at 90% 50%, rgba(255,50,50,0.07) 0%, transparent 30%);
+  animation-duration: 20s;
+  opacity: 0.9;
+}
+
+body.danger-mode .mist-tendrils {
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(255,50,50,0.03) 35%, transparent 40%),
+    linear-gradient(-45deg, transparent 60%, rgba(200,30,30,0.035) 65%, transparent 70%),
+    linear-gradient(90deg, transparent 20%, rgba(255,40,40,0.025) 25%, transparent 30%);
+  animation-duration: 12s;
+}
+
+/* HUD state changes */
+body.warning-mode #hud {
+  box-shadow: 
+    inset 0 0 0 1px rgba(138, 43, 226, 0.6),
+    inset 0 0 0 3px rgba(100, 150, 255, 0.3),
+    0 0 25px rgba(138, 43, 226, calc(var(--hud-glow-intensity) * 0.8)),
+    0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+body.danger-mode #hud {
+  box-shadow: 
+    inset 0 0 0 1px rgba(255, 100, 100, 0.7),
+    inset 0 0 0 3px rgba(255, 150, 150, 0.4),
+    0 0 30px rgba(255, 100, 100, var(--hud-glow-intensity)),
+    0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+body.danger-mode #hud::before,
+body.danger-mode #hud::after {
+  border-color: rgba(255, 100, 100, 0.8);
+}
+
+/* Cruxflare warning/danger states */
+.cruxflare-warning .resource-value.cruxflare-count {
+  animation: gentle-pulse var(--hud-pulse-speed) infinite;
+}
+
+.cruxflare-danger .resource-value.cruxflare-count {
+  color: #FF6464 !important;
+  animation: gentle-pulse calc(var(--hud-pulse-speed) * 0.7) infinite;
+}
+
+/* ==========================================
+   MIST OVERLAY BACKGROUND SYSTEM
+   Add this section to your style.css file
+   ========================================== */
+
+/* ========== NEW: MIST OVERLAY BACKGROUND LAYER ========== */
+/* This layer sits behind all existing mist effects */
+.mist-overlay-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0; /* Behind everything - lower than existing mist-layer (z-index: 1) */
+  overflow: hidden;
+  
+  /* Default: mist-overlay.png for game start */
+  background-image: url('images/mist-overlay.png');
+  background-repeat: repeat;
+  background-size: auto; /* Use natural tile size */
+  background-position: 0 0;
+  
+  /* Default animation - slow drift */
+  animation: mistOverlayDrift 60s ease-in-out infinite;
+  opacity: 0.8; /* Adjust this if too strong/weak */
+  
+  /* Smooth transitions when switching backgrounds */
+  transition: background-image 2s ease-in-out, animation-duration 1s ease-in-out;
+}
+
+/* ========== PHASE-BASED BACKGROUND SWITCHING ========== */
+/* Warning mode (≤9 Cruxflare) - switch to mist-overlay2.png */
+body.warning-mode .mist-overlay-layer {
+  background-image: url('images/mist-overlay2.png');
+  animation-duration: 45s; /* Slightly faster drift */
+}
+
+/* Danger mode (≤3 Cruxflare or Final Darkness) - keep overlay2, speed up */
+body.danger-mode .mist-overlay-layer {
+  background-image: url('images/mist-overlay2.png');
+  animation-duration: 25s; /* Much faster "rolling clouds" effect */
+}
+
+/* ========== MIST OVERLAY ANIMATIONS ========== */
+/* Subtle drift animation for the background images */
+@keyframes mistOverlayDrift {
+  0%, 100% { 
+    background-position: 0 0;
+    transform: scale(1);
+  }
+  25% { 
+    background-position: -50px -30px;
+    transform: scale(1.02);
+  }
+  50% { 
+    background-position: 30px -60px;
+    transform: scale(0.98);
+  }
+  75% { 
+    background-position: -20px -40px;
+    transform: scale(1.01);
+  }
+}
+
+/* ========== OPACITY ADJUSTMENTS FOR EXISTING MIST ========== */
+/* Reduce opacity of existing mist layers so overlay images show through */
+.mist-layer::before {
+  /* Reduce from opacity: 0.9 to 0.6 */
+  opacity: 0.4;
+}
+
+.mist-layer::after {
+  /* Reduce from opacity: 0.7 to 0.4 */
+  opacity: 0.2;
+}
+
+.mist-tendrils {
+  /* Reduce from opacity: 1.0 to 0.7 */
+  opacity: 0.5;
+}
