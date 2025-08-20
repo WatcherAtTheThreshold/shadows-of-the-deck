@@ -151,7 +151,3 @@ The current mist is really good, but the images actaully make solid grounding ba
    * Collect feedback from playtesters before merging to `main`.
 
 ---
-
-✅ *This document is intended for dev handoff and team discussion. Each proposed solution is flexible — implementation details may shift during development.*
-
----
