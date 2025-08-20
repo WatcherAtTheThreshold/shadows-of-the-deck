@@ -118,7 +118,7 @@ function initGame() {
   
   // Start tutorial for new players
 
-      logMsg('Welcome to the game!');
+      logMsg('Select cards to play them!');
     
 }
 
