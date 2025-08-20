@@ -100,7 +100,7 @@ function initGame() {
     drawMarketCard();
     
  showActionPhase();
-  logMsg('Welcome to the game!'); 
+  logMsg('Select cards to play them!'); 
 
      import('./intro.js').then(module => {
     const IntroTutorial = module.default;
