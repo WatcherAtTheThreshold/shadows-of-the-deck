@@ -114,6 +114,22 @@ Log says Welcome to the game! at start, but could it be helpfully instructional 
 
 ---
 
+## 8. Original mist-overlay.png & mist-overlay2.png
+
+**Problem:**
+The current mist is really good, but the images actaully make solid grounding background, mist-overlay.png for early game, mistoverlay2.png for end game?”
+
+**Proposed Solution:**
+
+* See if we can get those images showing, maybe even behind the current mist overlay?:
+
+  ```?
+  We could work on this.;
+  ```
+* Can you think of anything else to add/change?.
+
+---
+
 ## Next Steps
 
 1. **Prioritization**
