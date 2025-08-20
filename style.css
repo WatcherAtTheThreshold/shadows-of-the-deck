@@ -729,17 +729,17 @@ body.danger-mode .mist-overlay-layer {
 /* Reduce opacity of existing mist layers so overlay images show through */
 .mist-layer::before {
   /* Reduce from opacity: 0.9 to 0.6 */
-  opacity: 0.6;
+  opacity: 0.4;
 }
 
 .mist-layer::after {
   /* Reduce from opacity: 0.7 to 0.4 */
-  opacity: 0.4;
+  opacity: 0.2;
 }
 
 .mist-tendrils {
   /* Reduce from opacity: 1.0 to 0.7 */
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 /* ==========================================
