@@ -2561,21 +2561,21 @@ body.danger-mode .mist-overlay-layer {
 
 @keyframes massiveRipple {
   0% {
-    width: 0 !important;
-    height: 0 !important;
-    opacity: 1 !important;
+    width: 0;
+    height: 0;
+    opacity: 1;
     background: rgba(255, 0, 255, 0.8);
   }
   50% {
-    width: 200px !important;
-    height: 200px !important;
-    opacity: 0.5 !important;
+    width: 200px;
+    height: 200px;
+    opacity: 0.5;
     background: rgba(255, 100, 255, 0.6);
   }
   100% {
-    width: 300px !important;
-    height: 300px !important;
-    opacity: 0 !important;
+    width: 300px;
+    height: 300px;
+    opacity: 0;
     background: rgba(255, 0, 255, 0);
   }
 }
