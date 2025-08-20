@@ -661,6 +661,88 @@ body.danger-mode #hud::after {
 }
 
 /* ==========================================
+   MIST OVERLAY BACKGROUND SYSTEM
+   Add this section to your style.css file
+   ========================================== */
+
+/* ========== NEW: MIST OVERLAY BACKGROUND LAYER ========== */
+/* This layer sits behind all existing mist effects */
+.mist-overlay-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0; /* Behind everything - lower than existing mist-layer (z-index: 1) */
+  overflow: hidden;
+  
+  /* Default: mist-overlay.png for game start */
+  background-image: url('images/mist-overlay.png');
+  background-repeat: repeat;
+  background-size: auto; /* Use natural tile size */
+  background-position: 0 0;
+  
+  /* Default animation - slow drift */
+  animation: mistOverlayDrift 60s ease-in-out infinite;
+  opacity: 0.8; /* Adjust this if too strong/weak */
+  
+  /* Smooth transitions when switching backgrounds */
+  transition: background-image 2s ease-in-out, animation-duration 1s ease-in-out;
+}
+
+/* ========== PHASE-BASED BACKGROUND SWITCHING ========== */
+/* Warning mode (≤9 Cruxflare) - switch to mist-overlay2.png */
+body.warning-mode .mist-overlay-layer {
+  background-image: url('images/mist-overlay2.png');
+  animation-duration: 45s; /* Slightly faster drift */
+}
+
+/* Danger mode (≤3 Cruxflare or Final Darkness) - keep overlay2, speed up */
+body.danger-mode .mist-overlay-layer {
+  background-image: url('images/mist-overlay2.png');
+  animation-duration: 25s; /* Much faster "rolling clouds" effect */
+}
+
+/* ========== MIST OVERLAY ANIMATIONS ========== */
+/* Subtle drift animation for the background images */
+@keyframes mistOverlayDrift {
+  0%, 100% { 
+    background-position: 0 0;
+    transform: scale(1);
+  }
+  25% { 
+    background-position: -50px -30px;
+    transform: scale(1.02);
+  }
+  50% { 
+    background-position: 30px -60px;
+    transform: scale(0.98);
+  }
+  75% { 
+    background-position: -20px -40px;
+    transform: scale(1.01);
+  }
+}
+
+/* ========== OPACITY ADJUSTMENTS FOR EXISTING MIST ========== */
+/* Reduce opacity of existing mist layers so overlay images show through */
+.mist-layer::before {
+  /* Reduce from opacity: 0.9 to 0.6 */
+  opacity: 0.6;
+}
+
+.mist-layer::after {
+  /* Reduce from opacity: 0.7 to 0.4 */
+  opacity: 0.4;
+}
+
+.mist-tendrils {
+  /* Reduce from opacity: 1.0 to 0.7 */
+  opacity: 0.7;
+}
+
+/* ==========================================
    5. OVERLAYS & GAME SCREENS
    ========================================== */
 
