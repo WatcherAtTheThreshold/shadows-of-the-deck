@@ -2018,7 +2018,7 @@ body.danger-mode .mist-overlay-layer {
 }
 
 #restart-btn:hover, #end-turn-btn:hover { 
-  background: rgba(222, 184, 135, 0.6);
+  background: rgba(50, 50, 70, 0.6);
   border-color: rgba(222, 184, 135, 0.8);
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(222, 184, 135, 0.2);
