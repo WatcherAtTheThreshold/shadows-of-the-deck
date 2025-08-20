@@ -133,18 +133,19 @@ The current mist is really good, but the images actaully make solid grounding ba
 ## Next Steps
 
 1. **Prioritization**
-
+   
+   * **Mist-Overlay:** getting the mist-overlay backgrounds in place.
    * **Bug Fixes First:** Final Darkness logic, flickering hover, end-of-map handling.
    * **Enhancements Second:** Market flip animation, fullscreen backgrounds.
    * **Systems Third:** Scoring framework and HUD update.
 
-2. **Testing**
+3. **Testing**
 
    * Verify flickering fix on multiple browsers (Chrome, Firefox, Safari).
    * Confirm background switching logic syncs with both node traversal and music phase.
    * Playtest scoring balance for fun vs. grind.
 
-3. **Deployment**
+4. **Deployment**
 
    * Stage changes in a test branch (`feature-polish-pass`).
    * Collect feedback from playtesters before merging to `main`.
