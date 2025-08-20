@@ -685,7 +685,7 @@ body.danger-mode #hud::after {
   
   /* Default animation - slow drift */
   animation: mistOverlayDrift 60s ease-in-out infinite;
-  opacity: 0.8; /* Adjust this if too strong/weak */
+  opacity: 0.4; /* Adjust this if too strong/weak */
   
   /* Smooth transitions when switching backgrounds */
   transition: background-image 2s ease-in-out, animation-duration 1s ease-in-out;
