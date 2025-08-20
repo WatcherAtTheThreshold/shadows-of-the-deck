@@ -98,6 +98,22 @@ Drawing **Final Darkness** when 1–2 danger turns remain ends the game prematur
 
 ---
 
+## 7. Add Log dialogue
+
+**Problem:**
+Log says Welcome to the game! at start, but could it be helpfully instructional as well?”
+
+**Proposed Solution:**
+
+* Welcome to the game! stays on-screen for, what, 5-6 seconds, then it changes to Select cards to play them!. Simple, helpful.:
+
+  ```?
+  How would we do this?;
+  ```
+* Can you think of anything else to add/change?.
+
+---
+
 ## Next Steps
 
 1. **Prioritization**
