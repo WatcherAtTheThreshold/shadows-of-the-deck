@@ -69,6 +69,7 @@ function setupGameData() {
   
   mapNodes = 18;
   playerPos = 0;
+  playerDirection = 1;  // ADD THIS LINE
   fragmentPositions = [2, 5, 7, 10, 12, 15, 17];
   fragmentsCollected = 0;
   totalFragments = fragmentPositions.length;
@@ -458,18 +459,38 @@ function replayLastCard() {
   }
 }
 
-// Move player on the map (unchanged)
+// Move player on the map with bounce mechanics
 function movePlayer(steps, skipEncounters = false) {
-  playerPos = Math.min(playerPos + steps, mapNodes - 1);
+  console.log(`🚶 Starting move: ${steps} steps from position ${playerPos}, direction ${playerDirection}`);
   
-  if (fragmentPositions.includes(playerPos)) {
-    collectFragment();
+  for (let i = 0; i < steps; i++) {
+    let nextPos = playerPos + playerDirection;
+    
+    // Bounce off edges
+    if (nextPos >= mapNodes) {
+      console.log(`🔄 Hit right edge (${mapNodes-1}), bouncing backward`);
+      playerDirection = -1;
+      nextPos = playerPos - 1;
+    } else if (nextPos < 0) {
+      console.log(`🔄 Hit left edge (0), bouncing forward`);
+      playerDirection = 1;
+      nextPos = playerPos + 1;
+    }
+    
+    playerPos = nextPos;
+    console.log(`🚶 Step ${i + 1}: moved to position ${playerPos}`);
+    
+    // Check for fragments and encounters at each step
+    if (fragmentPositions.includes(playerPos)) {
+      collectFragment();
+    }
+    
+    if (encounterPositions.includes(playerPos) && !skipEncounters) {
+      triggerEncounter();
+    }
   }
   
-  if (encounterPositions.includes(playerPos) && !skipEncounters) {
-    triggerEncounter();
-  }
-  
+  console.log(`🚶 Final position: ${playerPos}, direction: ${playerDirection}`);
   renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
 }
 
