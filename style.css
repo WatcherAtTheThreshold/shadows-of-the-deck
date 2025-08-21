@@ -4,16 +4,17 @@
    
    TABLE OF CONTENTS:
    1. Base Styles & Reset - Line 20
-   2. HUD & Resource Display - Line 58
-   3. Layout Containers & Log System - Line 329
-   4. Atmospheric Effects & Mist - Line 462
-   5. Overlays & Game Screens - Line 619
-   6. Card System & Animations - Line 1290
-   7. Map System & Game Elements - Line 1627
-   8. Buttons, Legend & Tooltips - Line 1724
-   9. Tutorial & Interactive Elements - Line 1835
-   10. Mobile Responsive - Line 1925
-   11. Keyframe Animations - Line 2142
+   3. Responsive Scaling System - 41
+   3. HUD & Resource Display - Line 103
+   4. Layout Containers & Log System - Line 374
+   5. Atmospheric Effects & Mist - Line 507
+   6. Overlays & Game Screens - Line 746
+   7. Card System & Animations - Line 1403
+   8. Map System & Game Elements - Line 1922
+   9. Buttons, Legend & Tooltips - Line 2019
+   10. Tutorial & Interactive Elements - Line 2130
+   11. Mobile Responsive - Line 2220
+   12. Keyframe Animations - Line 2437
    ========================================== */
 
 /* ==========================================
@@ -37,8 +38,7 @@ body, html {
 }
 
 /* ==========================================
-   RESPONSIVE SCALING SYSTEM
-   Add this to your existing CSS
+   2. RESPONSIVE SCALING SYSTEM
    ========================================== */
 
 #game {
@@ -662,7 +662,6 @@ body.danger-mode #hud::after {
 
 /* ==========================================
    MIST OVERLAY BACKGROUND SYSTEM
-   Add this section to your style.css file
    ========================================== */
 
 /* ========== NEW: MIST OVERLAY BACKGROUND LAYER ========== */
