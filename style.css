@@ -685,7 +685,7 @@ body.danger-mode #hud::after {
   
   /* Default animation - slow drift */
   animation: mistOverlayDrift 60s ease-in-out infinite;
-  opacity: 0.5; /* Keep your current opacity setting */
+  opacity: 0.55; /* Keep your current opacity setting */
   
   /* Smooth transitions when switching backgrounds */
   transition: background-image 2s ease-in-out, animation-duration 1s ease-in-out;
@@ -1603,7 +1603,7 @@ body.danger-mode .mist-overlay-layer {
     url('images/cards/dead-card-120.png');
   
   border-color: rgba(80, 40, 80, 0.8) !important;
-  color: rgba(33, 44, 99, 0.7) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 /* Make dead cards look more ominous */

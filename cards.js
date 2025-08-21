@@ -22,7 +22,8 @@ export const CARD_EFFECTS = {
   'Mist Walker': { type: 'special', effect: 'move_and_coin', move: 2, coins: 1 },
   'Phantom Step': { type: 'move', value: 2 },
   'Essence Tap': { type: 'special', effect: 'coin_and_draw', coins: 2 },
-  'Spirit Guide': { type: 'special', effect: 'move_and_protect', move: 3 }
+  'Spirit Guide': { type: 'special', effect: 'move_and_protect', move: 3 },
+  'Shadow (dead)': { type: 'dead', effect: 'curse' }
 };
 
 // Generate tooltips for cards
@@ -37,6 +38,8 @@ export function generateTooltip(cardName) {
       return `Move ${effect.value} spaces on the map`;
     case 'move_safe': 
       return `Move ${effect.value} spaces, skip encounters`;
+    case 'dead':  // ADD THIS CASE
+      return "Cursed card - does nothing when played";
     case 'special':
       switch (effect.effect) {
         case 'lucky_find': 
