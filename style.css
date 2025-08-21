@@ -1573,10 +1573,10 @@ body.danger-mode .mist-overlay-layer {
 [data-card-name*="Focus"] .card-front {
   background-image: 
     linear-gradient(135deg, 
-      rgba(25, 25, 45, 0.45) 0%, 
-      rgba(15, 15, 35, 0.40) 30%,
-      rgba(20, 20, 40, 0.45) 70%,
-      rgba(10, 10, 30, 0.40) 100%),
+      rgba(25, 25, 45, 0.2) 0%, 
+      rgba(15, 15, 35, 0.4) 30%,
+      rgba(20, 20, 40, 0.6) 70%,
+      rgba(10, 10, 30, 0.8) 100%),
     url('images/cards/focus-card-120.png');
 }
 
@@ -1584,10 +1584,10 @@ body.danger-mode .mist-overlay-layer {
 [data-card-name*="Move"] .card-front {
   background-image: 
     linear-gradient(135deg, 
-      rgba(25, 25, 45, 0.45) 0%, 
-      rgba(15, 15, 35, 0.40) 30%,
-      rgba(20, 20, 40, 0.45) 70%,
-      rgba(10, 10, 30, 0.40) 100%),
+      rgba(25, 25, 45, 0.2) 0%, 
+      rgba(15, 15, 35, 0.4) 30%,
+      rgba(20, 20, 40, 0.6) 70%,
+      rgba(10, 10, 30, 0.8) 100%),
     url('images/cards/move-card-120.png');
 }
 
