@@ -1595,11 +1595,11 @@ body.danger-mode .mist-overlay-layer {
 [data-card-name*="Shadow (dead)"] .card-front,
 [data-card-name*="dead"] .card-front {
   background-image: 
-   background: linear-gradient(135deg, 
-     rgba(43, 54, 109, 1) 0%,    /* Lighter version of your blue */
-    rgba(23, 34, 89, 1) 30%,    /* Darker version */
-    rgba(38, 49, 104, 1) 70%,   /* Medium version */
-    rgba(18, 29, 84, 1) 100%);  /* Darkest version */
+    linear-gradient(135deg, 
+      rgba(43, 54, 109, 1) 0%,    /* Lighter version of your blue */
+      rgba(23, 34, 89, 1) 30%,    /* Darker version */
+      rgba(38, 49, 104, 1) 70%,   /* Medium version */
+      rgba(18, 29, 84, 1) 100%),  /* Darkest version */
     url('images/cards/dead-card-120.png');
   
   border-color: rgba(80, 40, 80, 0.8) !important;
