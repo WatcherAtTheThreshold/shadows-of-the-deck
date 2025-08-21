@@ -1603,7 +1603,7 @@ body.danger-mode .mist-overlay-layer {
     url('images/cards/dead-card-120.png');
   
   border-color: rgba(80, 40, 80, 0.8) !important;
-  color: rgba(150, 100, 150, 0.7) !important;
+  color: rgba(99, 33, 66, 0.7) !important;
 }
 
 /* Make dead cards look more ominous */
