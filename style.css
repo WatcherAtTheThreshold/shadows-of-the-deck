@@ -1787,10 +1787,10 @@ body.danger-mode .mist-overlay-layer {
 
 .card-back {
   background: linear-gradient(135deg, 
-    rgba(45, 25, 65, 0.98) 0%, 
-    rgba(35, 15, 55, 0.95) 30%,
-    rgba(40, 20, 60, 0.98) 70%,
-    rgba(30, 10, 50, 0.95) 100%);
+    rgba(45, 25, 65, 1) 0%, 
+    rgba(35, 15, 55, 1) 30%,
+    rgba(40, 20, 60, 1) 70%,
+    rgba(30, 10, 50, 1) 100%);
   border: 2px solid rgba(138, 43, 226, 0.6);
   color: transparent;
   opacity: 0;
