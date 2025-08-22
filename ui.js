@@ -444,7 +444,7 @@ setTimeout(() => {
     }, 300);
   }
 }, 3000);
-
+}
 
 // Show game over screen as an overlay
 // ========== ENHANCED WIN/LOSE POPUP SYSTEM ==========
