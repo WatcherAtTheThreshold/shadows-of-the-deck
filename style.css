@@ -1165,6 +1165,8 @@ background-repeat: no-repeat;
   z-index: 10000;
   width: 90%;
   max-width: 600px;
+  border-radius: 16px; /* Match the popup's border-radius */
+  overflow: hidden; /* Clip any content that extends beyond the rounded corners */
   pointer-events: none;
 }
 
