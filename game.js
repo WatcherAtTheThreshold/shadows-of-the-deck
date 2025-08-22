@@ -228,8 +228,11 @@ function buyCard(marketIndex) {
     }
     
     discardPile.push(cardObj.name);
-    marketRow.splice(marketIndex, 1);
-    drawMarketCard();
+    if (marketDeck.length > 0) {
+  marketRow[marketIndex] = marketDeck.shift();
+} else {
+  marketRow.splice(marketIndex, 1);
+}
     updateAllUI();
   } else {
     if (nextCardCostBonus > 0) {
