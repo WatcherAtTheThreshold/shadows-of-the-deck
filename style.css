@@ -1077,7 +1077,7 @@ body.danger-mode .mist-overlay-layer {
     rgba(100, 150, 255, 0.6) 70%, 
     rgba(222, 184, 135, 0.8) 100%),
   url('images/victory-background.png'); /* Image behind */
-background-size: 80%;
+background-size: 100%;
 background-position: center;
 background-repeat: no-repeat;
   backdrop-filter: blur(15px);
@@ -1121,7 +1121,7 @@ background-repeat: no-repeat;
     rgba(80, 30, 100, 0.6) 70%, 
     rgba(15, 10, 35, 0.8) 100%),
   url('images/defeat-background.png'); /* Image behind */
-background-size: 80%;
+background-size: 100%;
 background-position: center;
 background-repeat: no-repeat;
   backdrop-filter: blur(20px);
