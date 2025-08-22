@@ -1118,7 +1118,7 @@ background-repeat: no-repeat;
   linear-gradient(135deg, 
     rgba(25, 15, 45, 0.15) 0%, 
     rgba(60, 20, 80, 0.3) 30%, 
-    rgba(80, 30, 100, 0.4.5) 70%, 
+    rgba(80, 30, 100, 0.45) 70%, 
     rgba(15, 10, 35, 0.6) 100%),
   url('images/defeat-background.png'); /* Image behind */
 background-size: 100%;
