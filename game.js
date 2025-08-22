@@ -384,14 +384,22 @@ function handleSpecialEffect(effect) {
       return `Gained ${effect.value} fragment${effect.value === 1 ? '' : 's'} instantly!`;
       
     case 'jump_to_fragment':
-      if (fragmentPositions.length > 0) {
-        const nextFragment = fragmentPositions.find(pos => pos > playerPos) || fragmentPositions[0];
-        const oldPos = playerPos;
-        playerPos = nextFragment;
-        movePlayer(0, true);
-        return `Leaped from node ${oldPos} to fragment at node ${nextFragment}!`;
-      }
-      return `No fragments remaining to leap to`;
+  if (fragmentPositions.length > 0) {
+    const nextFragment = fragmentPositions.find(pos => pos > playerPos) || fragmentPositions[0];
+    const oldPos = playerPos;
+    playerPos = nextFragment;
+    
+    // Manually trigger fragment collection since we teleported
+    if (fragmentPositions.includes(playerPos)) {
+      collectFragment();
+    }
+    
+    // Update the map display
+    renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
+    
+    return `Leaped from node ${oldPos} to fragment at node ${nextFragment}!`;
+  }
+  return `No fragments remaining to leap to`;
       
     case 'replay_last':
       if (lastPlayedCard && CARD_EFFECTS[lastPlayedCard] && lastPlayedCard !== 'Dream Echo') {
