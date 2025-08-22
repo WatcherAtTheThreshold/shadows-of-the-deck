@@ -387,6 +387,7 @@ export function showCruxflareOverlay(eventString) {
         <div class="cruxflare-title">${eventData.name}</div>
         <div class="cruxflare-icon">${eventData.icon}</div>
         <div class="cruxflare-effect">${eventData.description}</div>
+        <div class="cruxflare-dismiss-hint">Click to dismiss</div>
       </div>
     </div>
   `;
@@ -398,34 +399,27 @@ export function showCruxflareOverlay(eventString) {
   const backdrop = document.getElementById('cruxflare-backdrop');
   const overlay = document.getElementById('cruxflare-overlay');
   
+  // Add click handlers for dismissing
+  const dismissOverlay = () => {
+    hideCruxflareOverlay();
+  };
+  
+  // Click on backdrop dismisses
+  backdrop.addEventListener('click', dismissOverlay);
+  
+  // Click on card also dismisses
+  overlay.addEventListener('click', dismissOverlay);
+  
   // Show with animation
   requestAnimationFrame(() => {
     backdrop.classList.add('show');
     overlay.classList.add('show');
   });
   
-  // Auto-dismiss after 3 seconds
+  // Auto-dismiss after 3 seconds (but can be dismissed early)
   setTimeout(() => {
     hideCruxflareOverlay();
   }, 3000);
-}
-
-// Hide and remove the Cruxflare overlay
-function hideCruxflareOverlay() {
-  const backdrop = document.getElementById('cruxflare-backdrop');
-  const overlay = document.getElementById('cruxflare-overlay');
-  
-  if (backdrop && overlay) {
-    // Fade out
-    backdrop.classList.remove('show');
-    overlay.classList.remove('show');
-    
-    // Remove from DOM after animation completes
-    setTimeout(() => {
-      backdrop.remove();
-      overlay.remove();
-    }, 300);
-  }
 }
 
 // Show game over screen as an overlay
