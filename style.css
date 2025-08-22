@@ -910,6 +910,32 @@ body.danger-mode .mist-overlay-layer {
   box-sizing: border-box;
 }
 
+/* Effect description at bottom */
+.cruxflare-effect {
+  margin-top: auto;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(138, 43, 226, 0.4);
+  font-family: 'Source Sans Pro', sans-serif;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.2;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Dismiss hint text */
+.cruxflare-dismiss-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  pointer-events: none;
+}
+
 /* Tutorial Popup Styles */
 .tutorial-popup-overlay {
   position: fixed;
