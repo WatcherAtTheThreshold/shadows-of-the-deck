@@ -1073,9 +1073,9 @@ body.danger-mode .mist-overlay-layer {
  background: 
   linear-gradient(135deg, 
     rgba(222, 184, 135, 0.2) 0%,    /* Dimming overlay on top */
-    rgba(138, 43, 226, 0.15) 30%, 
-    rgba(100, 150, 255, 0.1) 70%, 
-    rgba(222, 184, 135, 0.18) 100%),
+    rgba(138, 43, 226, 0.4) 30%, 
+    rgba(100, 150, 255, 0.6) 70%, 
+    rgba(222, 184, 135, 0.8) 100%),
   url('images/victory-background.png'); /* Image behind */
 background-size: 80%;
 background-position: center;
