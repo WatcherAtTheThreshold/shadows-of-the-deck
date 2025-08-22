@@ -1070,16 +1070,16 @@ body.danger-mode .mist-overlay-layer {
 /* ========== VICTORY SCREEN (WIN) ========== */
 .victory-screen {
   pointer-events: auto;
-  background:
-     url('images/victory-background.png'); /* ADD THIS LINE */
-    linear-gradient(135deg, 
-    rgba(222, 184, 135, 0.15) 0%, 
-    rgba(138, 43, 226, 0.1) 30%,
-    rgba(100, 150, 255, 0.08) 70%,
-    rgba(222, 184, 135, 0.12) 100%);
-    
-  background-size: cover; /* ADD THIS LINE */
-  background-position: center; /* ADD THIS LINE */
+ background: 
+  linear-gradient(135deg, 
+    rgba(222, 184, 135, 0.2) 0%,    /* Dimming overlay on top */
+    rgba(138, 43, 226, 0.15) 30%, 
+    rgba(100, 150, 255, 0.1) 70%, 
+    rgba(222, 184, 135, 0.18) 100%),
+  url('images/victory-background.png'); /* Image behind */
+background-size: 80%;
+background-position: center;
+background-repeat: no-repeat;
   backdrop-filter: blur(15px);
   padding: 40px;
   border-radius: 16px;
@@ -1114,16 +1114,16 @@ body.danger-mode .mist-overlay-layer {
 /* ========== DEFEAT SCREEN (LOSE) ========== */
 .defeat-screen {
   pointer-events: auto;
-  background:
-     url('images/defeat-background.png'); /* ADD THIS LINE */
-    linear-gradient(135deg, 
-    rgba(25, 15, 45, 0.95) 0%, 
-    rgba(60, 20, 80, 0.9) 30%,
-    rgba(80, 30, 100, 0.85) 70%,
-    rgba(15, 10, 35, 0.98) 100%);
-    
-  background-size: cover; /* ADD THIS LINE */
-  background-position: center; /* ADD THIS LINE */
+  background: 
+  linear-gradient(135deg, 
+    rgba(25, 15, 45, 0.2) 0%, 
+    rgba(60, 20, 80, 0.4) 30%, 
+    rgba(80, 30, 100, 0.6) 70%, 
+    rgba(15, 10, 35, 0.8) 100%),
+  url('images/defeat-background.png'); /* Image behind */
+background-size: 80%;
+background-position: center;
+background-repeat: no-repeat;
   backdrop-filter: blur(20px);
   padding: 40px;
   border-radius: 16px;
