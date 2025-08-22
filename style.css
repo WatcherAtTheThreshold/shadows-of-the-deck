@@ -914,7 +914,7 @@ body.danger-mode .mist-overlay-layer {
 /* Dismiss hint text */
 .cruxflare-dismiss-hint {
   position: absolute;
-  bottom: 0px;
+  bottom: 3px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.7rem;
