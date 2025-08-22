@@ -26,21 +26,27 @@ function updateMusicPhase() {
 
 // ========== ENHANCED DRAW HAND SYSTEM FOR IN-PLACE CARDS ==========
 function drawHand() {
-  while (playerHand.length < 5 && playerDeck.length > 0) {
+  while (playerHand.length < 5) {
+    // Check if we need to reshuffle mid-draw
+    if (playerDeck.length === 0 && discardPile.length > 0) {
+      playerDeck = [...discardPile];
+      discardPile = [];
+      // Shuffle deck
+      for (let i = playerDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
+      }
+      logMsg("Your deck is reshuffled.");
+    }
+    
+    // If still no cards available, break out
+    if (playerDeck.length === 0) {
+      break;
+    }
+    
     const randomIndex = Math.floor(Math.random() * playerDeck.length);
     const drawnCard = playerDeck.splice(randomIndex, 1)[0];
     playerHand.push(drawnCard);
-  }
-  
-  if (playerDeck.length === 0 && discardPile.length > 0) {
-    playerDeck = [...discardPile];
-    discardPile = [];
-    // Shuffle deck
-    for (let i = playerDeck.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
-    }
-    logMsg("Your deck is reshuffled.");
   }
 }
 
@@ -378,14 +384,22 @@ function handleSpecialEffect(effect) {
       return `Gained ${effect.value} fragment${effect.value === 1 ? '' : 's'} instantly!`;
       
     case 'jump_to_fragment':
-      if (fragmentPositions.length > 0) {
-        const nextFragment = fragmentPositions.find(pos => pos > playerPos) || fragmentPositions[0];
-        const oldPos = playerPos;
-        playerPos = nextFragment;
-        movePlayer(0, true);
-        return `Leaped from node ${oldPos} to fragment at node ${nextFragment}!`;
-      }
-      return `No fragments remaining to leap to`;
+  if (fragmentPositions.length > 0) {
+    const nextFragment = fragmentPositions.find(pos => pos > playerPos) || fragmentPositions[0];
+    const oldPos = playerPos;
+    playerPos = nextFragment;
+    
+    // Manually trigger fragment collection since we teleported
+    if (fragmentPositions.includes(playerPos)) {
+      collectFragment();
+    }
+    
+    // Update the map display
+    renderMap(mapNodes, playerPos, fragmentPositions, encounterPositions);
+    
+    return `Leaped from node ${oldPos} to fragment at node ${nextFragment}!`;
+  }
+  return `No fragments remaining to leap to`;
       
     case 'replay_last':
       if (lastPlayedCard && CARD_EFFECTS[lastPlayedCard] && lastPlayedCard !== 'Dream Echo') {
@@ -453,6 +467,11 @@ function replayLastCard() {
           logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, deck empty`);
         }
         break;
+      case 'move_and_protect':
+          movePlayer(lastEffect.move);
+          shadowBlocked = true;
+          logMsg(`Dream Echo: Moved ${lastEffect.move} more spaces, protected from next Cruxflare`);
+      break;
       default:
         logMsg(`Dream Echo: Cannot replay ${lastPlayedCard} (special effect not repeatable)`);
     }

@@ -428,12 +428,23 @@ const dismissOverlay = () => {
     overlay.classList.add('show');
   });
   
-  // Auto-dismiss after 3 seconds (but can be dismissed early)
-  setTimeout(() => {
-    hideCruxflareOverlay();
-  }, 3000);
+// Auto-dismiss after 3 seconds (but can be dismissed early)
+setTimeout(() => {
+  // Hide overlay inline instead of calling separate function
+  const backdrop = document.getElementById('cruxflare-backdrop');
+  const overlay = document.getElementById('cruxflare-overlay');
+  
+  if (backdrop && overlay) {
+    backdrop.classList.remove('show');
+    overlay.classList.remove('show');
+    
+    setTimeout(() => {
+      if (backdrop && backdrop.parentNode) backdrop.remove();
+      if (overlay && overlay.parentNode) overlay.remove();
+    }, 300);
+  }
+}, 3000);
 }
-
 
 // Show game over screen as an overlay
 // ========== ENHANCED WIN/LOSE POPUP SYSTEM ==========
