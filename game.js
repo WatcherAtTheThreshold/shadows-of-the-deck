@@ -467,6 +467,11 @@ function replayLastCard() {
           logMsg(`Dream Echo: Gained ${lastEffect.coins} more orbs, deck empty`);
         }
         break;
+      case 'move_and_protect':
+          movePlayer(lastEffect.move);
+          shadowBlocked = true;
+          logMsg(`Dream Echo: Moved ${lastEffect.move} more spaces, protected from next Cruxflare`);
+      break;
       default:
         logMsg(`Dream Echo: Cannot replay ${lastPlayedCard} (special effect not repeatable)`);
     }
