@@ -1392,8 +1392,8 @@ background-repeat: no-repeat;
 /* ========== MOBILE RESPONSIVENESS ========== */
 @media (max-width: 768px) {
   .victory-screen, .defeat-screen {
-    padding: 30px 20px;
-    margin: 20px;
+    /*padding: 30px 20px;
+    margin: 20px;*/
   }
   
   .win-particle, .lose-particle {
