@@ -400,9 +400,21 @@ export function showCruxflareOverlay(eventString) {
   const overlay = document.getElementById('cruxflare-overlay');
   
   // Add click handlers for dismissing
-  const dismissOverlay = () => {
-    hideCruxflareOverlay();
-  };
+const dismissOverlay = () => {
+  // Hide overlay inline instead of calling separate function
+  const backdrop = document.getElementById('cruxflare-backdrop');
+  const overlay = document.getElementById('cruxflare-overlay');
+  
+  if (backdrop && overlay) {
+    backdrop.classList.remove('show');
+    overlay.classList.remove('show');
+    
+    setTimeout(() => {
+      if (backdrop && backdrop.parentNode) backdrop.remove();
+      if (overlay && overlay.parentNode) overlay.remove();
+    }, 300);
+  }
+};
   
   // Click on backdrop dismisses
   backdrop.addEventListener('click', dismissOverlay);
