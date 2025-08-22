@@ -26,21 +26,27 @@ function updateMusicPhase() {
 
 // ========== ENHANCED DRAW HAND SYSTEM FOR IN-PLACE CARDS ==========
 function drawHand() {
-  while (playerHand.length < 5 && playerDeck.length > 0) {
+  while (playerHand.length < 5) {
+    // Check if we need to reshuffle mid-draw
+    if (playerDeck.length === 0 && discardPile.length > 0) {
+      playerDeck = [...discardPile];
+      discardPile = [];
+      // Shuffle deck
+      for (let i = playerDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
+      }
+      logMsg("Your deck is reshuffled.");
+    }
+    
+    // If still no cards available, break out
+    if (playerDeck.length === 0) {
+      break;
+    }
+    
     const randomIndex = Math.floor(Math.random() * playerDeck.length);
     const drawnCard = playerDeck.splice(randomIndex, 1)[0];
     playerHand.push(drawnCard);
-  }
-  
-  if (playerDeck.length === 0 && discardPile.length > 0) {
-    playerDeck = [...discardPile];
-    discardPile = [];
-    // Shuffle deck
-    for (let i = playerDeck.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [playerDeck[i], playerDeck[j]] = [playerDeck[j], playerDeck[i]];
-    }
-    logMsg("Your deck is reshuffled.");
   }
 }
 
