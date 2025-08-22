@@ -2432,7 +2432,9 @@ body.danger-mode .mist-overlay-layer {
   }
   
   .cruxflare-title {
-    font-size: 1.3rem; /* Reduced from 1.5rem */
+    font-size: 1.1rem; /* Down from 1.3rem */
+    line-height: 1.1; /* Tighter spacing for 2-line titles */
+    margin-bottom: 12px; /* Slightly less margin */
   }
   
   .cruxflare-icon {
