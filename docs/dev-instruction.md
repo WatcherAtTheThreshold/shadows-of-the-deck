@@ -17,18 +17,19 @@ Directives for best collaborative practices! We augment each other and I seek co
   - If you encounter files I upload that you can't read properly, let me know immediately so I can reformat them
   - Tell me if there are better ways or formats for files in the project folder so you can best see/read them for creating changes
 
-- **Project Phase**: Currently in prototyping phase - focus on functional code over optimization
-
 - **Development Process**:
   - Before writing any code, discuss with me about the concept/idea we're working on until we're both clear on it and I explicitly give the OK to begin code creation
   - Structure comments in code to make it very easy for me to find and manipulate pieces of blocks of code. The better the comments the easier it will be for me to work with small blocks and chunks of code
-  - I prefer full files to be created, but if comments and instructions are clear enough we could work with smaller changes
+  - I prefer files to be created with really wide comments, think 3 lines, like the example below, so that commented off chunks can be replaced via copy/paste
+// ================================================================
+// WIDE COMMENTS
+// ================================================================
 
 - **Workflow Pacing**: 
   - Stop after creating any complete file and ask "Ready for the next step?"
   - Wait for my explicit go-ahead before continuing
   - If working with partial snippets, slow way down - I may need multiple attempts and detailed integration instructions
-  - No writing multiple files or snippets in sequence without approval between each one
+  - No writing multiple files or snippets in sequence without approval between each one, please do not write over code you've generatede until I've implemented it 
 
 - **Project Completion Review**: 
   - When we finish implementing a goal/feature, I should provide a summary of what we accomplished
